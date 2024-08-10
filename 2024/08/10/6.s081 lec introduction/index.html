@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec introduction" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki World</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki World</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec introduction
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%AF%BC%E5%85%A5%E4%B8%8E%E4%BB%8B%E7%BB%8D"><span class="post-toc-text">导入与介绍</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%AF%BE%E7%A8%8B%E7%9B%AE%E6%A0%87"><span class="post-toc-text">课程目标</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OS%E5%85%B1%E5%90%8C%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="post-toc-text">OS共同的目标</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OS%E7%BB%93%E6%9E%84"><span class="post-toc-text">OS结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#kernel"><span class="post-toc-text">kernel</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#syscall%E4%B8%BE%E4%BE%8B"><span class="post-toc-text">syscall举例</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OS%E8%AE%BE%E8%AE%A1%E9%9A%BE%E7%82%B9"><span class="post-toc-text">OS设计难点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="post-toc-text">系统调用举例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#copy-c%EF%BC%9Aread%E3%80%81write%E3%80%81exit"><span class="post-toc-text">copy.c：read、write、exit</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#open-c"><span class="post-toc-text">open.c</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#fork"><span class="post-toc-text">fork</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#exec"><span class="post-toc-text">exec</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#fork-exec%EF%BC%9Await"><span class="post-toc-text">fork&#x2F;exec：wait</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#I-O%E9%87%8D%E5%AE%9A%E5%90%91"><span class="post-toc-text">I&#x2F;O重定向</span></a></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="导入与介绍"><a href="#导入与介绍" class="headerlink" title="导入与介绍"></a>导入与介绍</h2><h3 id="课程目标"><a href="#课程目标" class="headerlink" title="课程目标"></a>课程目标</h3><ol>
+<li>理解操作系统的设计和实现</li>
+<li>通过xv6，扩展操作系统，并通过操作系统接口，编写系统软件</li>
+</ol>
+<h3 id="OS共同的目标"><a href="#OS共同的目标" class="headerlink" title="OS共同的目标"></a>OS共同的目标</h3><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601003429.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601003429.png" class title="Pasted image 20240601003429.png"></a>
+<h3 id="OS结构"><a href="#OS结构" class="headerlink" title="OS结构"></a>OS结构</h3><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601004042.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601004042.png" class title="Pasted image 20240601004042.png"></a>
+
+<h4 id="kernel"><a href="#kernel" class="headerlink" title="kernel"></a>kernel</h4><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601004814.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601004814.png" class title="Pasted image 20240601004814.png"></a>
+<h4 id="syscall举例"><a href="#syscall举例" class="headerlink" title="syscall举例"></a>syscall举例</h4><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601004634.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601004634.png" class title="Pasted image 20240601004634.png"></a>
+
+
+<h3 id="OS设计难点"><a href="#OS设计难点" class="headerlink" title="OS设计难点"></a>OS设计难点</h3><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601005236.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601005236.png" class title="Pasted image 20240601005236.png"></a>
+<h3 id="系统调用举例"><a href="#系统调用举例" class="headerlink" title="系统调用举例"></a>系统调用举例</h3><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601225148.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601225148.png" class title="Pasted image 20240601225148.png"></a>
+<h4 id="copy-c：read、write、exit"><a href="#copy-c：read、write、exit" class="headerlink" title="copy.c：read、write、exit"></a>copy.c：read、write、exit</h4><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601220302.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601220302.png" class title="Pasted image 20240601220302.png"></a>
+<h4 id="open-c"><a href="#open-c" class="headerlink" title="open.c"></a>open.c</h4><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601220719.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601220719.png" class title="Pasted image 20240601220719.png"></a>
+<h4 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h4><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601221719.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601221719.png" class title="Pasted image 20240601221719.png"></a>
+<a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601221916.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601221916.png" class title="Pasted image 20240601221916.png"></a>
+<h4 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h4><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601224031.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601224031.png" class title="Pasted image 20240601224031.png"></a>
+<h4 id="fork-exec：wait"><a href="#fork-exec：wait" class="headerlink" title="fork&#x2F;exec：wait"></a>fork&#x2F;exec：wait</h4><a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601224735.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601224735.png" class title="Pasted image 20240601224735.png"></a>
+
+<h3 id="I-O重定向"><a href="#I-O重定向" class="headerlink" title="I&#x2F;O重定向"></a>I&#x2F;O重定向</h3><p>——by changing fd</p>
+<a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601230804.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601230804.png" class title="Pasted image 20240601230804.png"></a>
+<a href="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601231006.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20introduction/Pasted%20image%2020240601231006.png" class title="Pasted image 20240601231006.png"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-10</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span>Why so serious?</span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>

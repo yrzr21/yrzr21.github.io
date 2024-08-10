@@ -84,6 +84,24 @@
     <body>
         <script src="/js/darkmode-js.min.js"></script>
         
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
         
             <div class="left-toc-container">
                 <nav id="toc" class="bs-docs-sidebar"></nav>
@@ -152,10 +170,12 @@
     <div class="post-md">
         
             
-                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#lab-util"><span class="post-toc-text">lab util</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#user-level-sleep"><span class="post-toc-text">user-level sleep</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#user-level-pingpong"><span class="post-toc-text">user-level pingpong</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#primes"><span class="post-toc-text">primes</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CSP-%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">CSP 线程模型</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#find"><span class="post-toc-text">find</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#xargs"><span class="post-toc-text">xargs</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8"><span class="post-toc-text">指针使用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84"><span class="post-toc-text">字符串数组</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#exec"><span class="post-toc-text">exec</span></a></li></ol></li></ol></li></ol>
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%89%8D%E8%A8%80"><span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#lab-util"><span class="post-toc-text">lab util</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#user-level-sleep"><span class="post-toc-text">user-level sleep</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#user-level-pingpong"><span class="post-toc-text">user-level pingpong</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#primes"><span class="post-toc-text">primes</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CSP-%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">CSP 线程模型</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#find"><span class="post-toc-text">find</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#xargs"><span class="post-toc-text">xargs</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%8C%87%E9%92%88%E4%BD%BF%E7%94%A8"><span class="post-toc-text">指针使用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84"><span class="post-toc-text">字符串数组</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#exec"><span class="post-toc-text">exec</span></a></li></ol></li></ol></li></ol>
             
         
-        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="lab-util"><a href="#lab-util" class="headerlink" title="lab util"></a>lab util</h2><h3 id="user-level-sleep"><a href="#user-level-sleep" class="headerlink" title="user-level sleep"></a>user-level sleep</h3><p>可能需要查看文件：</p>
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文仅用作学习记录</p>
+<p>具体实现在这里：<a target="_blank" rel="noopener" href="https://github.com/yrzr21/xv6">yrzr21&#x2F;xv6 (github.com)</a>，&#96;请在参考源码前想想是否有必要这么做</p>
+<h2 id="lab-util"><a href="#lab-util" class="headerlink" title="lab util"></a>lab util</h2><h3 id="user-level-sleep"><a href="#user-level-sleep" class="headerlink" title="user-level sleep"></a>user-level sleep</h3><p>可能需要查看文件：</p>
 <a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240728183432.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240728183432.png" class title="Pasted image 20240728183432.png"></a>
 
 <h3 id="user-level-pingpong"><a href="#user-level-pingpong" class="headerlink" title="user-level pingpong"></a>user-level pingpong</h3><p>管道是单向的，想要双向通信必须使用两个管道</p>
