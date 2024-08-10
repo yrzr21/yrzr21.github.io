@@ -6,17 +6,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="lab utiluser-level sleep可能需要查看文件： ![Pasted image 20240728183432](&#x2F;6-s081-lab-util&#x2F;Pasted image 20240728183432.png) user-level pingpong管道是单向的，想要双向通信必须使用两个管道 primes递归过程中注意检测 read 的返回值以判断终止条件 f">
+    <meta name="description" content="lab utiluser-level sleep可能需要查看文件：   user-level pingpong管道是单向的，想要双向通信必须使用两个管道 primes递归过程中注意检测 read 的返回值以判断终止条件 fork产生的子进程共享父进程的文件描述符，但可单独关闭而不影响另一个进程 小心关闭不需要的 fd，不然很可能不够用…    CSP 线程模型参考：贝尔实验室和 CSP 线程 —">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6-s081-lab-util">
-<meta property="og:url" content="http://localhost:4000/2024/08/09/6-s081-lab-util/index.html">
+<meta property="og:url" content="http://localhost:4000/2024/08/10/6-s081-lab-util/index.html">
 <meta property="og:site_name" content="Toki World">
-<meta property="og:description" content="lab utiluser-level sleep可能需要查看文件： ![Pasted image 20240728183432](&#x2F;6-s081-lab-util&#x2F;Pasted image 20240728183432.png) user-level pingpong管道是单向的，想要双向通信必须使用两个管道 primes递归过程中注意检测 read 的返回值以判断终止条件 f">
+<meta property="og:description" content="lab utiluser-level sleep可能需要查看文件：   user-level pingpong管道是单向的，想要双向通信必须使用两个管道 primes递归过程中注意检测 read 的返回值以判断终止条件 fork产生的子进程共享父进程的文件描述符，但可单独关闭而不影响另一个进程 小心关闭不需要的 fd，不然很可能不够用…    CSP 线程模型参考：贝尔实验室和 CSP 线程 —">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-08-09T09:32:00.000Z">
-<meta property="article:modified_time" content="2024-08-09T09:55:06.035Z">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240728183432.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240809151722.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240809152236.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240809152455.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240809152406.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073223.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073351.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073358.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073521.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073737.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073948.png">
+<meta property="og:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808074131.png">
+<meta property="article:published_time" content="2024-08-10T11:49:51.000Z">
+<meta property="article:modified_time" content="2024-08-10T11:50:05.519Z">
 <meta property="article:author" content="Toki">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240728183432.png">
     
     
       
@@ -93,17 +106,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/08/09/6-s081-lab-util/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&text=6-s081-lab-util"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&is_video=false&description=6-s081-lab-util"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=6-s081-lab-util&body=Check out this article: http://localhost:4000/2024/08/09/6-s081-lab-util/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&name=6-s081-lab-util&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/08/09/6-s081-lab-util/&t=6-s081-lab-util"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/08/10/6-s081-lab-util/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&text=6-s081-lab-util"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&is_video=false&description=6-s081-lab-util"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=6-s081-lab-util&body=Check out this article: http://localhost:4000/2024/08/10/6-s081-lab-util/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&name=6-s081-lab-util&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/08/10/6-s081-lab-util/&t=6-s081-lab-util"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -135,7 +148,7 @@
       
     <div class="postdate">
       
-        <time datetime="2024-08-09T09:32:00.000Z" class="dt-published" itemprop="datePublished">2024-08-09</time>
+        <time datetime="2024-08-10T11:49:51.000Z" class="dt-published" itemprop="datePublished">2024-08-10</time>
         
       
     </div>
@@ -151,43 +164,53 @@
 
   <div class="content e-content" itemprop="articleBody">
     <h2 id="lab-util"><a href="#lab-util" class="headerlink" title="lab util"></a>lab util</h2><h3 id="user-level-sleep"><a href="#user-level-sleep" class="headerlink" title="user-level sleep"></a>user-level sleep</h3><p>可能需要查看文件：</p>
-<p>![Pasted image 20240728183432](&#x2F;6-s081-lab-util&#x2F;Pasted image 20240728183432.png)</p>
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240728183432.png" class title="Pasted image 20240728183432.png">
+
 <h3 id="user-level-pingpong"><a href="#user-level-pingpong" class="headerlink" title="user-level pingpong"></a>user-level pingpong</h3><p>管道是单向的，想要双向通信必须使用两个管道</p>
 <h3 id="primes"><a href="#primes" class="headerlink" title="primes"></a>primes</h3><p>递归过程中注意检测 read 的返回值以判断终止条件</p>
 <p>fork产生的子进程共享父进程的文件描述符，但可单独关闭而不影响另一个进程</p>
 <p>小心关闭不需要的 fd，不然很可能不够用…</p>
-
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240809151722.png" class title="Pasted image 20240809151722.png">
 
 
 <h4 id="CSP-线程模型"><a href="#CSP-线程模型" class="headerlink" title="CSP 线程模型"></a>CSP 线程模型</h4><p>参考：<a target="_blank" rel="noopener" href="https://swtch.com/~rsc/thread/">贝尔实验室和 CSP 线程 — Bell Labs and CSP Threads (swtch.com)</a></p>
 <p>概述：并发编程不应仅仅被视作一种提升效率的手段，提升效率有多种方式，如asynchronous event-driven programming 异步事件驱动的编程，不一定需要并发编程。并发编程还可以提供一种自然的抽象，使得程序更加简单</p>
 <p>SRC 线程模型过于底层，不得不配合一些其他的技术才能使用，此处提供了一种新的内存模型</p>
 <h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><p>open后，使用 fstat 获取文件信息存储在 struct stat 中，里面保存了包含文件类型的各种信息：</p>
-
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240809152236.png" class title="Pasted image 20240809152236.png">
 
 
 <p>读取目录文件存储在 struct dirent 中：</p>
-<p>![img](Pasted image 20240809152455.png)</p>
-<p>![img](Pasted image 20240809152406.png)</p>
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240809152455.png" class title="Pasted image 20240809152455.png">
+
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240809152406.png" class title="Pasted image 20240809152406.png">
+
 <h3 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h3><h4 id="指针使用"><a href="#指针使用" class="headerlink" title="指针使用"></a>指针使用</h4><p>指针数组，与二维数组完全不同：</p>
-<p>![img](Pasted image 20240808073223.png)</p>
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073223.png" class title="Pasted image 20240808073223.png">
+
 <p>args + x 表示第 x+1 个元素：</p>
-<p>![img](Pasted image 20240808073351.png)</p>
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073351.png" class title="Pasted image 20240808073351.png">
+
 <p>指针数组做参数时可能要求以NULL结尾：</p>
-<p>![img](Pasted image 20240808073358.png)</p>
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073358.png" class title="Pasted image 20240808073358.png">
+
 <p>注意指针运算：</p>
 <ul>
 <li>result为char**类型</li>
 </ul>
-<p>![img](Pasted image 20240808073521.png)</p>
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073521.png" class title="Pasted image 20240808073521.png">
+
 <h4 id="字符串数组"><a href="#字符串数组" class="headerlink" title="字符串数组"></a>字符串数组</h4><p>复制只是指针赋值…而非复制字符串</p>
 <p>可用这种方式初始化：</p>
-<p>![img](Pasted image 20240808073737.png)</p>
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073737.png" class title="Pasted image 20240808073737.png">
+
 <p><em>read</em> 读进来的数据不会自动<em>补0</em>，需要自己加</p>
 <p>小心判断字符串中的元素：</p>
-<p>![img](Pasted image 20240808073948.png)</p>
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808073948.png" class title="Pasted image 20240808073948.png">
+
 <h4 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h4><p>exec 的第一个元素必须是执行的程序名称</p>
-<p>![img](Pasted image 20240808074131.png)</p>
+<img src="/2024/08/10/6-s081-lab-util/08/10/6-s081-lab-util/Pasted%20image%2020240808074131.png" class title="Pasted image 20240808074131.png">
+
 <p>如：argv[1] 为 grep，则 args[0] 必须是 grep，且 args 以 NULL 结尾</p>
 
   </div>
@@ -220,17 +243,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/08/09/6-s081-lab-util/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&text=6-s081-lab-util"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&is_video=false&description=6-s081-lab-util"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=6-s081-lab-util&body=Check out this article: http://localhost:4000/2024/08/09/6-s081-lab-util/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/08/09/6-s081-lab-util/&name=6-s081-lab-util&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/08/09/6-s081-lab-util/&t=6-s081-lab-util"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://localhost:4000/2024/08/10/6-s081-lab-util/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&text=6-s081-lab-util"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&is_video=false&description=6-s081-lab-util"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=6-s081-lab-util&body=Check out this article: http://localhost:4000/2024/08/10/6-s081-lab-util/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&title=6-s081-lab-util"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://localhost:4000/2024/08/10/6-s081-lab-util/&name=6-s081-lab-util&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/2024/08/10/6-s081-lab-util/&t=6-s081-lab-util"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
