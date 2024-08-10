@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lab syscall" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki World</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki World</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lab syscall
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#syscall"><span class="post-toc-text">syscall</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86%E5%87%86%E5%A4%87"><span class="post-toc-text">前置知识准备</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Calling-system-calls"><span class="post-toc-text">Calling system calls</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#System-call-arguments"><span class="post-toc-text">System call arguments</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%8C%87%E9%92%88%E5%8F%82%E6%95%B0"><span class="post-toc-text">指针参数</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%9C%A8%E5%86%85%E6%A0%B8%E4%B8%8E%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E4%B9%8B%E9%97%B4%E5%AE%89%E5%85%A8%E5%9C%B0%E4%BC%A0%E9%80%92%E6%95%B0%E6%8D%AE"><span class="post-toc-text">在内核与用户空间之间安全地传递数据</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Supervisor-Status-Register%EF%BC%9Asstatus"><span class="post-toc-text">Supervisor Status Register：sstatus</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SPP-bit"><span class="post-toc-text">SPP bit</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SXLEN-32"><span class="post-toc-text">SXLEN &#x3D; 32</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SXLEN-64"><span class="post-toc-text">SXLEN &#x3D; 64</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%B8%80%E4%BA%9B%E6%9C%AF%E8%AF%AD%E8%A7%A3%E9%87%8A"><span class="post-toc-text">一些术语解释</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%BF%98%E6%B2%A1%E7%9C%8B"><span class="post-toc-text">还没看</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Supervisor-Cause-Register%EF%BC%9Ascause"><span class="post-toc-text">Supervisor Cause Register：scause</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#using-gdb"><span class="post-toc-text">using gdb</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#backtrace"><span class="post-toc-text">backtrace</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#p-x-p"><span class="post-toc-text">p &#x2F;x *p</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%89%B9%E6%9D%83%E5%AF%84%E5%AD%98%E5%99%A8"><span class="post-toc-text">特权寄存器</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%B0%83%E8%AF%95-kernel-panic"><span class="post-toc-text">调试 kernel panic</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%A4%84%E7%90%86%E5%99%A8%E5%92%8C%E5%86%85%E6%A0%B8%E7%9A%84%E7%8A%B6%E6%80%81"><span class="post-toc-text">查看处理器和内核的状态</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%88%86%E6%9E%90"><span class="post-toc-text">分析</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#syscall-trace"><span class="post-toc-text">syscall trace</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF"><span class="post-toc-text">切换分支</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#trace-%E6%98%AF%E6%80%8E%E4%B9%88%E4%B8%8E%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%8F%B7%E5%85%B3%E8%81%94%E8%B5%B7%E6%9D%A5%E7%9A%84%EF%BC%9F"><span class="post-toc-text">trace 是怎么与系统调用号关联起来的？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BC%AA%E5%AD%97%E5%85%B8"><span class="post-toc-text">伪字典</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%B6%85%E6%97%B6"><span class="post-toc-text">超时</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#sysinfo"><span class="post-toc-text">sysinfo</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#risc-v-%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="post-toc-text">risc-v 物理内存分配</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#kernel-kalloc-c"><span class="post-toc-text">kernel&#x2F;kalloc.c</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E9%97%AE%E9%A2%98"><span class="post-toc-text">多线程同步问题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#extern"><span class="post-toc-text">extern</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="post-toc-text">头文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#syscall-1"><span class="post-toc-text">syscall</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h2><h3 id="前置知识准备"><a href="#前置知识准备" class="headerlink" title="前置知识准备"></a>前置知识准备</h3><h4 id="Calling-system-calls"><a href="#Calling-system-calls" class="headerlink" title="Calling system calls"></a>Calling system calls</h4><ol>
+<li><p>用户程序将 exec 的参数放到寄存器 a0 和 a1 中，系统调用号放到 <em>a7</em> 中</p>
+<ul>
+<li>syscalls 函数指针数组通过该系统调用号 调用相关的函数</li>
+</ul>
+</li>
+<li><p>调用 ecall 进入 kernel，执行：uservec, usertrap, and then syscall</p>
+</li>
+<li><p>syscall 中的 syscalls 利用 a7 调用相关的函数，函数返回时将返回值放到 a0 中</p>
+<ul>
+<li>遇到错误时 syscall 返回赋值如-1，并打印错误消息</li>
+</ul>
+</li>
+</ol>
+<h4 id="System-call-arguments"><a href="#System-call-arguments" class="headerlink" title="System call arguments"></a>System call arguments</h4><p>kernel&#x2F;syscall.c</p>
+<ol>
+<li><p>用户代码调用的是 system call wrapper functions，参数被放到<em>约定的寄存器</em>中</p>
+</li>
+<li><p>内核 <em>trap</em> 代码将用户寄存器保存到当前进程的 <em>trap frame</em> 中</p>
+<ul>
+<li>使用示例：（syscall获取系统调用号）</li>
+</ul>
+</li>
+</ol>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808084451.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808084451.png" class title="Pasted image 20240808084451.png"></a>
+
+<ol start="3">
+<li>argint, argaddr, and argfd 以整数、指针或文件描述符的形式检索第n个系统调用参数，调用 argraw 保存结果</li>
+</ol>
+<h5 id="指针参数"><a href="#指针参数" class="headerlink" title="指针参数"></a>指针参数</h5><p>内核使用指针读写用户内存，这带来了一些问题：</p>
+<ol>
+<li><p>用户可能传递<em>无效指针</em> &#x2F; 有<em>恶意行为</em>，让内核访问内核内存而非用户内存</p>
+</li>
+<li><p>内核的<em>页表</em>与用户不同，不能使用普通指令从该指针指向的虚拟地址读取数据</p>
+</li>
+</ol>
+<h5 id="在内核与用户空间之间安全地传递数据"><a href="#在内核与用户空间之间安全地传递数据" class="headerlink" title="在内核与用户空间之间安全地传递数据"></a>在内核与用户空间之间安全地传递数据</h5><ol>
+<li><p>内核实现了一些函数，可以在用户和内核间安全地传递参数</p>
+</li>
+<li><p>如 fetchstr，从用户空间检索字符串文件名，通过调用 copystr实现</p>
+</li>
+</ol>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808085930.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808085930.png" class title="Pasted image 20240808085930.png"></a>
+
+<ol start="3">
+<li><p>copystr 从用户页表中的地址 addr 向 buf 复制最多 max 个字节的数据，它使用 walkaddr 遍历页表，以确定 addr 的物理地址</p>
+<ul>
+<li>类似函数：<em>copyout</em></li>
+</ul>
+</li>
+<li><p>由于内核将所有的 PM 映射到相同的内核 VM，copystr 可以直接从 addr 的物理地址向 buf复制数据</p>
+</li>
+<li><p>walkaddr 会检查用户提供的地址是否属于用户地址空间</p>
+</li>
+</ol>
+<h4 id="Supervisor-Status-Register：sstatus"><a href="#Supervisor-Status-Register：sstatus" class="headerlink" title="Supervisor Status Register：sstatus"></a>Supervisor Status Register：sstatus</h4><p>跟踪当前的操作状态：用户&#x2F;内核，其位数为SXLEN。</p>
+<h5 id="SPP-bit"><a href="#SPP-bit" class="headerlink" title="SPP bit"></a>SPP bit</h5><p><em>SPP</em> 表示表示进入内核模式前的特权级别，如果 trap 来自用户，则 SPP 被设为 0，否则为 1</p>
+<p>当从 trap handler 返回时，</p>
+<h5 id="SXLEN-32"><a href="#SXLEN-32" class="headerlink" title="SXLEN &#x3D; 32"></a>SXLEN &#x3D; 32</h5><a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808093819.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808093819.png" class title="Pasted image 20240808093819.png"></a>
+
+<h5 id="SXLEN-64"><a href="#SXLEN-64" class="headerlink" title="SXLEN &#x3D; 64"></a>SXLEN &#x3D; 64</h5><a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808094231.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808094231.png" class title="Pasted image 20240808094231.png"></a>
+
+<h5 id="一些术语解释"><a href="#一些术语解释" class="headerlink" title="一些术语解释"></a>一些术语解释</h5><p>以下是这些术语的缩写及其解释：</p>
+<ol>
+<li><p><strong>SXLEN</strong>: Supervisor XLEN</p>
+<ul>
+<li><code>SXLEN</code>表示监督模式下的字长（XLEN），通常是32位或64位，取决于处理器的架构。</li>
+</ul>
+</li>
+<li><p><strong>hart</strong>: Hardware Thread</p>
+<ul>
+<li><code>hart</code>表示硬件线程（Hardware Thread），即处理器内的一个独立执行线程。</li>
+</ul>
+</li>
+<li><p><strong>SRET</strong>: Supervisor Return</p>
+<ul>
+<li><code>SRET</code>是一条指令，用于从陷阱处理程序返回到监督模式之前的执行状态。</li>
+</ul>
+</li>
+<li><p><strong>SPP</strong>: Supervisor Previous Privilege</p>
+<ul>
+<li><code>SPP</code>是<code>sstatus</code>寄存器中的一位，表示进入监督模式之前的特权级别。</li>
+</ul>
+</li>
+<li><p><strong>SIE</strong>: Supervisor Interrupt Enable</p>
+<ul>
+<li><code>SIE</code>是<code>sstatus</code>寄存器中的一位，用于启用或禁用监督模式下的中断。</li>
+</ul>
+</li>
+<li><p><strong>SPIE</strong>: Supervisor Previous Interrupt Enable</p>
+<ul>
+<li><code>SPIE</code>是<code>sstatus</code>寄存器中的一位，表示进入监督模式之前中断是否启用。</li>
+</ul>
+</li>
+<li><p><strong>mstatus</strong>: Machine Status</p>
+<ul>
+<li><code>mstatus</code>是机器模式状态寄存器，记录处理器的状态信息，包括中断使能和特权级别等。</li>
+</ul>
+</li>
+</ol>
+<h5 id="还没看"><a href="#还没看" class="headerlink" title="还没看"></a>还没看</h5><p>好的，下面是直接翻译：</p>
+<p><code>sstatus</code>寄存器是一个SXLEN位的读&#x2F;写寄存器，当SXLEN&#x3D;32时其格式如图4.1所示，当SXLEN&#x3D;64时其格式如图4.2所示。<code>sstatus</code>寄存器记录处理器的当前运行状态。SPP位表示hart在进入监督模式之前所执行的特权级别。当发生陷阱时，如果陷阱源自用户模式，SPP被设置为0，否则设置为1。当执行SRET指令以从陷阱处理程序返回时，如果SPP位为0，特权级别被设置为用户模式；如果SPP位为1，特权级别被设置为监督模式；然后SPP被设置为0。</p>
+<p>SIE位启用或禁用监督模式下的所有中断。当SIE位被清除时，在监督模式下不会接受中断。当hart运行在用户模式时，SIE的值被忽略，并且监督级别的中断是启用的。监督模式可以使用<code>sie</code> CSR禁用单个中断源。</p>
+<p>SPIE位表示在进入监督模式之前监督中断是否启用。当陷阱进入监督模式时，SPIE被设置为SIE，并且SIE被设置为0。当执行SRET指令时，SIE被设置为SPIE，然后SPIE被设置为1。</p>
+<p><code>sstatus</code>寄存器是<code>mstatus</code>寄存器的一个子集。</p>
+<h4 id="Supervisor-Cause-Register：scause"><a href="#Supervisor-Cause-Register：scause" class="headerlink" title="Supervisor Cause Register：scause"></a>Supervisor Cause Register：scause</h4><a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808102307.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808102307.png" class title="Pasted image 20240808102307.png"></a>
+
+<p>SXLEN-bit 长的读写寄存器，当从 trap 进入内核模式时，有一句代码写入 <em>scause</em> 指明 trap 的原因。否则永远不会被写入——但可能被软件写 </p>
+<ul>
+<li>如果trap由 <em>中断</em> 引起，则会设置 Interrupt bit。</li>
+<li>异常码用于标识最近的异常或中断</li>
+</ul>
+<p>WLRL：寄存器在写入操作后，字段的值不会被重置或改变，直到进行下一次写操作。且值必须在指定范围内，此处要求必须能保存值0-31（即必须实现bit 0-4），支持哪些异常取决于实现</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808102529.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808102529.png" class title="Pasted image 20240808102529.png"></a>
+<h3 id="using-gdb"><a href="#using-gdb" class="headerlink" title="using gdb"></a>using gdb</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span> qemu-gdb</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">riscv64<span class="operator">-</span><span class="literal">unknown</span><span class="operator">-</span>elf<span class="operator">-</span>gdb</span><br></pre></td></tr></table></figure>
+
+<h4 id="backtrace"><a href="#backtrace" class="headerlink" title="backtrace"></a>backtrace</h4><a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808091710.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808091710.png" class title="Pasted image 20240808091710.png"></a>
+
+<ul>
+<li>backtrace 可以查看调用栈，0为栈顶</li>
+</ul>
+<h4 id="p-x-p"><a href="#p-x-p" class="headerlink" title="p &#x2F;x *p"></a>p &#x2F;x *p</h4><a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808092718.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808092718.png" class title="Pasted image 20240808092718.png"></a>
+
+<ul>
+<li>p &#x2F;x *p，以十六进制打印*p</li>
+</ul>
+<h5 id="特权寄存器"><a href="#特权寄存器" class="headerlink" title="特权寄存器"></a>特权寄存器</h5><a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808093127.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808093127.png" class title="Pasted image 20240808093127.png"></a>
+
+<ul>
+<li>处于内核模式时，可以查看特权寄存器</li>
+</ul>
+<h4 id="调试-kernel-panic"><a href="#调试-kernel-panic" class="headerlink" title="调试 kernel panic"></a>调试 kernel panic</h4><p>例如：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808095237.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808095237.png" class title="Pasted image 20240808095237.png"></a>
+
+<ul>
+<li><em>scause</em>：Supervisor Cause Register</li>
+</ul>
+<p>这个特权寄存器用于保存发生异常或中断的原因，查询risc-v文档可知 0x000000000000000d 表示Store&#x2F;AMO access fault，即写入内存时发生了访问错误</p>
+<ul>
+<li><em>sepc</em>：Supervisor Exception Program Counter</li>
+</ul>
+<p>保存了在监督模式下发生异常时的程序计数器值，可查看 <em>kernel.asm</em> 确认导致异常的指令，在此例中为：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808101139.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808101139.png" class title="Pasted image 20240808101139.png"></a>
+
+
+
+<ul>
+<li><em>stval</em>：Supervisor Trap Value</li>
+</ul>
+<p>用于保存与异常或中断相关的附加信息。对于一些异常类型，比如存储访问故障或地址错误，<em>stval</em> 可能包含导致异常的内存地址。</p>
+<h5 id="查看处理器和内核的状态"><a href="#查看处理器和内核的状态" class="headerlink" title="查看处理器和内核的状态"></a>查看处理器和内核的状态</h5><p>通过上面的sepc，可以通过gdb找到相应的指令，并在此处查看寄存器值：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808101550.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808101550.png" class title="Pasted image 20240808101550.png"></a>
+
+<h5 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h5><p>可以看到内核 VM 0~0x02000000 并没有被映射到物理内存。查询scause表可以看到异常为：load page fault</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808103846.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808103846.png" class title="Pasted image 20240808103846.png"></a>
+
+<p>有时需要更多信息，比如需要查看内核崩溃时的用户进程名字：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808103944.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808103944.png" class title="Pasted image 20240808103944.png"></a>
+
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808105152.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240808105152.png" class title="Pasted image 20240808105152.png"></a>
+
+<p>以及 pid 等等数据</p>
+<h3 id="syscall-trace"><a href="#syscall-trace" class="headerlink" title="syscall trace"></a>syscall trace</h3><h4 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h4><p>一定要做以下步骤获取 trace.c 以及 grade 、sysinfo.h 文件：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809055041.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809055041.png" class title="Pasted image 20240809055041.png"></a>
+
+<p>不然就会像我一样想半天，然后自己写了个 trace.c 死活发现不对</p>
+<p>可以参考下 trace.c 的源码：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809055226.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809055226.png" class title="Pasted image 20240809055226.png"></a>
+
+<h4 id="trace-是怎么与系统调用号关联起来的？"><a href="#trace-是怎么与系统调用号关联起来的？" class="headerlink" title="trace 是怎么与系统调用号关联起来的？"></a>trace 是怎么与系统调用号关联起来的？</h4><p>这个点困扰了我很久，查了很多代码都没找到什么踪迹，很神奇，加了个 SYS_trace 宏，加了个函数 sys_trace ，加了个 trace 接口就可以了</p>
+<p>猜测是因为 usys.pl 中的代码：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809075410.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809075410.png" class title="Pasted image 20240809075410.png"></a>
+
+<h4 id="伪字典"><a href="#伪字典" class="headerlink" title="伪字典"></a>伪字典</h4><p>本质还是个数组</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809070555.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809070555.png" class title="Pasted image 20240809070555.png"></a>
+
+<h4 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h4><p>电脑性能原因？…我改成二分计算系统调用号都耗时太长，改成O(1)又会占用太多空间…由于局部性说不定会耗时更长，搞不懂为什么要传个掩码进来</p>
+<p>需要去这里改评分时间：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809090132.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809090132.png" class title="Pasted image 20240809090132.png"></a>
+
+
+
+
+<h3 id="sysinfo"><a href="#sysinfo" class="headerlink" title="sysinfo"></a>sysinfo</h3><h4 id="risc-v-物理内存分配"><a href="#risc-v-物理内存分配" class="headerlink" title="risc-v 物理内存分配"></a>risc-v 物理内存分配</h4><h5 id="kernel-kalloc-c"><a href="#kernel-kalloc-c" class="headerlink" title="kernel&#x2F;kalloc.c"></a>kernel&#x2F;kalloc.c</h5><p>核心是这几个结构体和变量：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809110559.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809110559.png" class title="Pasted image 20240809110559.png"></a>
+
+<p>上面那个链表采用头插法收集释放的页指针</p>
+<p>一些小trick：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809110628.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809110628.png" class title="Pasted image 20240809110628.png"></a>
+
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809111129.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809111129.png" class title="Pasted image 20240809111129.png"></a>
+
+
+<h4 id="多线程同步问题"><a href="#多线程同步问题" class="headerlink" title="多线程同步问题"></a>多线程同步问题</h4><p>——需要锁</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809113954.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809113954.png" class title="Pasted image 20240809113954.png"></a>
+
+<h4 id="extern"><a href="#extern" class="headerlink" title="extern"></a>extern</h4><p>extern 只能用于声明变量或函数，而不能定义结构体，这样不行：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809114924.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809114924.png" class title="Pasted image 20240809114924.png"></a>
+
+<p>extern 的变量无法访问内部成员（下面的proc[i]还是可以的），这种要访问next的最好搞个公共头文件</p>
+<p>这样可以：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809114935.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809114935.png" class title="Pasted image 20240809114935.png"></a>
+<ul>
+<li>本质上在用匿名结构体定义变量，声明kmem定义在别的地方</li>
+</ul>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809114940.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809114940.png" class title="Pasted image 20240809114940.png"></a>
+
+<h4 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h4><p>头文件中还是别include其他的头文件了，很容易出现重复定义，在需要的.c文件中include就行</p>
+<h4 id="syscall-1"><a href="#syscall-1" class="headerlink" title="syscall"></a>syscall</h4><p>值得注意的是所有系统调用的都是以这种形式定义，并通过trapframe中的寄存器值作参数使用：</p>
+<a href="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809123253.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab%20syscall/Pasted%20image%2020240809123253.png" class title="Pasted image 20240809123253.png"></a>
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-10</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span>Why so serious?</span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
