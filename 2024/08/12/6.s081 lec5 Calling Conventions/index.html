@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec5 Calling Conventions" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec5 Calling Conventions
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Calling-Conventions"><span class="post-toc-text">Calling Conventions</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%AF%BE%E5%89%8D%E5%87%86%E5%A4%87"><span class="post-toc-text">课前准备</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#C-Datatypes-and-Alignment"><span class="post-toc-text">C Datatypes and Alignment</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#RVG-Calling-Convention"><span class="post-toc-text">RVG Calling Convention</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%80%9A%E8%BF%87%E5%AF%84%E5%AD%98%E5%99%A8%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="post-toc-text">通过寄存器传递参数</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%BF%87%E9%95%BF-%E8%BF%87%E7%9F%AD%E7%9A%84%E5%8F%82%E6%95%B0"><span class="post-toc-text">过长&#x2F;过短的参数</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="post-toc-text">返回值</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%A0%88%E5%B1%9E%E6%80%A7%EF%BC%9A%E5%90%91%E4%B8%8B%E5%A2%9E%E9%95%BF%E5%92%8C16%E5%AD%97%E8%8A%82%E5%AF%B9%E9%BD%90"><span class="post-toc-text">栈属性：向下增长和16字节对齐</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Caller-saved-%E4%B8%8E-Callee-saved"><span class="post-toc-text">Caller-saved 与 Callee-saved</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Soft-Float-Calling-Convention"><span class="post-toc-text">Soft-Float Calling Convention</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#C%E7%A8%8B%E5%BA%8F%E5%88%B0%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="post-toc-text">C程序到汇编程序的转换</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6-o"><span class="post-toc-text">目标文件 .o</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80"><span class="post-toc-text">汇编语言</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RISC-V-vs-x86"><span class="post-toc-text">RISC-V vs x86</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8C%BA%E5%88%AB"><span class="post-toc-text">区别</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%B2%BE%E7%AE%80%E6%8C%87%E4%BB%A4%E9%9B%86%E5%BA%94%E7%94%A8"><span class="post-toc-text">精简指令集应用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%90%91%E5%90%8E%E5%85%BC%E5%AE%B9"><span class="post-toc-text">向后兼容</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#gdb%E5%92%8C%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C"><span class="post-toc-text">gdb和汇编代码执行</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%80%E4%BA%9B%E6%A0%87%E7%AD%BE"><span class="post-toc-text">一些标签</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#asm-%E4%B8%8E-s"><span class="post-toc-text">.asm 与 .s</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#gdb"><span class="post-toc-text">gdb</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RISC-V%E5%AF%84%E5%AD%98%E5%99%A8"><span class="post-toc-text">RISC-V寄存器</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E4%BD%BF%E7%94%A8"><span class="post-toc-text">寄存器使用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Compressed-Instruction"><span class="post-toc-text">Compressed Instruction</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="post-toc-text">函数参数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Caller-Saved-%E4%B8%8E-Callee-Saved"><span class="post-toc-text">Caller Saved 与 Callee Saved</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%9B%B6%E6%89%A9%E5%B1%95%E5%92%8C%E7%AC%A6%E5%8F%B7%E6%89%A9%E5%B1%95"><span class="post-toc-text">零扩展和符号扩展</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Stack"><span class="post-toc-text">Stack</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Stack-Frame"><span class="post-toc-text">Stack Frame</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%A4%E4%B8%AA%E9%87%8D%E8%A6%81%E7%9A%84%E5%AF%84%E5%AD%98%E5%99%A8%EF%BC%9ASP-%E5%92%8C-FP"><span class="post-toc-text">两个重要的寄存器：SP 和 FP</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B1%87%E7%BC%96%E5%87%BD%E6%95%B0"><span class="post-toc-text">汇编函数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#leaf-%E5%87%BD%E6%95%B0"><span class="post-toc-text">leaf 函数</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Prologue-%E4%B8%8E-Epilogue"><span class="post-toc-text">Prologue 与 Epilogue</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%88%A0%E6%8E%89-Prologue-%E4%B8%8E-Epilogue"><span class="post-toc-text">删掉  Prologue 与 Epilogue</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BD%BF%E7%94%A8-gdb-%E6%9F%A5%E7%9C%8B-Stack-Frame"><span class="post-toc-text">使用 gdb 查看 Stack Frame</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="Calling-Conventions"><a href="#Calling-Conventions" class="headerlink" title="Calling Conventions"></a>Calling Conventions</h2><blockquote>
+<p>这节课的目标是让你们熟悉RISC-V处理器，汇编语言，以及RISC-V的calling convention。对于这周要发布的traps lab来说，这些内容至关重要，因为在这个实验中你们将会频繁用到 trapframe 和栈</p>
+</blockquote>
+<h3 id="课前准备"><a href="#课前准备" class="headerlink" title="课前准备"></a>课前准备</h3><h4 id="C-Datatypes-and-Alignment"><a href="#C-Datatypes-and-Alignment" class="headerlink" title="C Datatypes and Alignment"></a>C Datatypes and Alignment</h4><p>存在<em>零扩展和符号扩展</em>现象。符合这些标准的数据结构在内存中将自然对齐</p>
+<a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812074713.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812074713.png" class title="Pasted image 20240812074713.png"></a>
+
+<h4 id="RVG-Calling-Convention"><a href="#RVG-Calling-Convention" class="headerlink" title="RVG Calling Convention"></a>RVG Calling Convention</h4><a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812075712.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812075712.png" class title="Pasted image 20240812075712.png"></a>
+
+<h5 id="通过寄存器传递参数"><a href="#通过寄存器传递参数" class="headerlink" title="通过寄存器传递参数"></a>通过寄存器传递参数</h5><p>最多<em>8</em>个整数寄存器和8个浮点数寄存器，更多的参数需要通过<em>堆栈</em></p>
+<ul>
+<li>a0–a7，fa0–fa7</li>
+<li>第 i 个参数为浮点数则用 fai 传递，否则用 ai</li>
+<li>可以想象为<em>按指针大小对齐的结构体</em>，sp指向第一个参数（注意是小端序）</li>
+</ul>
+<h5 id="过长-过短的参数"><a href="#过长-过短的参数" class="headerlink" title="过长&#x2F;过短的参数"></a>过长&#x2F;过短的参数</h5><ol>
+<li><p>小于指针字的参数通过<em>最低有效位</em>传递给寄存器，在堆栈上为<em>小端存储</em></p>
+</li>
+<li><p>两倍指针字长：自然对齐，它们驻留在对齐的<em>偶数-奇数寄存器对</em>中，偶数寄存器放最低有效位</p>
+</li>
+</ol>
+<blockquote>
+<p>例如，在 RV32 中，函数 <em>void foo(int, long long)</em> 的第一个参数通过 a0 传递，第二个参数通过 a2 和 a3 传递。a1 中不会传递任何内容。</p>
+</blockquote>
+<ol start="3">
+<li>超过两倍于指针字大小的参数：<em>引用内存</em><ul>
+<li>不放堆栈，寄存器中给个指针</li>
+</ul>
+</li>
+</ol>
+<h5 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h5><p>整数寄存器 a0 和 a1 以及浮点寄存器 fa0 和 fa1</p>
+<ul>
+<li>如果返回值是结构体，可能把这个四个寄存器用完</li>
+</ul>
+<p>更大的值分配内存（堆还是栈？返回指针？）</p>
+<h5 id="栈属性：向下增长和16字节对齐"><a href="#栈属性：向下增长和16字节对齐" class="headerlink" title="栈属性：向下增长和16字节对齐"></a>栈属性：向下增长和16字节对齐</h5><h5 id="Caller-saved-与-Callee-saved"><a href="#Caller-saved-与-Callee-saved" class="headerlink" title="Caller-saved 与 Callee-saved"></a>Caller-saved 与 Callee-saved</h5><p>七个整数寄存器 <code>t0</code> 到 <code>t6</code> 和十二个浮点寄存器 <code>ft0</code> 到 <code>ft11</code> 是<em>临时寄存器</em>，在函数调用之间是易失的，需要由 <em>调用者保存</em></p>
+<p>十二个整数寄存器 <code>s0</code> 到 <code>s11</code> 和十二个浮点寄存器 <code>fs0</code> 到 <code>fs11</code> 是在函数调用之间 <em>保持不变</em> 的，如果被调用者需要使用这些寄存器，必须由 <em>被调用者保存</em></p>
+<h4 id="Soft-Float-Calling-Convention"><a href="#Soft-Float-Calling-Convention" class="headerlink" title="Soft-Float Calling Convention"></a>Soft-Float Calling Convention</h4><p>对于 <em>没有浮点硬件</em> 的机器，将使用软浮点调用约定，避免使用任何 F, D, and Q standard extensions，也不使用 f 寄存器</p>
+<p>整数参数的传递方式与 RVG 调用约定相同，<em>浮点参数则使用整数寄存器传递和返回</em>，遵循与相同大小的整数参数相同的规则</p>
+<blockquote>
+<p>例如，在 RV32 中，函数 <code>double foo(int, double, long double)</code> 的第一个参数通过 <code>a0</code> 传递，第二个参数通过 <code>a2</code> 和 <code>a3</code> 传递，第三个参数通过 <code>a4</code> 以引用方式传递；返回值在 <code>a0</code> 和 <code>a1</code> 中返回。在 RV64 中，参数通过 <code>a0</code>、<code>a1</code> 和 <code>a2-a3</code> 对传递，返回值在 <code>a0</code> 中返回。</p>
+</blockquote>
+<p>浮点数的动态舍入模式、异常 flag 根据 <code>fenv.h</code> 头文件中的例程来进行访问和管理</p>
+<h3 id="C程序到汇编程序的转换"><a href="#C程序到汇编程序的转换" class="headerlink" title="C程序到汇编程序的转换"></a>C程序到汇编程序的转换</h3><blockquote>
+<p>高级语言–汇编语言–二进制指令</p>
+</blockquote>
+<p>一个处理器可以理解特定的二进制指令，将这些指令的集合称为指令集，任何一个处理器都有一个关联的 <em>ISA（Instruction Sets Architecture）</em>。每一条指令都有其关联的二进制编码，或 <em>Opcode</em>。</p>
+<ul>
+<li>一个二进制指令对应了特定的汇编指令</li>
+</ul>
+<p>要让处理器理解你的语言，必须将它翻译为二进制指令</p>
+<h4 id="目标文件-o"><a href="#目标文件-o" class="headerlink" title="目标文件 .o"></a>目标文件 .o</h4><p>C经过编译、汇编、链接会变为 .obj或者.o文件。</p>
+<h4 id="汇编语言"><a href="#汇编语言" class="headerlink" title="汇编语言"></a>汇编语言</h4><p>不具备C语言的组织结构，在汇编语言中你只能看到一行行的指令，比如add，mult等等</p>
+<p>没有很好的控制流程，没有循环，但是有基于lable的跳转</p>
+<p>汇编语言中的函数是以label的形式存在而不是真正的函数定义</p>
+<h3 id="RISC-V-vs-x86"><a href="#RISC-V-vs-x86" class="headerlink" title="RISC-V vs x86"></a>RISC-V vs x86</h3><p>不同机器的指令集不同，对应的汇编语言也就不同。</p>
+<blockquote>
+<p>编译器通常是第三方开发的，而非指令集的创建者</p>
+</blockquote>
+<blockquote>
+<p>RISC-V 机器对应的汇编语言为 RISC-V汇编。</p>
+<p>如果你使用RISC-V，你不太能将Linux运行在上面。</p>
+<p>大多数现代计算机都运行在x86和x86-64处理器上。x86拥有一套不同的指令集，看起来与RISC-V非常相似，通常你们的个人电脑上运行的处理器是x86，Intel和AMD的CPU都实现了x86。</p>
+</blockquote>
+<p>RISC-V中的 <em>RISC是精简指令集（Reduced Instruction Set Computer）</em> 的意思，而x86通常被称为 <em>CISC，复杂指令集（Complex Instruction Set Computer）</em>。</p>
+<h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><p>二者有一些关键的区别：</p>
+<ol>
+<li><p><em>指令的数量</em>。创造RISC-V的一个非常大的初衷就是因为Intel手册中指令数量太多了</p>
+</li>
+<li><p><em>指令更加简单</em>。在x86-64中，很多指令都做了不止一件事情。但是RISC-V不会这样做，RISC-V的指令趋向于完成更简单的工作，相应的也消耗更少的CPU执行时间。</p>
+<ul>
+<li>没有确定的原因说，RISC比CISC更好。它们各自有各自的使用场景。</li>
+</ul>
+</li>
+<li><p><em>开源</em>。这是来自于UC-Berkly的一个研究项目，是市场上唯一的一款开源指令集，这意味着任何人都可以为RISC-V开发主板。</p>
+</li>
+</ol>
+<h4 id="精简指令集应用"><a href="#精简指令集应用" class="headerlink" title="精简指令集应用"></a>精简指令集应用</h4><blockquote>
+<p>在你们的日常生活中，你们可能已经在完全不知情的情况下使用了精简指令集。比如说ARM也是一个精简指令集，高通的Snapdragon处理器就是基于ARM。对于Mac，苹果公司也在尝试向ARM做迁移。如果你想在现实世界中找到RISC-V处理器，你可以在一些嵌入式设备中找到。所以RISC-V也是有应用的，当然它可能没有x86那么流行。</p>
+</blockquote>
+<h4 id="向后兼容"><a href="#向后兼容" class="headerlink" title="向后兼容"></a>向后兼容</h4><blockquote>
+<p>Intel的指令集之所以这么大，是因为Intel对于向后兼容非常看重。</p>
+<p>同时，Intel在它的处理器里面做了一些有意思的事情，例如安全相关的enclave，这是Intel最近加到处理器中来提升安全性的功能。</p>
+<p>此外，Intel还实现了一些非常具体的指令，这些指令可以非常高效的进行一些特定的运算。通常来说对于一个场景都会有一个完美的指令。</p>
+</blockquote>
+<p>如果查看RISC-V的文档，可以发现 RISC-V的特殊之处在于：<em>它区分了Base Integer Instruction Set和Standard Extension Instruction Set。</em></p>
+<ul>
+<li>Base Integer Instruction Set包含了所有的常用指令，如 add</li>
+<li>处理器还可以选择性的支持Standard Extension Instruction Set</li>
+</ul>
+<p>这种模式使得RISC-V更容易支持向后兼容。 每一个RISC-V处理器可以声明支持了哪些扩展指令集，然后编译器可以根据支持的指令集来编译代码。</p>
+<h3 id="gdb和汇编代码执行"><a href="#gdb和汇编代码执行" class="headerlink" title="gdb和汇编代码执行"></a>gdb和汇编代码执行</h3><a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/image%2017.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/image%2017.avif" class title="image 17.avif"></a>
+
+<blockquote>
+<p>如果你在你自己的计算机编写同样的C代码并编译，你得到的极有可能是差别较大的汇编代码。这里有很多原因，有一些原因我们之后会讲，有一些原因是因为编译器。</p>
+</blockquote>
+<p>当将C代码编译成汇编代码时，现代的 <em>编译器会执行各种各样的优化</em>，编译器可能决定不使用代码中的某个变量，或执行顺序不同，但保证最终的效果是相同的</p>
+<h4 id="一些标签"><a href="#一些标签" class="headerlink" title="一些标签"></a>一些标签</h4><p>上面的 global表示你可以在其他文件中调用这个函数。</p>
+<p>text表明这里的是代码。</p>
+<p>文件中每一行左边的数字表明的是这条指令会在内存中的哪个位置，这个信息非常有用。</p>
+<p>在汇编代码中还可以看到函数对应的label，以及它们是在哪里定义的。如：</p>
+<a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812110327.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812110327.png" class title="Pasted image 20240812110327.png"></a>
+
+<h4 id="asm-与-s"><a href="#asm-与-s" class="headerlink" title=".asm 与 .s"></a>.asm 与 .s</h4><blockquote>
+<p>我并不是百分百确定。这两类文件都是汇编代码，.asm文件中包含大量额外的标注，而.s文件中没有。所以通常来说当你编译你的C代码，你得到的是.s文件。如果你好奇我们是如何得到.asm文件，makefile里面包含了具体的步骤。</p>
+</blockquote>
+<h4 id="gdb"><a href="#gdb" class="headerlink" title="gdb"></a>gdb</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span> qemu-gdb</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">riscv64<span class="operator">-</span><span class="literal">unknown</span><span class="operator">-</span>elf<span class="operator">-</span>gdb</span><br></pre></td></tr></table></figure>
+
+<p>我的 tui、layout 无法使用，还是只看源码吧。打一个断点：</p>
+<a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812111411.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812111411.png" class title="Pasted image 20240812111411.png"></a>
+
+<p>根据这个地址可以从反汇编文件找到 main 函数的第一条指令：</p>
+<a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812111200.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812111200.png" class title="Pasted image 20240812111200.png"></a>
+
+<ul>
+<li>这个地址上面的汇编指令是在初始化函数栈</li>
+</ul>
+<blockquote>
+<p>其他略过</p>
+</blockquote>
+<h3 id="RISC-V寄存器"><a href="#RISC-V寄存器" class="headerlink" title="RISC-V寄存器"></a>RISC-V寄存器</h3><p>即课前准备的内容：</p>
+<a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812112047.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812112047.png" class title="Pasted image 20240812112047.png"></a>
+
+<p>汇编代码并不是在内存上执行，而是在寄存器上执行。寄存器是用来进行任何运算和数据读取的最快的方式</p>
+<blockquote>
+<p>通常我们在谈到寄存器的时候，我们会用它们的ABI名字。不仅是因为这样描述更清晰和标准，同时也因为在写汇编代码的时候使用的也是ABI名字。</p>
+<p>第一列中的寄存器名字并不是超级重要，它唯一重要的场景是在RISC-V的Compressed Instruction中。</p>
+</blockquote>
+<h4 id="寄存器使用"><a href="#寄存器使用" class="headerlink" title="寄存器使用"></a>寄存器使用</h4><p>我们通过load将数据存放在寄存器中，这里的数据源可以是来自内存，也可以来自另一个寄存器。</p>
+<p>之后我们在寄存器上执行一些操作。</p>
+<p>如果我们对操作的结果关心的话，我们会将操作的结果store在某个地方。这里的目的地可能是内存中的某个地址，也可能是另一个寄存器。</p>
+<h4 id="Compressed-Instruction"><a href="#Compressed-Instruction" class="headerlink" title="Compressed Instruction"></a>Compressed Instruction</h4><p>基本上来说，RISC-V中通常的指令是64bit，但是在Compressed Instruction中指令是16bit。</p>
+<p>在Compressed Instruction中我们 <em>使用更少的寄存器</em>，也就是x8 - x15寄存器。</p>
+<blockquote>
+<p>我猜你们可能会有疑问，为什么s1寄存器和其他的s寄存器是分开的，因为<em>s1在 Compressed Instruction 是有效的，而s2-11却不是</em>。</p>
+</blockquote>
+<h4 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h4><p>a0到a7寄存器是用来作为函数的参数。如果一个函数有超过8个参数，我们就需要用内存了</p>
+<blockquote>
+<p>从这里也可以看出，当可以使用寄存器的时候，我们不会使用内存，我们只在不得不使用内存的场景才使用它。</p>
+</blockquote>
+<p>更多的内容请见课前准备</p>
+<h4 id="Caller-Saved-与-Callee-Saved"><a href="#Caller-Saved-与-Callee-Saved" class="headerlink" title="Caller Saved 与 Callee Saved"></a>Caller Saved 与 Callee Saved</h4><ul>
+<li>Caller Saved：临时变量。需由调用方保存和恢复</li>
+<li>Callee Saved：约定函数调用前后，其值保持不变。需由被调用方保存和恢复</li>
+</ul>
+<p>基本上来说，任何一个Caller Saved寄存器，作为调用方的函数要小心可能的数据可能的变化；任何一个Callee Saved寄存器，作为被调用方的函数要小心寄存器的值不会相应的变化。</p>
+<blockquote>
+<p>学生提问：除了Stack Pointer和Frame Pointer，我不认为我们需要更多的Callee Saved寄存器。</p>
+<p>TA：s0 - s11都是Callee寄存器，我认为它们是 <em>提供给编译器</em> 而不是程序员使用。在一些特定的场景下，你会想要确保一些数据在函数调用之后仍然能够保存，这个时候编译器可以选择使用s寄存器。</p>
+</blockquote>
+<h4 id="零扩展和符号扩展"><a href="#零扩展和符号扩展" class="headerlink" title="零扩展和符号扩展"></a>零扩展和符号扩展</h4><p>大小小于寄存器大小的数据，基于它有符号或无符号，进行相应的扩展</p>
+<h3 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h3><blockquote>
+<p>接下来我们讨论一下栈，stack。栈之所以很重要的原因是，它使得我们的函数变得有组织，且能够正常返回。</p>
+</blockquote>
+<a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/image%2018.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/image%2018.avif" class title="image 18.avif"></a>
+
+<h4 id="Stack-Frame"><a href="#Stack-Frame" class="headerlink" title="Stack Frame"></a>Stack Frame</h4><ol>
+<li><p>每次函数调用都会产生一个 <em>Stack Frame</em>，并且只给函数自己使用。</p>
+</li>
+<li><p>通过移动Stack Pointer来完成Stack Frame的 <em>空间分配</em>。</p>
+</li>
+<li><p><em>从高地址开始向低地址使用</em>。所以栈总是向下增长。空间分配也就得做减法</p>
+</li>
+<li><p>一个函数的Stack Frame包含了<em>保存的寄存器，本地变量</em>，并且，如果函数的 <em>参数</em> 多于8个，额外的参数会出现在Stack中。</p>
+</li>
+<li><p>Stack Frame大小并不总是一样，但是有关Stack Frame有两件事情是确定的：</p>
+<ul>
+<li><em>Return address</em>总是会出现在Stack Frame的第一位</li>
+<li>指向<em>前一个Stack Frame的指针</em>也会出现在栈中的固定位置</li>
+</ul>
+</li>
+</ol>
+<h4 id="两个重要的寄存器：SP-和-FP"><a href="#两个重要的寄存器：SP-和-FP" class="headerlink" title="两个重要的寄存器：SP 和 FP"></a>两个重要的寄存器：SP 和 FP</h4><p>第一个是SP（Stack Pointer），它指向Stack的底部并代表了<em>当前Stack Frame的位置</em>。第二个是FP（Frame Pointer），它指向<em>当前Stack Frame的顶部。</em></p>
+<p>我们可以通过 FP 找到指令的 Return address 和上一个 Stack Frame 的指针</p>
+<blockquote>
+<p>所以当前函数返回时，我们需要将前一个Frame Pointer存储到FP寄存器中</p>
+</blockquote>
+<h4 id="汇编函数"><a href="#汇编函数" class="headerlink" title="汇编函数"></a>汇编函数</h4><blockquote>
+<p>Stack Frame必须要被汇编代码创建。编译器生成了汇编代码，进而创建了Stack Frame。</p>
+</blockquote>
+<p>所以通常，在汇编代码中，函数的最开始你们可以看到 <em>Function prologue，之后是函数的本体，最后是Epilogue</em>。这就是一个汇编函数通常的样子。</p>
+<h5 id="leaf-函数"><a href="#leaf-函数" class="headerlink" title="leaf 函数"></a>leaf 函数</h5><a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/image%2019.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/image%2019.avif" class title="image 19.avif"></a>
+
+<p>有些足够简单的函数不需要用到栈，不调用别的函数，它只有函数主体，并没有Stack Frame的内容。</p>
+<p>它不调用别的函数，所以 <em>不需要保存自己的 Return address 或者任何其他的Caller Saved寄存器，但可能仍需保存 Callee Saved寄存器</em></p>
+<p>叶函数必定返回到上一个 Stack Frame，所以 <em>FP 寄存器不会变化</em>，也无需保存。RA 是调用者保存的，叶函数也无需保存</p>
+<h5 id="Prologue-与-Epilogue"><a href="#Prologue-与-Epilogue" class="headerlink" title="Prologue 与 Epilogue"></a>Prologue 与 Epilogue</h5><a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812115914.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812115914.png" class title="Pasted image 20240812115914.png"></a>
+
+<blockquote>
+<p>这个函数调用了其他函数，需要 prologue</p>
+</blockquote>
+<p>可以看到在 sum_then_double 的 prologue 中，我们为它的 Stack Frame 分配了空间，并在 sp 处保存了自己的返回地址 </p>
+<a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812121708.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812121708.png" class title="Pasted image 20240812121708.png"></a>
+
+<p>在 epilogue 中，我们加载了返回地址，并释放了栈空间。最后 ret</p>
+<h5 id="删掉-Prologue-与-Epilogue"><a href="#删掉-Prologue-与-Epilogue" class="headerlink" title="删掉  Prologue 与 Epilogue"></a>删掉  Prologue 与 Epilogue</h5><blockquote>
+<p>如果我们删除掉Prologue 和 Epilogue，sum_then_double 将不知道自己该返回到哪里。</p>
+<p>call 会把 sum_to 的返回地址加载到ra中，所以会覆盖掉 sum_then_double 的 ra。</p>
+<p>在 sum_then_double 返回时，他将陷入一个无限循环，始终返回到 li t0, 2</p>
+</blockquote>
+<h4 id="使用-gdb-查看-Stack-Frame"><a href="#使用-gdb-查看-Stack-Frame" class="headerlink" title="使用 gdb 查看 Stack Frame"></a>使用 gdb 查看 Stack Frame</h4><p>可以通过 info frame 查看一些信息，包含 ra、fp、pc 等：</p>
+<a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812125106.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812125106.png" class title="Pasted image 20240812125106.png"></a>
+
+<p>如果过对调用栈中的某个 stack frame 感兴趣，可以先定位到那个frame再输入info frame：</p>
+<a href="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812125444.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/12/6.s081%20lec5%20Calling%20Conventions/Pasted%20image%2020240812125444.png" class title="Pasted image 20240812125444.png"></a>
+
+
+
+
+
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-12</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>

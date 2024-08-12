@@ -4,7 +4,7 @@
     <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
-    <meta name="description" content="lab util" />
+    <meta name="description" content="lab1 Util" />
     <meta name="hexo-theme-A4" content="v1.9.2" />
     <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
     <title>Toki</title>
@@ -164,7 +164,7 @@
         
             
                 <div class="post-main-title">
-                    lab util
+                    lab1 Util
                 </div>
             
         
@@ -180,52 +180,52 @@
         <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文仅用作学习记录</p>
 <p>具体实现在这里：<a target="_blank" rel="noopener" href="https://github.com/yrzr21/xv6">yrzr21&#x2F;xv6 (github.com)</a>，&#96;请在参考源码前想想是否有必要这么做</p>
 <h2 id="lab-util"><a href="#lab-util" class="headerlink" title="lab util"></a>lab util</h2><h3 id="user-level-sleep"><a href="#user-level-sleep" class="headerlink" title="user-level sleep"></a>user-level sleep</h3><p>可能需要查看文件：</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240728183432.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240728183432.png" class title="Pasted image 20240728183432.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240728183432.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240728183432.png" class title="Pasted image 20240728183432.png"></a>
 
 <h3 id="user-level-pingpong"><a href="#user-level-pingpong" class="headerlink" title="user-level pingpong"></a>user-level pingpong</h3><p>管道是单向的，想要双向通信必须使用两个管道</p>
 <h3 id="primes"><a href="#primes" class="headerlink" title="primes"></a>primes</h3><p>递归过程中注意检测 read 的返回值以判断终止条件</p>
 <p>fork产生的子进程共享父进程的文件描述符，但可单独关闭而不影响另一个进程</p>
 <p>小心关闭不需要的 fd，不然很可能不够用…</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240809151722.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240809151722.png" class title="Pasted image 20240809151722.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240809151722.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240809151722.png" class title="Pasted image 20240809151722.png"></a>
 
 
 <h4 id="CSP-线程模型"><a href="#CSP-线程模型" class="headerlink" title="CSP 线程模型"></a>CSP 线程模型</h4><p>参考：<a target="_blank" rel="noopener" href="https://swtch.com/~rsc/thread/">贝尔实验室和 CSP 线程 — Bell Labs and CSP Threads (swtch.com)</a></p>
 <p>概述：并发编程不应仅仅被视作一种提升效率的手段，提升效率有多种方式，如asynchronous event-driven programming 异步事件驱动的编程，不一定需要并发编程。并发编程还可以提供一种自然的抽象，使得程序更加简单</p>
 <p>SRC 线程模型过于底层，不得不配合一些其他的技术才能使用，此处提供了一种新的内存模型</p>
 <h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><p>open后，使用 fstat 获取文件信息存储在 struct stat 中，里面保存了包含文件类型的各种信息：</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240809152236.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240809152236.png" class title="Pasted image 20240809152236.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240809152236.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240809152236.png" class title="Pasted image 20240809152236.png"></a>
 
 
 <p>读取目录文件存储在 struct dirent 中：</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240809152455.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240809152455.png" class title="Pasted image 20240809152455.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240809152455.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240809152455.png" class title="Pasted image 20240809152455.png"></a>
 
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240809152406.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240809152406.png" class title="Pasted image 20240809152406.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240809152406.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240809152406.png" class title="Pasted image 20240809152406.png"></a>
 
 <h3 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h3><h4 id="指针使用"><a href="#指针使用" class="headerlink" title="指针使用"></a>指针使用</h4><p>指针数组，与二维数组完全不同：</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073223.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073223.png" class title="Pasted image 20240808073223.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073223.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073223.png" class title="Pasted image 20240808073223.png"></a>
 
 <p>args + x 表示第 x+1 个元素：</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073351.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073351.png" class title="Pasted image 20240808073351.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073351.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073351.png" class title="Pasted image 20240808073351.png"></a>
 
 <p>指针数组做参数时可能要求以NULL结尾：</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073358.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073358.png" class title="Pasted image 20240808073358.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073358.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073358.png" class title="Pasted image 20240808073358.png"></a>
 
 <p>注意指针运算：</p>
 <ul>
 <li>result为char**类型</li>
 </ul>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073521.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073521.png" class title="Pasted image 20240808073521.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073521.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073521.png" class title="Pasted image 20240808073521.png"></a>
 
 <h4 id="字符串数组"><a href="#字符串数组" class="headerlink" title="字符串数组"></a>字符串数组</h4><p>复制只是指针赋值…而非复制字符串</p>
 <p>可用这种方式初始化：</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073737.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073737.png" class title="Pasted image 20240808073737.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073737.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073737.png" class title="Pasted image 20240808073737.png"></a>
 
 <p><em>read</em> 读进来的数据不会自动<em>补0</em>，需要自己加</p>
 <p>小心判断字符串中的元素：</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073948.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808073948.png" class title="Pasted image 20240808073948.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073948.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808073948.png" class title="Pasted image 20240808073948.png"></a>
 
 <h4 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h4><p>exec 的第一个元素必须是执行的程序名称</p>
-<a href="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808074131.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6-s081-lab-util/Pasted%20image%2020240808074131.png" class title="Pasted image 20240808074131.png"></a>
+<a href="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808074131.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lab1%20util/Pasted%20image%2020240808074131.png" class title="Pasted image 20240808074131.png"></a>
 
 <p>如：argv[1] 为 grep，则 args[0] 必须是 grep，且 args 以 NULL 结尾</p>
 </div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {

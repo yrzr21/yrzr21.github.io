@@ -4,7 +4,7 @@
     <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
-    <meta name="description" content="lec Page Table" />
+    <meta name="description" content="lec4 Page Table" />
     <meta name="hexo-theme-A4" content="v1.9.2" />
     <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
     <title>Toki</title>
@@ -164,7 +164,7 @@
         
             
                 <div class="post-main-title">
-                    lec Page Table
+                    lec4 Page Table
                 </div>
             
         
@@ -195,7 +195,7 @@
 <li>PT 提供 va 到 pa 的映射</li>
 </ol>
 <h5 id="Sv39-RISC-V"><a href="#Sv39-RISC-V" class="headerlink" title="Sv39 RISC-V"></a>Sv39 RISC-V</h5><p>（Supervisor Virtual）</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240809192703.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240809192703.png" class title="Pasted image 20240809192703.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240809192703.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240809192703.png" class title="Pasted image 20240809192703.png"></a>
 
 
 <ol>
@@ -222,7 +222,7 @@
 <li><p>保留所有PT需要大量的内存，<em>三级页表使得只需保留很少一部分PT在内存中</em>，忽略没有被映射的页表</p>
 </li>
 </ol>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240809193645.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240809193645.png" class title="Pasted image 20240809193645.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240809193645.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240809193645.png" class title="Pasted image 20240809193645.png"></a>
 
 <h5 id="flags"><a href="#flags" class="headerlink" title="flags"></a>flags</h5><ul>
 <li>V：指向的页是否合法&#x2F;被分配，索引未被分配的页会引发异常</li>
@@ -231,7 +231,7 @@
 </ul>
 <h5 id="satp-寄存器"><a href="#satp-寄存器" class="headerlink" title="satp 寄存器"></a>satp 寄存器</h5><p>存储<em>根页表的物理地址</em>，每个CPU都有自己的satp，可以更加方便快速地运行不同进程</p>
 <h4 id="Kernel-address-space"><a href="#Kernel-address-space" class="headerlink" title="Kernel address space"></a>Kernel address space</h4><p>xv6 为<em>每个进程维护一个页表</em>，用于描述每个进程的用户地址空间，以及一个<em>描述内核地址空间的单独页表</em>：</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240809203658.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240809203658.png" class title="Pasted image 20240809203658.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240809203658.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240809203658.png" class title="Pasted image 20240809203658.png"></a>
 
 <ul>
 <li>(kernel&#x2F;memlayout.h) 声明了 xv6 内核内存布局的常量。</li>
@@ -280,7 +280,7 @@
 </ol>
 <h5 id="pagetable-t"><a href="#pagetable-t" class="headerlink" title="pagetable_t"></a>pagetable_t</h5><p>指向根页表的指针</p>
 <h5 id="walk：MMU"><a href="#walk：MMU" class="headerlink" title="walk：MMU"></a>walk：MMU</h5><p>模拟 MMU 查找 va 对应的最终的 PTE 的地址：</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240809193645.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240809193645.png" class title="Pasted image 20240809193645.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240809193645.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240809193645.png" class title="Pasted image 20240809193645.png"></a>
 
 <p>每9位下降到下一级页表直到最终的PTE，如果中间页表的 PTE 无效 且 alloc 参数被设置，则分配一个物理页，直到最低层</p>
 <ul>
@@ -313,10 +313,10 @@
 <p>kernel&#x2F;kalloc.c:1</p>
 </blockquote>
 <h5 id="分配器"><a href="#分配器" class="headerlink" title="分配器"></a>分配器</h5><p>分配器使用自旋锁保护：</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810071704.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810071704.png" class title="Pasted image 20240810071704.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810071704.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810071704.png" class title="Pasted image 20240810071704.png"></a>
 
 <p>列表元素：</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810071904.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810071904.png" class title="Pasted image 20240810071904.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810071904.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810071904.png" class title="Pasted image 20240810071904.png"></a>
 
 <ol>
 <li><p>main 调用 <em>kinit</em> 来初始化 freelist，以容纳从内核末尾到 PHYSTOP 之间的每个 page</p>
@@ -346,13 +346,13 @@
 </ol>
 <p>所以充满着C类型转换</p>
 <h4 id="Process-address-space"><a href="#Process-address-space" class="headerlink" title="Process address space"></a>Process address space</h4><p>每个进程都有独立的页表，在切换进程时也会切换页表</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810080807.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810080807.png" class title="Pasted image 20240810080807.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810080807.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810080807.png" class title="Pasted image 20240810080807.png"></a>
 
 <h5 id="范围"><a href="#范围" class="headerlink" title="范围"></a>范围</h5><p>进程的 VM 范围为：0~<em>MAXVA</em>，原则上允许一个进程寻址 256GB 的内存</p>
 <ul>
 <li>kernel&#x2F;riscv.h:348</li>
 </ul>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810080256.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810080256.png" class title="Pasted image 20240810080256.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810080256.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810080256.png" class title="Pasted image 20240810080256.png"></a>
 
 <h5 id="分配进程内存"><a href="#分配进程内存" class="headerlink" title="分配进程内存"></a>分配进程内存</h5><p>进程请求分配用户内存是，xv6 使用kalloc分配物理页，然后创建 PTE、设置包含PTE_V的权限位</p>
 <h5 id="进程-VM-特点"><a href="#进程-VM-特点" class="headerlink" title="进程 VM 特点"></a>进程 VM 特点</h5><ol>
@@ -422,7 +422,7 @@
 </ul>
 </li>
 </ol>
-<h5 id="init-program-section-header"><a href="#init-program-section-header" class="headerlink" title="/init program section header"></a>/init program section header</h5><a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810102741.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810102741.png" class title="Pasted image 20240810102741.png"></a>
+<h5 id="init-program-section-header"><a href="#init-program-section-header" class="headerlink" title="/init program section header"></a>/init program section header</h5><a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810102741.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810102741.png" class title="Pasted image 20240810102741.png"></a>
 
 <p>filesz 可能小于 memsz，其间隙应该用0填充，而非从文件读取数据</p>
 <ul>
@@ -464,7 +464,7 @@
 <li>MMU不会保存PT，不会创建PT，无法翻译地址时告诉CPU发生错误</li>
 <li>切换进程时需要切换PT，此时需要修改 satp 的值</li>
 </ul>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/image%2016.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/image%2016.avif" class title="image 16.avif"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/image%2016.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/image%2016.avif" class title="image 16.avif"></a>
 
 
 <h4 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h4><p>如果为64位机器的每一个地址都存储一个 PTE，那么需要耗费海量的空间存储 PT，实际情况中，RISC-V<em>为每个 page 存储一个 PTE</em>，<em>粒度为 4KB</em>，$2^{12}$ B</p>
@@ -474,7 +474,7 @@
 </ul>
 <p>我们将va分为两部分：<em>index &amp; offset</em>，<em>使用index查找page，offset 索引具体的字节</em></p>
 <p>index 标识了物理内存的页号，MMU 通过 VPN 读取 PT 中的 PPN，也就是物理页号，PPN + VPO 共同组成了具体地址的指针</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810120824.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810120824.png" class title="Pasted image 20240810120824.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810120824.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810120824.png" class title="Pasted image 20240810120824.png"></a>
 <h4 id="地址大小"><a href="#地址大小" class="headerlink" title="地址大小"></a>地址大小</h4><p>va 的<em>高25位没有使用</em>，限制了VM的大小，那么现在一个进程的 VM 只有 $2^{39}$ B &#x3D; 512 GB</p>
 <ul>
 <li>新的处理器或许可以支持更大的地址空间，只需要将未使用的25bit拿出来做为虚拟内存地址的一部分即可</li>
@@ -495,7 +495,7 @@
 </ul>
 <p>一个directory同样用一页存储，大小为4KB。一个PTE 8B &#x3D; 2^3 B，共512&#x3D;2^9个PTE</p>
 <p>SATP 实际存储根页表的物理地址</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810122939.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810122939.png" class title="Pasted image 20240810122939.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810122939.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810122939.png" class title="Pasted image 20240810122939.png"></a>
 
 <h5 id="多级页表的优点"><a href="#多级页表的优点" class="headerlink" title="多级页表的优点"></a>多级页表的优点</h5><p>所以这种3步得到物理地址的方式的<em>优点是什么？</em></p>
 <p>大多数进程只需要一个三级页表，即三个PT，约12KB的内存，索引 $2^{9+12}$ B &#x3D; 2MB 的物理内存，而大部分内存是尚未被分配的，我们完全不需要为这些va分配PTE并存储到PT中</p>
@@ -505,11 +505,11 @@
 </ul>
 <p>其次，内核和进程都有自己的页表，无法访问对方的物理内存，此时内核需要访问对方的页表以获得一个自己可以读写的用户数据所在的物理内存…所以需要 walk 实现 MMU 的功能</p>
 <h5 id="为什么硬件不开发类似于walk函数的接口？"><a href="#为什么硬件不开发类似于walk函数的接口？" class="headerlink" title="为什么硬件不开发类似于walk函数的接口？"></a>为什么硬件不开发类似于walk函数的接口？</h5><p>后面会说</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810135622.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810135622.png" class title="Pasted image 20240810135622.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810135622.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810135622.png" class title="Pasted image 20240810135622.png"></a>
 
 
 
-<h4 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h4><a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810125144.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810125144.png" class title="Pasted image 20240810125144.png"></a>
+<h4 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h4><a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810125144.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810125144.png" class title="Pasted image 20240810125144.png"></a>
 
 <p>前面有，最重要的几个标志位是：VRWXU</p>
 <h4 id="为什么不把PPN放在一个va中？"><a href="#为什么不把PPN放在一个va中？" class="headerlink" title="为什么不把PPN放在一个va中？"></a>为什么不把PPN放在一个va中？</h4><p>我们要查物理地址就需要通过PPN，而若把PPN放在va中，则我们可能需要查这个va的PPN，进而陷入无限的递归——这样做完全没有必要，反而浪费了时间</p>
@@ -531,7 +531,7 @@
 <h4 id="什么时候缓存？"><a href="#什么时候缓存？" class="headerlink" title="什么时候缓存？"></a>什么时候缓存？</h4><p>整个CPU和MMU都在处理器芯片中，所以在一个RISC-V芯片中有多个CPU核，MMU和TLB存在于每一个CPU核里面。</p>
 <p>RISC-V处理器有L1 cache，L2 Cache，有些cache是根据物理地址索引的，有些cache是根据虚拟地址索引的，<em>由虚拟地址索引的cache位于MMU之前，由物理地址索引的cache位于MMU之后</em>。</p>
 <h3 id="Kernel-页表"><a href="#Kernel-页表" class="headerlink" title="Kernel 页表"></a>Kernel 页表</h3><p>kernel 地址空间：</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810140036.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810140036.png" class title="Pasted image 20240810140036.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810140036.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810140036.png" class title="Pasted image 20240810140036.png"></a>
 
 <h4 id="物理地址空间"><a href="#物理地址空间" class="headerlink" title="物理地址空间"></a>物理地址空间</h4><p>右半部分的<em>结构完全由硬件设计者决定</em>，他们决定如果物理地址大于 <em>0x80000000</em> 会走向DRAM芯片，如果得到的物理地址低于0x80000000会走向不同的I&#x2F;O设备</p>
 <ul>
@@ -544,7 +544,7 @@
 <h5 id="unmapped-物理内存：boot-ROM"><a href="#unmapped-物理内存：boot-ROM" class="headerlink" title="unmapped 物理内存：boot ROM"></a>unmapped 物理内存：boot ROM</h5><p>此部分主要包含boot ROM，其结构为：未使用–boot ROM–未使用</p>
 <p><em>当你对主板上电，主板做的第一件事情就是运行存储在boot ROM中的代码，当boot完成之后，会跳转到地址0x80000000</em>，OS需要确保这个地址有一些数据以启动 OS</p>
 <h5 id="0x80000000之下：DRAM外的I-O设备"><a href="#0x80000000之下：DRAM外的I-O设备" class="headerlink" title="0x80000000之下：DRAM外的I&#x2F;O设备"></a>0x80000000之下：DRAM外的I&#x2F;O设备</h5><p>主要分为：中断控制器、Concole和显示器交互、与磁盘交互</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810141205.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810141205.png" class title="Pasted image 20240810141205.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810141205.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810141205.png" class title="Pasted image 20240810141205.png"></a>
 
 <p>我们向这些 “<em>虚拟的物理内存</em>” 读写即是在与实际设备交互，包括与DRAM物理内存的交互也是被虚拟化后的，实际的DRAM可不是一个大数组，<em>这是一层抽象</em></p>
 <h5 id="最上方的-Unused"><a href="#最上方的-Unused" class="headerlink" title="最上方的 Unused"></a>最上方的 Unused</h5><p>——DRAM不够了，这部分物理内存没被覆盖到</p>
@@ -575,9 +575,9 @@
 <h5 id="free-memory"><a href="#free-memory" class="headerlink" title="free memory"></a>free memory</h5><p>存储用户进程的 PT、text、data，耗尽时 fork 和 exec 会返回错误</p>
 <p>理论上来说用户和内核的虚拟地址空间大小一样，但是用户的VM使用率更低</p>
 <h3 id="xv6-的实现"><a href="#xv6-的实现" class="headerlink" title="xv6 的实现"></a>xv6 的实现</h3><h4 id="kvminit"><a href="#kvminit" class="headerlink" title="kvminit"></a>kvminit</h4><p><em>设置 kernel 地址空间</em></p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810164811.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810164811.png" class title="Pasted image 20240810164811.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810164811.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810164811.png" class title="Pasted image 20240810164811.png"></a>
 
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810164852.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810164852.png" class title="Pasted image 20240810164852.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810164852.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810164852.png" class title="Pasted image 20240810164852.png"></a>
 
 <ol>
 <li><p>先为最高级页表分配物理页，并初始化为全0</p>
@@ -590,7 +590,7 @@
 </li>
 </ol>
 <h5 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h5><p>执行完第一个kvmmap时的kernel page table：</p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810171537.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810171537.png" class title="Pasted image 20240810171537.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810171537.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810171537.png" class title="Pasted image 20240810171537.png"></a>
 
 <ol>
 <li><p>最高级页表位于 0x87fff000，只有一个页表项，其序号为0</p>
@@ -598,7 +598,7 @@
 <li><p>中间页表位于<del>，只有一个页表项，其序号为128。最低级的页表</del>，最终指向 UART0，即 0x10000000L，即：000000000 010000000 000000000 000000000000</p>
 </li>
 </ol>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810172244.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810172244.png" class title="Pasted image 20240810172244.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810172244.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810172244.png" class title="Pasted image 20240810172244.png"></a>
 
 <ul>
 <li>0x10000000L 右移12位为VPN，再右移九位为二级页表的序号128（因为最高级页表序号为0）</li>
@@ -606,7 +606,7 @@
 <ol start="3">
 <li>根据 fl 部分可确定标志位，图中最低级PTE的标志为：0x7 &#x3D; 0111，即：WRV，这意味着合法可读写，不可执行不可用户访问等等</li>
 </ol>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810125144.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810125144.png" class title="Pasted image 20240810125144.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810125144.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810125144.png" class title="Pasted image 20240810125144.png"></a>
 
 
 
@@ -615,7 +615,7 @@
 
 
 
-<h4 id="kvminithart"><a href="#kvminithart" class="headerlink" title="kvminithart"></a>kvminithart</h4><a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810172917.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810172917.png" class title="Pasted image 20240810172917.png"></a>
+<h4 id="kvminithart"><a href="#kvminithart" class="headerlink" title="kvminithart"></a>kvminithart</h4><a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810172917.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810172917.png" class title="Pasted image 20240810172917.png"></a>
 
 <ol>
 <li><p>设置 SATP 寄存器，使用 kvminit 刚设置好的页表——我们现在有了分页机制</p>
@@ -634,7 +634,7 @@
 </ul>
 <p>在翻译过程中，如果中间PTE不存在，若alloc被设置，则会分配一个临时的PTE初始化为0，并继续执行，否则直接返回0</p>
 <p><em>即便有了分页机制，walk函数还能正常工作，这正是因为恒等映射</em></p>
-<a href="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810174003.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec%20Page%20Table/Pasted%20image%2020240810174003.png" class title="Pasted image 20240810174003.png"></a>
+<a href="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810174003.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/10/6.s081%20lec4%20Page%20Table/Pasted%20image%2020240810174003.png" class title="Pasted image 20240810174003.png"></a>
 
 
 
