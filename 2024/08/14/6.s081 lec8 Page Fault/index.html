@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec8 Page Fault" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec8 Page Fault
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Page-Fault"><span class="post-toc-text">Page Fault</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%AF%BE%E5%89%8D%E5%87%86%E5%A4%87"><span class="post-toc-text">课前准备</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#COW-fork"><span class="post-toc-text">COW fork</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%89%E7%A7%8D-Page-Fault"><span class="post-toc-text">三种 Page Fault</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#COW-fork-%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%A1%88"><span class="post-toc-text">COW fork 基本方案</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#exec-%E4%B8%8E-fork"><span class="post-toc-text">exec 与 fork</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#lazy-allocation"><span class="post-toc-text">lazy allocation</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#paging-from-disk"><span class="post-toc-text">paging from disk</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%87%AA%E5%8A%A8%E6%89%A9%E5%B1%95%E5%A0%86%E6%A0%88%E5%92%8C%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6"><span class="post-toc-text">自动扩展堆栈和内存映射文件</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Page-Fault-Basics"><span class="post-toc-text">Page Fault Basics</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#page-fault-%E4%BF%A1%E6%81%AF"><span class="post-toc-text">page fault 信息</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Lazy-page-allocation"><span class="post-toc-text">Lazy page allocation</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sbrk%EF%BC%9Aeager-allocation"><span class="post-toc-text">sbrk：eager allocation</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sbrk%EF%BC%9Alazy-allocation"><span class="post-toc-text">sbrk：lazy allocation</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sbrk%EF%BC%9Acode"><span class="post-toc-text">sbrk：code</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#usertrap%EF%BC%9Apage-fault-%E5%A4%84%E7%90%86"><span class="post-toc-text">usertrap：page fault 处理</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Zero-Fill-On-Demand"><span class="post-toc-text">Zero Fill On Demand</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84%EF%BC%9F"><span class="post-toc-text">有什么好处？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#page-fault%E7%9A%84%E4%BB%A3%E4%BB%B7"><span class="post-toc-text">page fault的代价</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#COW-Fork"><span class="post-toc-text">COW Fork</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A6%82%E4%BD%95%E5%88%86%E8%BE%A8COW%E4%B8%8E%E5%86%99%E9%94%99%E8%AF%AF%EF%BC%9F"><span class="post-toc-text">如何分辨COW与写错误？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B1%E4%BA%ABpage%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="post-toc-text">共享page带来的问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Demand-Paging"><span class="post-toc-text">Demand Paging</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BC%98%E7%82%B9"><span class="post-toc-text">优点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#worst-case"><span class="post-toc-text">worst case</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%86%85%E5%AD%98%E8%BF%98%E6%98%AF%E8%80%97%E5%B0%BD%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="post-toc-text">内存还是耗尽了怎么办？</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Memory-Mapped-Files"><span class="post-toc-text">Memory Mapped Files</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#eager-mmap"><span class="post-toc-text">eager mmap</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#unmap"><span class="post-toc-text">unmap</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#lazy-mmap"><span class="post-toc-text">lazy mmap</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E8%AF%BB%E5%86%99%E5%90%8C%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="post-toc-text">多进程读写同一个文件</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="Page-Fault"><a href="#Page-Fault" class="headerlink" title="Page Fault"></a>Page Fault</h2><h3 id="课前准备"><a href="#课前准备" class="headerlink" title="课前准备"></a>课前准备</h3><p>Xv6 对异常的响应非常简单：发生在用户空间则终止，发生在内核则崩溃。实际的系统比这更加复杂</p>
+<h4 id="COW-fork"><a href="#COW-fork" class="headerlink" title="COW fork"></a>COW fork</h4><p>例如，可以利用异常 page fault 实现 COW fork：instead of 直接分配一块内存然后把父进程的内容完全复制到子进程，子进程可以和父进程共享完全相同的内存——但需要一些更多的操作</p>
+<h4 id="三种-Page-Fault"><a href="#三种-Page-Fault" class="headerlink" title="三种 Page Fault"></a>三种 Page Fault</h4><p>Page Fault：CPU 试图访问内存时，vm无法找到合适的映射</p>
+<ul>
+<li>load</li>
+<li>store</li>
+<li>instruction：试图获取指令</li>
+</ul>
+<p><code>scause</code> 会告诉我们是哪种 Page Fault，<code>stval</code> 会存储无法转换的vm</p>
+<h4 id="COW-fork-基本方案"><a href="#COW-fork-基本方案" class="headerlink" title="COW fork 基本方案"></a>COW fork 基本方案</h4><p>父进程和子进程初始时<em>共享所有物理页面，但将它们映射为只读</em>。于是，试图进行写入时，会引发 Store Page Fault Exception</p>
+<p>处理此异常时，为出现错误的页面分配一个<em>副本</em>，然后父子进程一个<em>映射</em>到新页并可读写，另一个映射到另一页并可读写，然后返回到原进程<em>重新执行写入指令</em></p>
+<p>COW fork 是<em>透明的</em>：应用程序不需要做任何修改就能从中受益。</p>
+<h5 id="exec-与-fork"><a href="#exec-与-fork" class="headerlink" title="exec 与 fork"></a>exec 与 fork</h5><p>子进程通常会在 fork 后立即调用 exec，用新的地址空间替换其现有的地址空间，在这种情况下可以完全避免多余的内存复制</p>
+<h4 id="lazy-allocation"><a href="#lazy-allocation" class="headerlink" title="lazy allocation"></a>lazy allocation</h4><p>基于COW思想，自然衍生出另一个策略：<code>延迟分配</code>。应用程序通常要求比实际需要更多的内存，可以推迟这些内存的分配</p>
+<p>程序调用 <code>sbrk</code>  时，grows the address space。新地址之一发生 page fault，为其分配物理空间并映射到PT中</p>
+<p>内核可以<code>透明</code>地实现此功能。</p>
+<h4 id="paging-from-disk"><a href="#paging-from-disk" class="headerlink" title="paging from disk"></a>paging from disk</h4><p>同样地，如果应用程序需要的<code>内存超过了可用的物理 RAM</code>，内核可以逐出一些页面，将它们写入存储设备，并将其 PTE 标记为无效</p>
+<p>如果应用程序尝试读写此页面，将会发生 Page Fault，内核随后检查这个页，如果存在磁盘上，则分配一页物理内存，将页面加载到内存中，并更新PTE。在这个过程中可能会删掉另一个PTE指向的页面</p>
+<h4 id="自动扩展堆栈和内存映射文件"><a href="#自动扩展堆栈和内存映射文件" class="headerlink" title="自动扩展堆栈和内存映射文件"></a>自动扩展堆栈和内存映射文件</h4><h3 id="Page-Fault-Basics"><a href="#Page-Fault-Basics" class="headerlink" title="Page Fault Basics"></a>Page Fault Basics</h3><p>利用 page fault 可以实现：lazy allocation、copy-on-write fork、demand paging、memory mapped files</p>
+<blockquote>
+<p>然而xv6一个都没实现</p>
+</blockquote>
+<p>虚拟内存有两个优点：隔离性 &amp; 抽象，其中利用<code>抽象</code>我们可以实现许多有趣的功能。目前内存映射基本都是直接映射，且内存地址映射相对来说比较<code>静态</code>，利用 page fault，我们可以<code>动态更新PT</code></p>
+<h4 id="page-fault-信息"><a href="#page-fault-信息" class="headerlink" title="page fault 信息"></a>page fault 信息</h4><p>产生 page fault 时肯定有 <code>出错的虚拟地址</code> ，错误的vm会存储在 <code>stval</code>，错误的原因会存储在 <code>scause</code> ，产生异常的指令地址放在 <code>sepc</code> 和 trapframe-&gt;epc。</p>
+<blockquote>
+<p>scause中，与 page fault 相关的为：8 instruction、13 load、15 store</p>
+</blockquote>
+<p>这几个寄存器为我们分别提供了：产生错误的内存地址、错误原因、错误的指令，理想情况下，修复 page fault 后指令便可正常运行</p>
+<h3 id="Lazy-page-allocation"><a href="#Lazy-page-allocation" class="headerlink" title="Lazy page allocation"></a>Lazy page allocation</h3><p>——<code>sbrk</code>，这是XV6提供的系统调用，它使得用户应用程序能扩大自己的<code>heap</code>。程序启动时sbrk指向heap的最底端，同时也是stack最顶端，通过进程结构体中的 <code>sz</code> 字段标识</p>
+<a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813230737.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813230737.png" class title="Pasted image 20240813230737.png"></a>
+
+<p>sbrk 有一个参数n，代表申请字节数，它会<code>改变 sz 的值</code>。实际发生时，内核会分配一些物理内存，初始化为0，然后返回给sbrk。同时也可以传递负值，来减小内存 sz。我们主要关注扩大内存</p>
+<h4 id="sbrk：eager-allocation"><a href="#sbrk：eager-allocation" class="headerlink" title="sbrk：eager allocation"></a>sbrk：eager allocation</h4><p>sbrk 的默认实现策略是 <code>eager allocation</code>，一旦申请就分配。然而应用程序倾向于多申请内存，会存在一定量的 <code>内存浪费</code>。原则上讲这不是什么大问题，但使用 page fault，我们可以使用一种更加聪明的策略，那就是 <code>lazy allocation</code>，使用时分配。</p>
+<h4 id="sbrk：lazy-allocation"><a href="#sbrk：lazy-allocation" class="headerlink" title="sbrk：lazy allocation"></a>sbrk：lazy allocation</h4><p>在此策略下，sbrk <code>只会将 p-&gt;sz 增加 n</code>，不分配任何物理内存。在使用新内存时，也即访问一个<code>大于旧的 p-&gt;sz，但是又小于新的 p-&gt;sz</code> 的地址时，我们希望内核分配一个page，并重新执行原指令</p>
+<blockquote>
+<p>通常情况下，如果进程确实已经用光了所有物理内存，也就是发生了 OOM（Out Of Memory），内核可以杀掉进程，也可以把一些page写入磁盘，需要时再取出——这是后文的内容了</p>
+</blockquote>
+<h4 id="sbrk：code"><a href="#sbrk：code" class="headerlink" title="sbrk：code"></a>sbrk：code</h4><a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813232948.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813232948.png" class title="Pasted image 20240813232948.png"></a>
+
+<p>在 lazy 策略下，应该是这样：</p>
+<a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813233134.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813233134.png" class title="Pasted image 20240813233134.png"></a>
+
+
+<p>再次执行程序时，就会触发page fault：</p>
+<a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813233450.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813233450.png" class title="Pasted image 20240813233450.png"></a>
+<ul>
+<li>pid &#x3D; 3，这很可能是个 shell</li>
+</ul>
+<p>查找这条指令，发现它位于 malloc 中，因为此时我们以为自己正在初始化已分配的内存：</p>
+<a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813233607.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240813233607.png" class title="Pasted image 20240813233607.png"></a>
+
+<p>新页的另一个佐证就是，我们的Shell通常是有5个page，但此时试图访问 5008，也就是第六个 page</p>
+<h4 id="usertrap：page-fault-处理"><a href="#usertrap：page-fault-处理" class="headerlink" title="usertrap：page fault 处理"></a>usertrap：page fault 处理</h4><a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240814094550.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240814094550.png" class title="Pasted image 20240814094550.png"></a>
+
+<p>触发写 page fault 时，分配内存，注意要<code>对 va 取整</code>，并对其映射</p>
+<p>此时有另一个错：</p>
+<a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240814095357.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240814095357.png" class title="Pasted image 20240814095357.png"></a>
+
+<p>我们在尝试 ummap 一些本就没有 map 的页，而sbrk本就没有做任何事，因此这实际上是我们的预期行为，所以：</p>
+<a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240814095559.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240814095559.png" class title="Pasted image 20240814095559.png"></a>
+
+<a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240814095855.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/Pasted%20image%2020240814095855.png" class title="Pasted image 20240814095855.png"></a>
+
+<p>——我们这里仍有很多需要修改的地方，比如判断sz范围，这是下一个实验的内容</p>
+<h3 id="Zero-Fill-On-Demand"><a href="#Zero-Fill-On-Demand" class="headerlink" title="Zero Fill On Demand"></a>Zero Fill On Demand</h3><p>一个简单但是使用的非常频繁的功能</p>
+<a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/image%2021.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/image%2021.avif" class title="image 21.avif"></a>
+
+<p>bss 放未初始化或初始化为0的全局变量，或许包含多个 page。通常可以调优的地方在于，<code>将这些 vm 全部映射到一个page上</code>，这样就可以避免大量的物理内存分配：</p>
+<a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/image%2022.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/image%2022.avif" class title="image 22.avif"></a>
+
+<p>但我们<code>不允许对它进行写</code>，我们期望这全都是0，所以在写时需要另外分配一个可读可写0页，重新映射，然后重新执行指令</p>
+<h4 id="有什么好处？"><a href="#有什么好处？" class="headerlink" title="有什么好处？"></a>有什么好处？</h4><p>更加充分得利用内存，且exec需要做的工作更少</p>
+<h4 id="page-fault的代价"><a href="#page-fault的代价" class="headerlink" title="page fault的代价"></a>page fault的代价</h4><p>page fault并不是没有代价的，切换地址空间需要巨量的 store</p>
+<h3 id="COW-Fork"><a href="#COW-Fork" class="headerlink" title="COW Fork"></a>COW Fork</h3><p>shell 运行程序时，会fork一个副本，然后立马exec，丢弃副本——这很浪费。所以一个优化策略就是，子进程与父进程共享内存，但修改需要对父进程不可见——这利用 page fault 实现：</p>
+<p>将父子进程共享的PTE设为<code>只读</code>，写时触发page fault。在page fault中，为要写的页分配一个副本，本进程映射到这个页，另一个进程还是映射到原来的页，并把权限均设为可读可写</p>
+<h4 id="如何分辨COW与写错误？"><a href="#如何分辨COW与写错误？" class="headerlink" title="如何分辨COW与写错误？"></a>如何分辨COW与写错误？</h4><a href="/2024/08/14/6.s081%20lec8%20Page%20Fault/image%2023.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/14/6.s081%20lec8%20Page%20Fault/image%2023.avif" class title="image 23.avif"></a>
+
+<p>可以将<code>保留位</code>中的第8位设为 COW，标识当前是一个copy-on-write page。</p>
+<p>也可以由<code>内核维护</code>这些信息，这些实现都很灵活</p>
+<h4 id="共享page带来的问题"><a href="#共享page带来的问题" class="headerlink" title="共享page带来的问题"></a>共享page带来的问题</h4><p>什么时候释放一个page？我们需要对每个page维护一个<code>计数</code>信息</p>
+<h3 id="Demand-Paging"><a href="#Demand-Paging" class="headerlink" title="Demand Paging"></a>Demand Paging</h3><p>exec 对于text，data区域也是以eager的方式进行加载，为什么不延迟分配？<code>程序的二进制文件可能非常巨大</code></p>
+<p>可以为 text 和 data <code>分配好PTE，但是其不对应任何物理内存</code>，也就是PTE_V 为0</p>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>如果我们幸运的话，用户程序并没有使用所有的text区域或者data区域，那么我们一方面可以<code>节省一些物理内存</code>，另一方面我们可以让<code>exec运行的更快</code></p>
+<h4 id="worst-case"><a href="#worst-case" class="headerlink" title="worst case"></a>worst case</h4><p>在最坏的情况下，程序使用了text和data中的所有内容，而这个程序又比较大，我们会遇到超级多的page fault——不仅如此，这还包含从磁盘加载文件的时间，<code>我们的程序会变得很慢</code></p>
+<blockquote>
+<p>一种策略：程序给操作系统提示，说哪部分一定会用到，这部分一定加载进来，其他可能用可能不用的部分统统延迟加载</p>
+</blockquote>
+<h4 id="内存还是耗尽了怎么办？"><a href="#内存还是耗尽了怎么办？" class="headerlink" title="内存还是耗尽了怎么办？"></a>内存还是耗尽了怎么办？</h4><blockquote>
+<p>我们将要读取的文件，它的text和data区域可能大于物理内存的容量。又或者多个应用程序按照demand paging的方式启动，它们二进制文件的和大于实际物理内存的容量。对于demand paging来说，假设内存已经耗尽了或者说OOM了，这个时候如果得到了一个page fault，需要从文件系统拷贝中拷贝一些内容到内存中，但这时你又没有任何可用的物理内存page，这其实回到了之前的一个问题：在lazy allocation中，如果内存耗尽了该如何办？</p>
+</blockquote>
+<p>一个选择是<code>撤回page（evict page）</code>，写回文件系统并标记PTE为non-valid</p>
+<p>可能的撤回策略有：<code>LRU</code>，以及<code>优先撤回 non-dirty page 中的未访问 page</code></p>
+<blockquote>
+<p>如果先撤回dirty page，它之后再被修改，现在你或许需要把它再次加载回内存，然后再次写回文件系统</p>
+</blockquote>
+<blockquote>
+<p>需要<code>定时清除Access bit</code>。clock algorithm，就是一种实现方式。</p>
+</blockquote>
+<h3 id="Memory-Mapped-Files"><a href="#Memory-Mapped-Files" class="headerlink" title="Memory Mapped Files"></a>Memory Mapped Files</h3><p>将完整或者部分文件加载到内存中，这样就可以<code>通过内存地址相关的load或者store指令来操纵文件</code>。这通过函数 <code>mmap</code> 实现</p>
+<blockquote>
+<p>mmap 的实现方式也分 eager 和 lazy</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> *<span class="title">mmap</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> length, <span class="type">int</span> prot, <span class="type">int</span> flags, <span class="type">int</span> fd, <span class="type">off_t</span> offset)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>从文件描述符对应的文件的偏移量的位置开始，映射长度为len的内容到虚拟内存地址VA，同时我们需要加上一些保护，比如只读或者读写。</p>
+<blockquote>
+<p>flag：读写；prot：私有还是共享</p>
+</blockquote>
+<h4 id="eager-mmap"><a href="#eager-mmap" class="headerlink" title="eager mmap"></a>eager mmap</h4><p>分配物理内存，设置PTE，从fd指定偏移开始复制到指定va。然后就可以开始对内存进行操作</p>
+<h4 id="unmap"><a href="#unmap" class="headerlink" title="unmap"></a>unmap</h4><p>将dirty block写回到文件中。</p>
+<h4 id="lazy-mmap"><a href="#lazy-mmap" class="headerlink" title="lazy mmap"></a>lazy mmap</h4><p>不立即分配内存，只分配PTE。记录一下这个PTE属于这个文件描述符，相应的信息通常在VMA（Virtual Memory Area）结构体中保存</p>
+<h4 id="多进程读写同一个文件"><a href="#多进程读写同一个文件" class="headerlink" title="多进程读写同一个文件"></a>多进程读写同一个文件</h4><p>存在同步问题，可以使用锁。</p>
+<p>共享的情形下，如果修改了文件，需要同步到内存中</p>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-14</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
