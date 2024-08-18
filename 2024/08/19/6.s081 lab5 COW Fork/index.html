@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lab5 COW Fork" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lab5 COW Fork
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#COW-Fork"><span class="post-toc-text">COW Fork</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#debug"><span class="post-toc-text">debug</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%BC%8F%E6%8E%89%E6%9D%A1%E4%BB%B6%E6%A3%80%E6%9F%A5"><span class="post-toc-text">漏掉条件检查</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9D%80%E6%AD%BB%E8%BF%9B%E7%A8%8B"><span class="post-toc-text">杀死进程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%BF%98%E8%AE%B0%E9%87%8D%E6%96%B0-make"><span class="post-toc-text">忘记重新 make</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#debug-%E5%8F%8A%E5%85%B6%E5%9B%B0%E9%9A%BE"><span class="post-toc-text">debug 及其困难</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="post-toc-text">测试程序</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%B8%80%E4%BA%9B%E7%BB%8F%E9%AA%8C"><span class="post-toc-text">一些经验</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="post-toc-text">思路</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BF%AE%E6%94%B9%E7%9A%84%E6%96%87%E4%BB%B6"><span class="post-toc-text">修改的文件</span></a></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="COW-Fork"><a href="#COW-Fork" class="headerlink" title="COW Fork"></a>COW Fork</h2><p>这是我做过耗时最长的一个实验，写代码花了半天，debug花了两天半。</p>
+<h3 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h3><h4 id="漏掉条件检查"><a href="#漏掉条件检查" class="headerlink" title="漏掉条件检查"></a>漏掉条件检查</h4><p>系统调用后头一定要跟检查。。。</p>
+<a href="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819043923.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819043923.png" class title="Pasted image 20240819043923.png"></a>
+
+<a href="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819040016.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819040016.png" class title="Pasted image 20240819040016.png"></a>
+
+
+<a href="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819040046.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819040046.png" class title="Pasted image 20240819040046.png"></a>
+
+<h4 id="杀死进程"><a href="#杀死进程" class="headerlink" title="杀死进程"></a>杀死进程</h4><p>必须在特定的时刻杀死进程，并释放资源，比如：</p>
+<a href="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819050057.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819050057.png" class title="Pasted image 20240819050057.png"></a>
+
+<a href="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819050104.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819050104.png" class title="Pasted image 20240819050104.png"></a>
+
+
+<h4 id="忘记重新-make"><a href="#忘记重新-make" class="headerlink" title="忘记重新 make"></a>忘记重新 make</h4><p>虽说 makefile 会根据修改重新部分编译，但似乎有的部分没有照顾到？有个地方我修改对了，但由于没有make clean 然后重新编译花了巨久，最后通过的代码跟之前没什么差别，莫名其妙clean一下然后就过了</p>
+<h4 id="debug-及其困难"><a href="#debug-及其困难" class="headerlink" title="debug 及其困难"></a>debug 及其困难</h4><p>由于这里的错跟页表关系很大，<code>错误及其难以定位</code>：需要查阅文档、看汇编、手动计算 pte、各种地方加 printf，最后才可能在某个狭小的地方找到错误</p>
+<p>而且很多错误你完全没有头绪</p>
+<h4 id="测试程序"><a href="#测试程序" class="headerlink" title="测试程序"></a>测试程序</h4><p>原内核代码也有些异样，一种情况下内核直接 panic 终止运行了，但是在另一种相近的情形下处理方式居然不同？我都不知道该不该把这个panic改成return 0了</p>
+<a href="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819041700.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819041700.png" class title="Pasted image 20240819041700.png"></a>
+
+<a href="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819041651.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819041651.png" class title="Pasted image 20240819041651.png"></a>
+
+
+
+<h3 id="一些经验"><a href="#一些经验" class="headerlink" title="一些经验"></a>一些经验</h3><p>很多时候只需要修改底层实现即可，上层接口完全可以保持不变。但这样需要设计良好的抽象，不能打破抽象间隔，不然会很混乱</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>新进程内存的复制全部都会通过 <code>uvmcopy</code>，只需要将父进程的映射同步到子进程即可，同时把可写页设为<code>只读&amp;COW</code>，在写时会遇到write page fault，然后检查是否是COW，是则分配一个物理页，复制原来的内容过去，unmap原来的，map新的可写且非COW的PTE</p>
+<ul>
+<li>为什么不同步把父&#x2F;子进程设为可写？原因很多，一是父进程看不到子进程，二是父进程可能有多个子进程，甚至有孙孙孙进程</li>
+</ul>
+<p>需要对 copyout做类似的处理</p>
+<p>需要增添计数机制，在引用为0时释放物理页，主要修改 kalloc 和 kfree</p>
+<h3 id="修改的文件"><a href="#修改的文件" class="headerlink" title="修改的文件"></a>修改的文件</h3><a href="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819051147.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/19/6.s081%20lab5%20COW%20Fork/Pasted%20image%2020240819051147.png" class title="Pasted image 20240819051147.png"></a></div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-19</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
