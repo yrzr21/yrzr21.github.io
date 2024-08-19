@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec10 Locking" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec10 Locking
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Locking"><span class="post-toc-text">Locking</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%AF%BE%E5%89%8D%E5%87%86%E5%A4%87"><span class="post-toc-text">课前准备</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Race-conditions%EF%BC%9A%E4%BB%A5-kfree-%E4%B8%BA%E4%BE%8B"><span class="post-toc-text">Race conditions：以 kfree 为例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#race"><span class="post-toc-text">race</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%94%81"><span class="post-toc-text">锁</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Code-Locks"><span class="post-toc-text">Code: Locks</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#acquire"><span class="post-toc-text">acquire</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#amoswap"><span class="post-toc-text">amoswap</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#acquire-%E4%B8%8E-release-%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">acquire 与 release 实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Code-Using-locks"><span class="post-toc-text">Code: Using locks</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%BD%95%E6%97%B6%E4%BD%BF%E7%94%A8%E9%94%81"><span class="post-toc-text">何时使用锁</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%BD%95%E6%97%B6%E4%B8%8D%E4%BD%BF%E7%94%A8%E9%94%81"><span class="post-toc-text">何时不使用锁</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#big-kernel-lock"><span class="post-toc-text">big kernel lock</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%BB%86%E7%B2%92%E5%BA%A6%E9%94%81"><span class="post-toc-text">细粒度锁</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Deadlock-and-lock-ordering"><span class="post-toc-text">Deadlock and lock ordering</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#e-g-%E4%B8%8D%E5%90%8C%E9%A1%BA%E5%BA%8F%E8%8E%B7%E5%8F%96%E9%94%81"><span class="post-toc-text">e.g. 不同顺序获取锁</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%85%A8%E5%B1%80%E9%94%81%E9%93%BE"><span class="post-toc-text">全局锁链</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%94%81%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="post-toc-text">锁遇到的一些问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Locks-and-interrupt-handlers"><span class="post-toc-text">Locks and interrupt handlers</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A%E6%AD%BB%E9%94%81"><span class="post-toc-text">问题：死锁</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#solution"><span class="post-toc-text">solution</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#push-off-%E4%B8%8E-pop-off%EF%BC%9A%E9%94%81%E5%B5%8C%E5%A5%97%E5%B1%82%E7%BA%A7"><span class="post-toc-text">push_off 与 pop_off：锁嵌套层级</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Instruction-and-memory-ordering"><span class="post-toc-text">Instruction and memory ordering</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">内存模型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%87%8D%E6%8E%92%E4%B8%8E%E5%B9%B6%E5%8F%91"><span class="post-toc-text">重排与并发</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#sync-synchronize"><span class="post-toc-text">__sync_synchronize</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Sleep-locks"><span class="post-toc-text">Sleep locks</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#acquiresleep"><span class="post-toc-text">acquiresleep</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%9D%A1%E7%9C%A0%E9%94%81%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="post-toc-text">睡眠锁的使用场景</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Real-world"><span class="post-toc-text">Real world</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#POSIX-%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">POSIX 线程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%97%A0%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4%E9%94%81"><span class="post-toc-text">无原子指令锁</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%94%81%E4%B8%8E%E7%BC%93%E5%AD%98"><span class="post-toc-text">锁与缓存</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%97%A0%E9%94%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95"><span class="post-toc-text">无锁的数据结构和算法</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E9%94%81%EF%BC%9F"><span class="post-toc-text">为什么要使用锁？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B9%B6%E8%A1%8C%E4%B8%8E%E9%94%81%EF%BC%9A%E7%9F%9B%E7%9B%BE%E7%9A%84%E5%A4%84%E5%A2%83"><span class="post-toc-text">并行与锁：矛盾的处境</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BE%9D%E9%9D%A0%E5%B9%B6%E8%A1%8C%E6%8F%90%E5%8D%87%E6%80%A7%E8%83%BD%EF%BC%9F"><span class="post-toc-text">为什么要依靠并行提升性能？</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%94%81%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D-race-condition%EF%BC%9F"><span class="post-toc-text">锁如何避免 race condition？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#critical-section"><span class="post-toc-text">critical section</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#big-kernel-lock-%E4%B8%8E%E5%BA%8F%E5%88%97%E5%8C%96"><span class="post-toc-text">big kernel lock 与序列化</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BD%BF%E7%94%A8%E9%94%81%EF%BC%9F"><span class="post-toc-text">什么时候使用锁？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8F%AF%E5%8F%98%E5%85%B1%E4%BA%AB%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="post-toc-text">可变共享数据结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#printf"><span class="post-toc-text">printf</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8A%A0%E9%94%81%E6%98%AF%E5%90%A6%E5%8F%AF%E8%A1%8C%EF%BC%9F"><span class="post-toc-text">自动加锁是否可行？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#e-g-rename"><span class="post-toc-text">e.g. rename</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%94%81%E7%9A%84%E4%BD%BF%E7%94%A8%E5%AE%8C%E5%85%A8%E6%98%AF%E7%94%B1%E7%A8%8B%E5%BA%8F%E5%91%98%E5%86%B3%E5%AE%9A%E7%9A%84"><span class="post-toc-text">锁的使用完全是由程序员决定的</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%94%81%E7%9A%84%E4%B8%80%E8%88%AC%E7%94%A8%E9%80%94%E5%92%8C%E9%97%AE%E9%A2%98"><span class="post-toc-text">锁的一般用途和问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%94%81%E7%9A%84%E4%B8%80%E8%88%AC%E7%94%A8%E9%80%94"><span class="post-toc-text">锁的一般用途</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%94%81%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9A%E6%AD%BB%E9%94%81"><span class="post-toc-text">锁的问题：死锁</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%8D%95%E4%B8%AA%E9%94%81"><span class="post-toc-text">单个锁</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%A4%9A%E4%B8%AA%E9%94%81%EF%BC%9Adeadly-embrace"><span class="post-toc-text">多个锁：deadly embrace</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%94%81%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9A%E7%A0%B4%E5%9D%8F%E6%8A%BD%E8%B1%A1"><span class="post-toc-text">锁的问题：破坏抽象</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%94%81%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%9A%E6%80%A7%E8%83%BD%E6%9D%83%E8%A1%A1%E4%B8%8E%E5%A4%8D%E6%9D%82%E6%80%A7"><span class="post-toc-text">锁的问题：性能权衡与复杂性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%80%9A%E5%B8%B8%E7%9A%84%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="post-toc-text">通常的开发流程</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#xv6%EF%BC%9AUART-%E4%B8%8E%E9%94%81"><span class="post-toc-text">xv6：UART 与锁</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%8D%E5%8F%98%E9%87%8F"><span class="post-toc-text">不变量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#uartputc"><span class="post-toc-text">uartputc</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#uartstart"><span class="post-toc-text">uartstart</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#uartintr%EF%BC%9Ahandler-%E6%88%96%E8%AE%B8%E4%B9%9F%E5%BE%97%E5%8A%A0%E9%94%81"><span class="post-toc-text">uartintr：handler 或许也得加锁</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%87%AA%E6%97%8B%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">自旋锁的实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#amoswap-1"><span class="post-toc-text">amoswap</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#amoswap-%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%EF%BC%9F"><span class="post-toc-text">amoswap 具体实现？</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#acquire-1"><span class="post-toc-text">acquire</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#release"><span class="post-toc-text">release</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B6%E4%BB%96%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4"><span class="post-toc-text">其他原子指令</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A%E8%87%AA%E6%97%8B%E9%94%81%E9%9C%80%E8%A6%81%E5%A4%84%E7%90%86%E7%9A%84%E5%B9%B6%E5%8F%91"><span class="post-toc-text">总结：自旋锁需要处理的并发</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#memory-fence"><span class="post-toc-text">memory fence</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="Locking"><a href="#Locking" class="headerlink" title="Locking"></a>Locking</h2><h3 id="课前准备"><a href="#课前准备" class="headerlink" title="课前准备"></a>课前准备</h3><p>无论是多核还是单核处理器，计算机都会交错运行多个进程。这种<code>并发</code>为对共享数据结构的操作的<code>可见性</code>带来了一定的破坏。常见的并发来源有：<code>多处理器并行、线程切换、中断</code></p>
+<p>本章重点介绍一种并发控制技术：锁。锁保护了某个数据结构，在同一时间只能由一个CPU持有。但锁可能让<code>并发串行化</code>，降低性能</p>
+<h4 id="Race-conditions：以-kfree-为例"><a href="#Race-conditions：以-kfree-为例" class="headerlink" title="Race conditions：以 kfree 为例"></a>Race conditions：以 kfree 为例</h4><a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819154310.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819154310.png" class title="Pasted image 20240819154310.png"></a>
+
+<p><code>wait</code> 会调用 <code>kfree</code> 释放子进程的内存，将物理页加入空闲页链表中。如果两个CPU同时执行了wait指令，那么后面的插入可能会被前面的插入覆盖掉——我们丢失跟踪了一个页，这是一种 更新丢失</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819154618.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819154618.png" class title="Pasted image 20240819154618.png"></a>
+
+<h5 id="race"><a href="#race" class="headerlink" title="race"></a>race</h5><p>竞争：一个内存被并发访问，且至少一个是写操作</p>
+<p>通常会引发错误，比如 <code>更新丢失</code>、<code>读取脏数据</code></p>
+<p>其结果取决于CPU的精确时序以及内存系统如何排列它们的内存操作，这使得引发的 <code>错误难以重现和调试</code></p>
+<h5 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h5><p>一种避免竞争的方法是 <code>锁</code>。锁确保了互斥，使得一次只有一个CPU执行关键代码，操作共享数据结构</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819161926.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819161926.png" class title="Pasted image 20240819161926.png"></a>
+
+<p>acquire 和 release 之间的指令序列通常被称为<code>临界区</code>。通常我们会说锁在保护链表。它将临界区的指令<code>串行化</code>，一次只能执行一个，临界区中的指令的<code>原子性</code>得到了保证。</p>
+<p>锁限制了性能——毕竟我们串行化了一部分的指令。多个进程请求相同的锁的情况被称为 冲突&#x2F;争用。<code>不恰当的获取锁的位置极度影响性能</code>——一部分代码完全不会操作数据结构，没必要串行化这部分代码</p>
+<h4 id="Code-Locks"><a href="#Code-Locks" class="headerlink" title="Code: Locks"></a>Code: Locks</h4><p>xv6 有两种类型的锁：<code>spinlock</code> and <code>sleep-lock</code>。这里先看自旋锁</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819173200.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819173200.png" class title="Pasted image 20240819173200.png"></a>
+
+<p>locked 为0代表锁可以被获取，非0时表示锁被持有</p>
+<h5 id="acquire"><a href="#acquire" class="headerlink" title="acquire"></a>acquire</h5><p>逻辑上来将可以这样获取锁，但实际上不行：</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819173401.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819173401.png" class title="Pasted image 20240819173401.png"></a>
+
+<p>如果同时运行到 if，它们可以同时获得一把锁——这显然不行。单纯从软件级别无论如何也不能实现一个有效的锁，我们<code>需要硬件的支持</code>。</p>
+<h5 id="amoswap"><a href="#amoswap" class="headerlink" title="amoswap"></a>amoswap</h5><p>在 risc-v 上，指令 <code>amoswap r, a</code> 读取a处内存的值，将值 r 存储到 a，并把a的值放到了寄存器r中，相当于交换了 寄存器 r 和内存地址 a 处的值。</p>
+<p>硬件保证这个操作是原子的，它使用特殊的硬件防止在读写之间任何其他 CPU 使用这个内存地址。 </p>
+<h5 id="acquire-与-release-实现"><a href="#acquire-与-release-实现" class="headerlink" title="acquire 与 release 实现"></a>acquire 与 release 实现</h5><p>可移植函数 <code>__sync_lock_test_and_set</code> 对 amoswap 进行了封装，返回 lk-&gt;locked 的原值</p>
+<p>在 acquire 的实现中，它不断重试（<code>自旋</code>）调用上述函数，如果它返回0，则成功获取了锁，并更新了 locked 为1。返回1则并没有改变它的值</p>
+<p>可以看到，<code>acquire 进行了大量无用操作</code>。如果有大量锁的争用，那么对性能会有很严重的影响。所以能少用锁就少用锁</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819174613.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819174613.png" class title="Pasted image 20240819174613.png"></a>
+
+<p>获取锁后记录持有锁的CPU id，用于调试。该字段受锁保护，必须持有锁才能更改。</p>
+<p>release 理论上来说只需要对 locked 赋值为0即可，但这也可能是非原子的，所以使用了C库函数 <code>__sync_lock_release</code> 释放锁，它也封装了 amoswap</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819175246.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819175246.png" class title="Pasted image 20240819175246.png"></a>
+
+
+<h4 id="Code-Using-locks"><a href="#Code-Using-locks" class="headerlink" title="Code: Using locks"></a>Code: Using locks</h4><p>xv6 在许多地方使用锁来避免竞争条件，保护共享数据结构。比如前面的 kalloc 和 kfree</p>
+<h5 id="何时使用锁"><a href="#何时使用锁" class="headerlink" title="何时使用锁"></a>何时使用锁</h5><p>使用锁的一个难点是决定<code>使用多少锁</code>，以及<code>每个锁应该保护哪些数据和不变量</code>。</p>
+<p>一旦这个数据结构可能被多个CPU同时写入和访问，就应当用锁保护它，也即，应当保护 <code>共享数据结构</code></p>
+<h5 id="何时不使用锁"><a href="#何时不使用锁" class="headerlink" title="何时不使用锁"></a>何时不使用锁</h5><p>为了提高效率，不要过度使用锁，因为锁会减少并行性。如果<code>并行性不重要</code>，那么可以安排只有一个线程，这样就不用担心锁的问题了。</p>
+<p>以及可以考虑使用更<code>细粒度的锁</code>，以减少锁的争用</p>
+<h5 id="big-kernel-lock"><a href="#big-kernel-lock" class="headerlink" title="big kernel lock"></a>big kernel lock</h5><p>在多处理器上，一个简单的内核可以通过使用一个<code>全局锁</code>来实现：在进入内核时获取锁，在退出内核时释放锁（尽管像管道读取或等待这样的系统调用可能会出现问题）。但这牺牲了并行性，一次只能有一个CPU执行内核代码</p>
+<h5 id="细粒度锁"><a href="#细粒度锁" class="headerlink" title="细粒度锁"></a>细粒度锁</h5><p>比如 kalloc 的物理页分配器：</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819233727.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819233727.png" class title="Pasted image 20240819233727.png"></a>
+
+<p><code>可以将其划分为更细粒度的锁</code>，比如9个物理页分别使用三个分配器存放，每个分配器配一把锁即可。当本分配器耗尽时可能采取一些特殊机制。</p>
+<p>比如文件锁，每个文件都有一把锁，这样处理不同文件的进程无需获取锁就可以操作文件</p>
+<p>比如一个文件锁还可以更加细化，将文件划分为一个个区域，每个区域配一把锁，这样就允许不同进程同时写入一个文件</p>
+<p>综上，<code>锁粒度的决定需要根据性能测量以及复杂性考虑来做出</code></p>
+<h4 id="Deadlock-and-lock-ordering"><a href="#Deadlock-and-lock-ordering" class="headerlink" title="Deadlock and lock ordering"></a>Deadlock and lock ordering</h4><p>如果内核中的某段代码路径需要<code>同时持有多个锁</code>，那么所有<code>代码路径</code>都必须以<code>相同的顺序</code>获取这些锁，否则便可能出现<code>死锁</code></p>
+<h5 id="e-g-不同顺序获取锁"><a href="#e-g-不同顺序获取锁" class="headerlink" title="e.g. 不同顺序获取锁"></a>e.g. 不同顺序获取锁</h5><p>假设在 xv6 中有两段代码路径需要锁 A 和锁 B，但代码路径 1 按照顺序 A 然后 B 获取锁，而代码路径 2 按照顺序 B 然后 A 获取锁。假设线程 T1 执行代码路径 1 并获取了锁 A，而线程 T2 执行代码路径 2 并获取了锁 B。接下来 T1 将尝试获取锁 B，而 T2 将尝试获取锁 A。两个获取操作都会无限期地阻塞</p>
+<h5 id="全局锁链"><a href="#全局锁链" class="headerlink" title="全局锁链"></a>全局锁链</h5><p>sleep 中有很多长度为2的锁顺序链，文件系统中包含了xv6最长的<code>锁链</code></p>
+<h5 id="锁遇到的一些问题"><a href="#锁遇到的一些问题" class="headerlink" title="锁遇到的一些问题"></a>锁遇到的一些问题</h5><p>遵守全局的避免死锁的顺序可能会非常困难。有时<code>锁的顺序与逻辑程序结构冲突</code>，例如，代码模块 M1 调用模块 M2，但锁顺序要求在 M2 中的锁比 M1 中的锁先被获取。</p>
+<p>有时<code>锁的身份在事前无法确定</code>，可能是因为必须持有一个锁才能确定下一个要获取的锁的身份。</p>
+<p>死锁的危险通常限制了锁的粒度，因为更多的锁通常意味着更多的死锁机会</p>
+<h4 id="Locks-and-interrupt-handlers"><a href="#Locks-and-interrupt-handlers" class="headerlink" title="Locks and interrupt handlers"></a>Locks and interrupt handlers</h4><p><code>自旋锁与中断的交互可能引发潜在的危险</code></p>
+<h5 id="问题：死锁"><a href="#问题：死锁" class="headerlink" title="问题：死锁"></a>问题：死锁</h5><p>假设 <code>sys_sleep</code> 持有 <code>tickslock</code>，然后其所在的 CPU 被计时器中断打断，<code>clockintr</code> 会尝试获取 tickslock，发现它已被占用，并等待其释放。</p>
+<p>在这种情况下，tickslock 永远不会被释放：只有 sys_sleep 可以释放它，但 sys_sleep 不会继续运行，直到 clockintr 返回。</p>
+<p>因此，CPU 将进入死锁状态，任何需要这个锁的代码也会因此停滞。</p>
+<h5 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h5><p>如果中断程序需要使用锁，那么CPU持有该锁时必须<code>关闭中断</code></p>
+<p>xv6 更为保守：当 CPU 获取任何锁时，xv6 总是禁用该 CPU 上的中断。尽管如此，中断仍然可能在其他 CPU 上发生，因此中断的获取操作仍然可以等待线程释放自旋锁；只是不会在同一个 CPU 上发生。</p>
+<p>当 CPU 不再持有任何自旋锁时，xv6 会<code>重新启用中断</code>。为此，需要一些数据记录CPU持有<code>锁的嵌套层级</code></p>
+<h5 id="push-off-与-pop-off：锁嵌套层级"><a href="#push-off-与-pop-off：锁嵌套层级" class="headerlink" title="push_off 与 pop_off：锁嵌套层级"></a>push_off 与 pop_off：锁嵌套层级</h5><p><code>acquire</code> 调用 <code>push_off</code>，而 <code>release</code> 调用 <code>pop_off</code>，以跟踪当前 CPU 上锁的嵌套层级。</p>
+<p>push_off 会关闭中断——计数一定不为0；当计数达到零时，pop_off 恢复中断。<code>intr_off</code> 和 <code>intr_on</code> 函数分别执行 RISC-V 指令来禁用和启用中断。</p>
+<p>一个顺序问题：<code>先 push 后获取锁</code>。否则可能获取了锁，然后没来得及push就被中断，然后中断程序获取这把锁，就形成了死锁。同样，需要<code>先释放锁再 pop</code></p>
+<h4 id="Instruction-and-memory-ordering"><a href="#Instruction-and-memory-ordering" class="headerlink" title="Instruction and memory ordering"></a>Instruction and memory ordering</h4><p>为了提高执行效率，编译器和CPU可能会<code>打乱代码的执行顺序</code>，并只对执行结果和串行代码结果的一致做保证。</p>
+<h5 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h5><p>比如串行指令顺序是AB，但指令B需要较长的时间得到结果，而且它不与指令A互相依赖，那么很可能会先执行B再执行A。这种CPU 的排序规则被称为<code>内存模型</code>。</p>
+<h5 id="重排与并发"><a href="#重排与并发" class="headerlink" title="重排与并发"></a>重排与并发</h5><p>遗憾的是，<code>这种重排序可能会改变并发代码的结果</code>，比如把4移动到6后会带来灾难性的后果：</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820004025.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820004025.png" class title="Pasted image 20240820004025.png"></a>
+
+<h5 id="sync-synchronize"><a href="#sync-synchronize" class="headerlink" title="__sync_synchronize"></a>__sync_synchronize</h5><p>为了告诉硬件和编译器不要执行这样的重排序，xv6 在 acquire和 release  中使用了 <code>__sync_synchronize()</code>。</p>
+<p>__sync_synchronize() 是一个<code>内存屏障</code>，它告诉编译器和 CPU 不要跨越该屏障对加载或存储操作进行重排序。</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820004457.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820004457.png" class title="Pasted image 20240820004457.png"></a>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820004651.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820004651.png" class title="Pasted image 20240820004651.png"></a>
+
+<p>xv6 在 acquire 和 release 中的屏障几乎在所有关键情况下都能强制保持顺序，因为 xv6 在访问共享数据时使用了锁。第九章将讨论少数几个例外情况。</p>
+<h4 id="Sleep-locks"><a href="#Sleep-locks" class="headerlink" title="Sleep locks"></a>Sleep locks</h4><p>有时，xv6 需要<code>长时间持有一个锁</code>。在这种情况下，另一个进程想要获取这把自旋锁则会浪费大量的CPU时间，<code>无法让出CPU</code>。否则违反关闭中断的要求</p>
+<p>我们希望能够这样做，以便在<code>一个进程尝试获取锁时，其他进程可以使用 CPU</code>，<code>sleep-lock</code> 为此而生</p>
+<h5 id="acquiresleep"><a href="#acquiresleep" class="headerlink" title="acquiresleep"></a>acquiresleep</h5><p><code>acquiresleep</code> 在等待时让出 CPU，使用的技术将在第7章解释。</p>
+<p>简单来说，睡眠锁有一个受自旋锁保护的 <code>locked</code> 字段，acquiresleep 通过调用 <code>sleep</code> 原子性地让出 CPU 并释放自旋锁。这样，其他线程可以在 <code>acquiresleep</code> 等待时执行。</p>
+<h5 id="睡眠锁的使用场景"><a href="#睡眠锁的使用场景" class="headerlink" title="睡眠锁的使用场景"></a>睡眠锁的使用场景</h5><p>由于睡眠锁在持有锁时保持<code>中断启用</code>状态，因此<code>不能在中断处理程序中使用</code>。</p>
+<p>由于 acquiresleep 可能会让出 CPU，睡眠锁<code>不能在自旋锁的关键区内使用</code>（尽管可以在睡眠锁的关键区内使用自旋锁）。</p>
+<p>自旋锁最适合用于<code>短暂</code>的关键区，因为等待它们会浪费 CPU 时间；而睡眠锁更适合用于<code>耗时较长</code>的操作。</p>
+<h4 id="Real-world"><a href="#Real-world" class="headerlink" title="Real world"></a>Real world</h4><p>尽管关于并发原语和并行性的研究已经有多年历史，但使用锁进行编程仍然具有挑战性。</p>
+<p>通常，<code>最好将锁隐藏在更高级的构造中</code>，例如同步队列，尽管 xv6 并没有这样做。</p>
+<p>如果你要使用锁编程，明智的做法是<code>使用工具来尝试识别竞争条件</code>，因为很容易忽略某些需要锁保护的不变量。</p>
+<h5 id="POSIX-线程"><a href="#POSIX-线程" class="headerlink" title="POSIX 线程"></a>POSIX 线程</h5><p>大多数操作系统都支持 POSIX 线程（Pthreads），它允许一个用户进程在不同的 CPU 上并发运行多个线程。Pthreads 支持用户级锁、屏障等。</p>
+<p>支持 Pthreads 需要操作系统的支持。例如，如果一个 Pthread 在系统调用中阻塞，那么同一进程的另一个 Pthread 应该能够在该 CPU 上继续运行。再比如，如果一个 Pthread 改变了其进程的地址空间（例如映射或取消映射内存），内核必须安排同一进程的其他线程在其他 CPU 上更新其硬件页表以反映地址空间的变化。</p>
+<h5 id="无原子指令锁"><a href="#无原子指令锁" class="headerlink" title="无原子指令锁"></a>无原子指令锁</h5><p>虽然可以在没有原子指令的情况下实现锁，但成本很高，如：</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820010627.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820010627.png" class title="Pasted image 20240820010627.png"></a>
+
+<p>大多数操作系统使用原子指令。</p>
+<h5 id="锁与缓存"><a href="#锁与缓存" class="headerlink" title="锁与缓存"></a>锁与缓存</h5><p>如果多个 CPU 同时尝试获取同一个锁，锁的开销可能很大。如果一个 CPU 在其本地缓存中缓存了一个锁，而另一个 CPU 需要获取该锁，那么用于更新保存锁的缓存行的原子指令必须将该缓存行从一个 CPU 的缓存移动到另一个 CPU 的缓存中，并可能会使缓存行的其他副本失效。从另一个 CPU 的缓存中获取缓存行的开销可能比从本地缓存获取缓存行的开销高出数个数量级。</p>
+<h5 id="无锁的数据结构和算法"><a href="#无锁的数据结构和算法" class="headerlink" title="无锁的数据结构和算法"></a>无锁的数据结构和算法</h5><p>为了避免与锁相关的开销，许多操作系统使用无锁的数据结构和算法。</p>
+<p>例如，有可能实现一个链表（如本章开头提到的那个链表），在链表搜索时不需要锁，而在向链表中插入一个项目时只需使用一个原子指令。</p>
+<p>然而，无锁编程比使用锁编程要复杂得多，例如，必须考虑指令和内存重排序。使用锁编程已经很难了，所以 xv6 避免了无锁编程的额外复杂性。</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820010536.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820010536.png" class title="Pasted image 20240820010536.png"></a>
+
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820010547.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820010547.png" class title="Pasted image 20240820010547.png"></a>
+
+<h3 id="为什么要使用锁？"><a href="#为什么要使用锁？" class="headerlink" title="为什么要使用锁？"></a>为什么要使用锁？</h3><p><code>并发访问共享数据结构可能造成更新丢失、读取脏数据等现象</code>，我们想要保证数据的正确性</p>
+<ul>
+<li>并行可以看作是并发的一种特殊情况，但并发并不一定意味着并行</li>
+<li>需要指出的是，并发不一定导致 race condition，它的结果具有相当的随机性，可能导致完全正确的结果</li>
+</ul>
+<h4 id="并行与锁：矛盾的处境"><a href="#并行与锁：矛盾的处境" class="headerlink" title="并行与锁：矛盾的处境"></a>并行与锁：矛盾的处境</h4><p>我们想要并行的在不同的CPU核上执行系统调用，但是如果这些系统调用使用了共享的数据，我们又需要使用锁，而锁又会使得这些系统调用串行执行，所以最后锁反过来又限制了性能。</p>
+<h5 id="为什么要依靠并行提升性能？"><a href="#为什么要依靠并行提升性能？" class="headerlink" title="为什么要依靠并行提升性能？"></a>为什么要依靠并行提升性能？</h5><a href="/2024/08/20/6.s081%20lec10%20Locking/image%2027.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/image%2027.avif" class title="image 27.avif"></a>
+
+
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820013621.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820013621.png" class title="Pasted image 20240820013621.png"></a>
+
+<p>所以现在如果一个应用程序想要提升性能，它不能只依赖单核，必须要依赖于多核。这也意味着，如果应用程序与内核交互的较为紧密，那么操作系统也需要高效的在多个CPU核上运行。</p>
+<h3 id="锁如何避免-race-condition？"><a href="#锁如何避免-race-condition？" class="headerlink" title="锁如何避免 race condition？"></a>锁如何避免 race condition？</h3><p>锁就是一个对象，就像其他在内核中的对象一样。有一个结构体叫做lock，它包含了一些字段，这些字段中维护了锁的状态。锁有非常直观的API：</p>
+<ul>
+<li><p><code>acquire</code>，接收指向lock的指针作为参数。acquire确保了在任何时间，只会有一个进程能够成功的获取锁。</p>
+</li>
+<li><p><code>release</code>，也接收指向lock的指针作为参数。在同一时间尝试获取锁的其他进程需要等待，直到持有锁的进程对锁调用release。</p>
+</li>
+</ul>
+<h4 id="critical-section"><a href="#critical-section" class="headerlink" title="critical section"></a>critical section</h4><p>锁的acquire和release之间的代码，通常被称为<code>critical section</code>。</p>
+<p>之所以被称为critical section，是因为通常会在这里以<code>原子</code>的方式执行共享数据的更新。所以基本上来说，如果在acquire和release之间有多条指令，它们<code>要么会一起执行，要么一条也不会执行</code>。</p>
+<h4 id="big-kernel-lock-与序列化"><a href="#big-kernel-lock-与序列化" class="headerlink" title="big kernel lock 与序列化"></a>big kernel lock 与序列化</h4><p>如果内核中只有一把大锁，基本上所有的系统调用都会被这把大锁保护而被<code>序列化</code>，这些系统调用会串行的执行</p>
+<p>所以通常来说，例如XV6的操作系统会有<code>多把锁</code>，这样就能获得某种程度的并发执行。</p>
+<h3 id="什么时候使用锁？"><a href="#什么时候使用锁？" class="headerlink" title="什么时候使用锁？"></a>什么时候使用锁？</h3><p>锁限制了并发性，也限制了性能，这带来了一个问题，什么时候才必须要加锁呢？</p>
+<h4 id="可变共享数据结构"><a href="#可变共享数据结构" class="headerlink" title="可变共享数据结构"></a>可变共享数据结构</h4><p>如果两个进程访问了一个共享的数据结构，并且其中一个进程会更新共享的数据结构，那么就需要对于这个共享的数据结构加锁</p>
+<blockquote>
+<p>这个规则有时过于严格，有时又过于宽松，后文中会对此进行解释</p>
+</blockquote>
+<h4 id="printf"><a href="#printf" class="headerlink" title="printf"></a>printf</h4><p>如果我们将一个字符串传递给它，XV6会尝试原子性的将整个字符串输出，而不是与其他进程的printf交织输出</p>
+<h4 id="自动加锁是否可行？"><a href="#自动加锁是否可行？" class="headerlink" title="自动加锁是否可行？"></a>自动加锁是否可行？</h4><p>对于一些更复杂的场景，就不是那么容易探测到race condition。比如能否通过自动的对共享数据结构创建锁来自动避免race condition吗？</p>
+<h5 id="e-g-rename"><a href="#e-g-rename" class="headerlink" title="e.g. rename"></a>e.g. rename</h5><p>假设我们有一个对于rename的调用，这个调用会将文件从一个目录移到另一个目录，我们现在将文件d1&#x2F;x移到文件d2&#x2F;y：</p>
+<ul>
+<li>先对d1加锁，删除x，之后再释放对于d1的锁；之后我们会对d2加锁，增加y，之后再释放d2的锁</li>
+</ul>
+<p>但这样可能得到错误的结果，两个操作的间隔会有一段真空期，即d1和d2中都不存在任何文件，正确的做法是：</p>
+<ul>
+<li>在重命名的一开始就对d1和d2加锁，之后删除x再添加y，最后再释放对于d1和d2的锁</li>
+</ul>
+<p><code>所以自动加锁在某些场景下会出问题</code></p>
+<h4 id="锁的使用完全是由程序员决定的"><a href="#锁的使用完全是由程序员决定的" class="headerlink" title="锁的使用完全是由程序员决定的"></a>锁的使用完全是由程序员决定的</h4><p>并没有强制说一定要使用锁，<code>锁的使用完全是由程序员决定的</code> —— 程序员决定是否将锁与数据结构关联，以及决定何时对锁进行acquire和release。</p>
+<h3 id="锁的一般用途和问题"><a href="#锁的一般用途和问题" class="headerlink" title="锁的一般用途和问题"></a>锁的一般用途和问题</h3><h4 id="锁的一般用途"><a href="#锁的一般用途" class="headerlink" title="锁的一般用途"></a>锁的一般用途</h4><ul>
+<li>避免丢失更新</li>
+<li>打包多个操作，使它们具有原子性</li>
+<li>维护共享数据结构的不变性。使修改对所有人可见</li>
+</ul>
+<h4 id="锁的问题：死锁"><a href="#锁的问题：死锁" class="headerlink" title="锁的问题：死锁"></a>锁的问题：死锁</h4><h5 id="单个锁"><a href="#单个锁" class="headerlink" title="单个锁"></a>单个锁</h5><p>一个死锁的最简单的场景就是：首先acquire一个锁，然后进入到critical section；在critical section中，再acquire同一个锁</p>
+<p>XV6会探测这样的死锁，如果XV6看到了同一个进程多次acquire同一个锁，就会触发一个panic。</p>
+<h5 id="多个锁：deadly-embrace"><a href="#多个锁：deadly-embrace" class="headerlink" title="多个锁：deadly embrace"></a>多个锁：deadly embrace</h5><p>CPU1会获取d1的锁的同时，CPU2获取d2的锁，然后CPU1尝试获取d2，CPU2尝试获取d1</p>
+<p>这里的死锁就没那么容易探测了。解决方案是，如果你有多个锁，你需要对锁进行排序，所有的操作都必须以<code>相同顺序</code>获取锁。</p>
+<h4 id="锁的问题：破坏抽象"><a href="#锁的问题：破坏抽象" class="headerlink" title="锁的问题：破坏抽象"></a>锁的问题：破坏抽象</h4><p>对于一个系统设计者，你需要确定对于所有的锁对象的全局的顺序。</p>
+<p>不过在设计一个操作系统的时候，定义一个全局的锁的顺序会有些问题。如果一个模块m1中方法g调用了另一个模块m2中的方法f，那么m1中的方法g需要知道m2的方法f使用了哪些锁。因为如果m2使用了一些锁，那么m1的方法g必须集合f和g中的锁，并形成一个全局的锁的排序。这意味着在m2中的锁必须对m1可见，这样m1才能以恰当的方法调用m2。</p>
+<p>但是这样又<code>违背了代码抽象的原则</code>。在完美的情况下，代码抽象要求m1完全不知道m2是如何实现的。但是不幸的是，具体实现中，m2内部的锁需要泄露给m1，这样m1才能完成全局锁排序。所以当你设计一些更大的系统时，锁使得代码的模块化更加的复杂了。</p>
+<h4 id="锁的问题：性能权衡与复杂性"><a href="#锁的问题：性能权衡与复杂性" class="headerlink" title="锁的问题：性能权衡与复杂性"></a>锁的问题：性能权衡与复杂性</h4><p>基本上来说，<code>如果你想获得更高的性能，你需要拆分数据结构和锁</code>。但这又会<code>引入大量的工作</code>：</p>
+<p>怎么拆分呢？通常不会很简单，有的时候还有些困难。比如说，你是否应该为每个目录关联不同的锁？你是否应该为每个inode关联不同的锁？你是否应该为每个进程关联不同的锁？或者是否有更好的方式来拆分数据结构呢？如果你重新设计了加锁的规则，你需要确保不破坏内核一直尝试维护的数据不变性。</p>
+<p>如果你拆分了锁，你可能需要重写代码。如果你为了获得更好的性能，重构了部分内核或者程序，将数据结构进行拆分并引入了更多的锁，这涉及到很多工作，你需要确保你能够继续维持数据的不变性，你需要重写代码。通常来说这里有很多的工作，并且并不容易。</p>
+<p>所以这里就有矛盾点了。我们想要获得更好的性能，那么我们需要有更多的锁，但是这又引入了大量的工作。</p>
+<h5 id="通常的开发流程"><a href="#通常的开发流程" class="headerlink" title="通常的开发流程"></a>通常的开发流程</h5><p>通常来说，开发的流程是：</p>
+<ul>
+<li><p>先以coarse-grained lock（也就是大锁）开始。</p>
+</li>
+<li><p>再对程序进行测试，来看一下程序是否能使用多核。</p>
+</li>
+<li><p>如果可以的话，那么工作就结束了，你对于锁的设计足够好了；如果不可以的话，那意味着锁存在竞争，多个进程会尝试获取同一个锁，因此它们将会序列化的执行，性能也上不去，之后你就需要重构程序。</p>
+</li>
+</ul>
+<p>在这个流程中，测试的过程比较重要。</p>
+<p>有的模块使用了coarse-grained lock，但是它并没有经常被并行的调用，那么其实就没有必要重构程序，因为重构程序设计到大量的工作，并且也会使得代码变得复杂。所以如果<code>不是必要的话，还是不要进行重构</code>。</p>
+<h3 id="xv6：UART-与锁"><a href="#xv6：UART-与锁" class="headerlink" title="xv6：UART 与锁"></a>xv6：UART 与锁</h3><p>从代码上看UART只有一个锁，它保护了UART的的传输缓存、写指针、读指针：</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820023047.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820023047.png" class title="Pasted image 20240820023047.png"></a>
+
+<p>这是一个 <code>coarse-grained lock</code> 的设计。另外，以上三个数据结构的设计模式叫做消费者-生产者模式</p>
+<h4 id="不变量"><a href="#不变量" class="headerlink" title="不变量"></a>不变量</h4><p>读指针的内容需要被显示，写指针接收来自例如printf的数据。</p>
+<p>有一些不变的特性，例如读指针需要追赶写指针；从读指针到写指针之间的数据是需要被发送到显示端；从写指针到读指针之间的是空闲槽位，锁帮助我们维护了这些特性不变。</p>
+<h4 id="uartputc"><a href="#uartputc" class="headerlink" title="uartputc"></a>uartputc</h4><a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820023646.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820023646.png" class title="Pasted image 20240820023646.png"></a>
+
+<p>获得锁–查看buf是否满了–是则放入槽位–释放锁</p>
+<p>锁保证了对缓存的写入是原子操作</p>
+<h4 id="uartstart"><a href="#uartstart" class="headerlink" title="uartstart"></a>uartstart</h4><a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820023910.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820023910.png" class title="Pasted image 20240820023910.png"></a>
+
+<p>这是处理发送缓存中数据的函数，它调用者的锁保证了清空缓存前不会再往缓存中存数据，也就不会覆盖缓存中的数据</p>
+<h4 id="uartintr：handler-或许也得加锁"><a href="#uartintr：handler-或许也得加锁" class="headerlink" title="uartintr：handler 或许也得加锁"></a>uartintr：handler 或许也得加锁</h4><p>锁保证了一个时间只有一个CPU上的进程可以写入UART的寄存器 THR。</p>
+<p>而UART传输完毕后会产生中断，如果另一个CPU处理了这个中断，然后调用 uartstart，那么可能有多个CPU同时写入THR，所以我们需要<code>在 handler 中也获取锁</code>。</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820024741.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820024741.png" class title="Pasted image 20240820024741.png"></a>
+
+<h3 id="自旋锁的实现"><a href="#自旋锁的实现" class="headerlink" title="自旋锁的实现"></a>自旋锁的实现</h3><p>主要难点在于锁的acquire接口。而一般的软件手段完全不能实现 acquire。</p>
+<h4 id="amoswap-1"><a href="#amoswap-1" class="headerlink" title="amoswap"></a>amoswap</h4><p>最常见的手段依赖于一个特殊的硬件指令 <code>amoswap</code>（atomic memory swap</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">amoswap address, r1, r2</span><br></pre></td></tr></table></figure>
+<p>（amoswap的参数和课前介绍的不太一样）</p>
+<p>这条指令会先锁定住address，将address中的数据保存在一个临时变量中（tmp），之后将r1中的数据写入到地址中，之后再将保存在临时变量中的数据写入到r2中，最后再对于地址解锁。</p>
+<p>硬件保证了这一些列的操作具有原子性</p>
+<h5 id="amoswap-具体实现？"><a href="#amoswap-具体实现？" class="headerlink" title="amoswap 具体实现？"></a>amoswap 具体实现？</h5><p>处理器的指令集通常像是一个说明文档，它不会有具体实现的细节，具体的实现依赖于内存系统是如何工作的，比如说：</p>
+<ul>
+<li><p>多个处理器共用一个内存控制器，内存控制器可以支持这里的操作，比如给一个特定的地址加锁，然后让一个处理器执行2-3个指令，然后再解锁。因为所有的处理器都需要通过这里的内存控制器完成读写，所以内存控制器可以对操作进行排序和加锁。</p>
+</li>
+<li><p>如果内存位于一个共享的总线上，那么需要总线控制器（bus arbiter）来支持。总线控制器需要以原子的方式执行多个内存操作。</p>
+</li>
+<li><p>如果处理器有缓存，那么缓存一致性协议会确保对于持有了我们想要更新的数据的cache line只有一个写入者，相应的处理器会对cache line加锁，完成两个操作。</p>
+</li>
+</ul>
+<p>基本上都是对于地址加锁，读出数据，写入新数据，然后再返回旧数据</p>
+<h4 id="acquire-1"><a href="#acquire-1" class="headerlink" title="acquire"></a>acquire</h4><p>使用 amoswap 的<code>test-and-set循环</code>。开始时需要关闭中断，以避免可能的<code>死锁</code></p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819174613.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819174613.png" class title="Pasted image 20240819174613.png"></a>
+
+<a href="/2024/08/20/6.s081%20lec10%20Locking/image%2028.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/image%2028.avif" class title="image 28.avif"></a>
+
+<h4 id="release"><a href="#release" class="headerlink" title="release"></a>release</h4><p>写个0——但也得依靠 <code>amoswap</code>，因为其他的处理器可能会向locked字段写入</p>
+<p><code>store 并不总是原子操作</code>，这取决于具体的实现——缓存等</p>
+<a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819175246.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240819175246.png" class title="Pasted image 20240819175246.png"></a>
+
+
+
+<h4 id="其他原子指令"><a href="#其他原子指令" class="headerlink" title="其他原子指令"></a>其他原子指令</h4><a href="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820030954.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/20/6.s081%20lec10%20Locking/Pasted%20image%2020240820030954.png" class title="Pasted image 20240820030954.png"></a>
+
+<h4 id="总结：自旋锁需要处理的并发"><a href="#总结：自旋锁需要处理的并发" class="headerlink" title="总结：自旋锁需要处理的并发"></a>总结：自旋锁需要处理的并发</h4><p>spinlock需要处理两类并发，一类是不同CPU之间的并发，一类是相同CPU上中断和普通程序之间的并发。针对后一种情况，我们需要在acquire中关闭中断。中断会在release的结束位置再次打开，因为在这个位置才能再次安全的接收中断。</p>
+<h4 id="memory-fence"><a href="#memory-fence" class="headerlink" title="memory fence"></a>memory fence</h4><p>编译器或者处理器可能会重排指令以获得更好的性能，但临界区中的指令不能被放到外面。</p>
+<p>我们需要使用<code>memory fence</code>或者叫做 <code>synchronize</code> 指令，来确定指令的移动范围：任何在它之前的load&#x2F;store指令，都不能移动到它之后。</p>
+<p>锁的acquire和release函数都包含了synchronize指令。</p>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-20</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
