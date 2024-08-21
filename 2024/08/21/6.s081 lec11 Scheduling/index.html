@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec11 Scheduling" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec11 Scheduling
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Scheduling"><span class="post-toc-text">Scheduling</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%AF%BE%E5%89%8D%E5%87%86%E5%A4%87"><span class="post-toc-text">课前准备</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Multiplexing-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="post-toc-text">Multiplexing 多路复用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%88%87%E6%8D%A2%E8%BF%9B%E7%A8%8B%EF%BC%9F"><span class="post-toc-text">什么时候切换进程？</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%9D%A2%E5%AF%B9%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="post-toc-text">面对的一些问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Code-Context-switching"><span class="post-toc-text">Code: Context switching</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#scheduler-%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">scheduler 线程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%88%87%E6%8D%A2%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="post-toc-text">切换上下文</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#swtch%EF%BC%9A%E5%88%87%E6%8D%A2%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="post-toc-text">swtch：切换上下文</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#context"><span class="post-toc-text">context</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#yield%E3%80%81sched-%E4%B8%8E%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="post-toc-text">yield、sched 与调度器</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Code-Scheduling"><span class="post-toc-text">Code: Scheduling</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="post-toc-text">调度器</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%B0%83%E5%BA%A6%E4%B8%AD%E7%9A%84%E4%B8%8D%E5%8F%98%E9%87%8F"><span class="post-toc-text">调度中的不变量</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#yield"><span class="post-toc-text">yield</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#sched"><span class="post-toc-text">sched</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E4%B8%AD%E9%87%8A%E6%94%BE%E9%94%81"><span class="post-toc-text">不同的线程中释放锁</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%8D%8F%E7%A8%8B%EF%BC%9Asched-%E5%92%8C-scheduler"><span class="post-toc-text">协程：sched 和 scheduler</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#swtch-%E4%B8%8D%E8%BF%94%E5%9B%9E%E5%88%B0-sched%EF%BC%9A%E9%A6%96%E6%AC%A1%E8%B0%83%E5%BA%A6"><span class="post-toc-text">swtch 不返回到 sched：首次调度</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#p-lock-%E4%BF%9D%E6%8A%A4%E7%9A%84%E5%85%B6%E4%BB%96%E5%86%85%E5%AE%B9"><span class="post-toc-text">p-&gt;lock 保护的其他内容</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Code-mycpu-and-myproc"><span class="post-toc-text">Code: mycpu and myproc</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#struct-cpu"><span class="post-toc-text">struct cpu</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#cpuid-%E4%B8%8E-mycpu"><span class="post-toc-text">cpuid 与 mycpu</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%A6%82%E4%BD%95%E7%A1%AE%E4%BF%9D-tp-%E6%98%AF%E5%BD%93%E5%89%8DCPU-id%EF%BC%9F"><span class="post-toc-text">如何确保 tp 是当前CPU id？</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%B8%AD%E6%96%AD%E4%B8%8Etp"><span class="post-toc-text">中断与tp</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#myproc"><span class="post-toc-text">myproc</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B%E6%A6%82%E8%BF%B0"><span class="post-toc-text">线程概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%9F"><span class="post-toc-text">为什么需要多线程？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81"><span class="post-toc-text">线程的状态</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B9%B6%E5%8F%91%E7%AD%96%E7%95%A5"><span class="post-toc-text">并发策略</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B%E7%B3%BB%E7%BB%9F%E4%B8%8E%E5%85%B1%E4%BA%AB%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="post-toc-text">线程系统与共享地址空间</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="post-toc-text">共享内存</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">内核线程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">用户线程</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B9%B6%E5%8F%91%EF%BC%8C%E4%BD%86%E6%98%AF%E4%B8%8D%E4%BD%BF%E7%94%A8%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">并发，但是不使用线程</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#XV6%E7%BA%BF%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="post-toc-text">XV6线程调度</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%97%AE%E9%A2%98"><span class="post-toc-text">面临的问题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AE%9A%E6%97%B6%E5%99%A8%E4%B8%AD%E6%96%AD%E4%B8%8E-pre-emptive-scheduling"><span class="post-toc-text">定时器中断与 pre-emptive scheduling</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%88%86%E7%B1%BB"><span class="post-toc-text">线程分类</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#pre-emptive-scheduling%EF%BC%9Arunning-runable"><span class="post-toc-text">pre-emptive scheduling：running-&gt;runable</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#CPU%E7%8A%B6%E6%80%81"><span class="post-toc-text">CPU状态</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#XV6%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2"><span class="post-toc-text">XV6线程切换</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2%E6%A6%82%E8%BF%B0"><span class="post-toc-text">用户线程切换概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2"><span class="post-toc-text">内核线程切换</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9B%B4%E5%AE%8C%E6%95%B4%E7%9A%84%E6%95%85%E4%BA%8B"><span class="post-toc-text">更完整的故事</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#swtch-%E6%A6%82%E8%BF%B0"><span class="post-toc-text">swtch 概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%B0%83%E5%BA%A6%E5%99%A8%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">调度器线程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#swtch-%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="post-toc-text">swtch 的工作</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%81%A2%E5%A4%8D%E6%A0%88"><span class="post-toc-text">恢复栈</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#schedulder-%E6%A6%82%E8%BF%B0"><span class="post-toc-text">schedulder 概述</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#demo-%E7%A4%BA%E4%BE%8B"><span class="post-toc-text">demo 示例</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#yield-1"><span class="post-toc-text">yield</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sched-1"><span class="post-toc-text">sched</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#swtch-%E4%B8%8E-context"><span class="post-toc-text">swtch 与 context</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#context-1"><span class="post-toc-text">context</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#swtch"><span class="post-toc-text">swtch</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#schedulder"><span class="post-toc-text">schedulder</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#p-lock-%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="post-toc-text">p-&gt;lock 的作用</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%A2%AB%E8%B0%83%E5%BA%A6%EF%BC%9Aforkret"><span class="post-toc-text">进程第一次被调度：forkret</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">进程与线程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%A2%AB%E8%B0%83%E5%BA%A6"><span class="post-toc-text">进程第一次被调度</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#forkret"><span class="post-toc-text">forkret</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B"><span class="post-toc-text">第一个进程</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="Scheduling"><a href="#Scheduling" class="headerlink" title="Scheduling"></a>Scheduling</h2><h3 id="课前准备"><a href="#课前准备" class="headerlink" title="课前准备"></a>课前准备</h3><p>任何操作系统可能都会运行比计算机 CPU 数量更多的进程，我们需要<code>分时共享</code> CPU。这种共享对用户进程来说是<code>透明</code>的。一种常见的方法是通过将进程<code>多路复用</code>到硬件 CPU 上，给每个进程提供它拥有自己<code>虚拟 CPU 的假象</code>。</p>
+<h4 id="Multiplexing-多路复用"><a href="#Multiplexing-多路复用" class="headerlink" title="Multiplexing 多路复用"></a>Multiplexing 多路复用</h4><p>xv6 实现 <code>sleep</code> 和 <code>wakeup</code> 使进程休眠或唤醒</p>
+<h5 id="什么时候切换进程？"><a href="#什么时候切换进程？" class="headerlink" title="什么时候切换进程？"></a>什么时候切换进程？</h5><ul>
+<li><p>一个进程等待设备或管道 I&#x2F;O 完成、等待子进程退出、主动调用 sleep</p>
+</li>
+<li><p>定期切换。防止进程长时间霸占CPU</p>
+</li>
+</ul>
+<h5 id="面对的一些问题"><a href="#面对的一些问题" class="headerlink" title="面对的一些问题"></a>面对的一些问题</h5><ol>
+<li>如何切换进程？<ul>
+<li>尽管上下文切换的概念很简单，但其实现是 xv6 中最复杂的代码之一</li>
+</ul>
+</li>
+<li>如何保证透明性、以及强制切换？</li>
+<li>多核上运行进程，需要锁</li>
+<li>如何释放进程资源？</li>
+<li>进程切换时如何保存上下文？</li>
+<li>唤醒线程时，如何避免竞争？</li>
+</ol>
+<p>xv6 尽量以最简单的方式解决这些问题，但结果代码仍然相当复杂。</p>
+<h4 id="Code-Context-switching"><a href="#Code-Context-switching" class="headerlink" title="Code: Context switching"></a>Code: Context switching</h4><a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820142509.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820142509.png" class title="Pasted image 20240820142509.png"></a>
+
+<p>旧进程的用户线程–旧进程的内核线程–调度器线程–新进程的内核线程–新用户线程</p>
+<h5 id="scheduler-线程"><a href="#scheduler-线程" class="headerlink" title="scheduler 线程"></a>scheduler 线程</h5><p>每个CPU都有一个调度器线程，它有自己的<code>上下文</code>：寄存器和栈。</p>
+<p>它不能运行在旧进程的内核线程的上下文中，因为旧进程可能会被其他核唤醒并运行</p>
+<h5 id="切换上下文"><a href="#切换上下文" class="headerlink" title="切换上下文"></a>切换上下文</h5><p>切换线程需要保存旧线程的寄存器，并恢复新线程的寄存器——这意味着恢复了SP和PC，也就恢复了栈和执行的代码</p>
+<h5 id="swtch：切换上下文"><a href="#swtch：切换上下文" class="headerlink" title="swtch：切换上下文"></a>swtch：切换上下文</h5><p><code>swtch</code>：纯汇编函数，无情的保存和恢复寄存器的机器</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820170250.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820170250.png" class title="Pasted image 20240820170250.png"></a>
+
+<p>注意，只保存并恢复了<code>callee saved</code> 寄存器与 <code>ra</code>，在 ra 中是 swtch 的返回地址。于是从 swtch 就会返回到调用它的那条指令。<code>无需保存与恢复pc</code></p>
+<h5 id="context"><a href="#context" class="headerlink" title="context"></a>context</h5><p><code>context</code> 结构体包含了这些信息：</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820170539.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820170539.png" class title="Pasted image 20240820170539.png"></a>
+
+<p><code>proc</code> 和 <code>cpu</code> 都使用了 context 结构体</p>
+<h5 id="yield、sched-与调度器"><a href="#yield、sched-与调度器" class="headerlink" title="yield、sched 与调度器"></a>yield、sched 与调度器</h5><p><code>yield</code> 会调用 <code>sched</code>，后者调用 <code>swtch</code>，用于保存和恢复上下文。</p>
+<p>切换到 <code>cpu-&gt;scheduler</code>，也即每个CPU的调度器的上下文。它不会返回到 sched，而是返回到调度器</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820171303.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820171303.png" class title="Pasted image 20240820171303.png"></a>
+
+<h4 id="Code-Scheduling"><a href="#Code-Scheduling" class="headerlink" title="Code: Scheduling"></a>Code: Scheduling</h4><p>分析通过调度器从一个进程的内核线程切换到另一个进程</p>
+<h5 id="调度器"><a href="#调度器" class="headerlink" title="调度器"></a>调度器</h5><p>调度器是每个 CPU 有一个特殊的线程，负责选择下一个要运行的进程。</p>
+<p>调度器循环遍历进程表，寻找一个可以运行的进程，即 <code>p-&gt;state == RUNNABLE</code> 的进程。一旦找到则更新 state 与当前 cpu 的 proc，然后通过 swtch 开始运行该线程</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820184851.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820184851.png" class title="Pasted image 20240820184851.png"></a>
+
+<h5 id="调度中的不变量"><a href="#调度中的不变量" class="headerlink" title="调度中的不变量"></a>调度中的不变量</h5><p><code>在不变量不成立时必须拥有进程的锁</code>。而在<code>进程停止运行前、以及开始运行时</code>，我们会修改一些元数据，所以此时必须持有锁。</p>
+<p>这里的<code>不变量</code>有：CPU当前运行的进程、CPU的寄存器值（保存到p-&gt;context）、进程的状态。</p>
+<p>这些不变量保证了 <code>yield</code> 可以安全切换该进程，以及调度器可以安全地调度运行它。</p>
+<p>在不持有锁时，应当保证：寄存器值保存到了 context、没有CPU在其内核栈上运行、以及没有cpu的 c-&gt;proc 指向它</p>
+<h5 id="yield"><a href="#yield" class="headerlink" title="yield"></a>yield</h5><p>如上文所述，一个想要放弃 CPU 的进程必须获取其自身的进程锁，释放它持有的其他锁，更新自己的状态（p-&gt;state），然后调用 <code>sched</code></p>
+<blockquote>
+<p><code>yield</code>、<code>sleep</code> 、<code>exit</code> 均遵循这个惯例。</p>
+</blockquote>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820201141.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820201141.png" class title="Pasted image 20240820201141.png"></a>
+
+<h5 id="sched"><a href="#sched" class="headerlink" title="sched"></a>sched</h5><p>sched 会仔细检查这些条件，并断言<code>中断</code>应该已经被关闭了。最后调用 swtch 切换到调度器上下文</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820171303.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820171303.png" class title="Pasted image 20240820171303.png"></a>
+
+<p>注意，此时不变量的属性被打破， sched 的<code>调用者必须持有进程的锁</code>。</p>
+<h5 id="不同的线程中释放锁"><a href="#不同的线程中释放锁" class="headerlink" title="不同的线程中释放锁"></a>不同的线程中释放锁</h5><p>这个锁在切换后的代码，也即<code>调度器中释放</code>它。</p>
+<p>这种使用方式不同寻常，通常持有锁的线程负责释放锁，但在切换线程上下文时有必要打破这一惯例，以维护进程的不变量</p>
+<h5 id="协程：sched-和-scheduler"><a href="#协程：sched-和-scheduler" class="headerlink" title="协程：sched 和 scheduler"></a>协程：sched 和 scheduler</h5><p>内核线程通常会在 sched 中放弃CPU，然后跳转（通过swtch）到 scheduler 中某个固定的位置，scheduler 又会跳转到某个线程的 sched 末尾，进而返回到一个线程中。</p>
+<p>这种在线程之间发生的程式化切换有时被称为协程（？？）。这个例子中，sched 和 scheduler 是彼此的协程。</p>
+<h5 id="swtch-不返回到-sched：首次调度"><a href="#swtch-不返回到-sched：首次调度" class="headerlink" title="swtch 不返回到 sched：首次调度"></a>swtch 不返回到 sched：首次调度</h5><p>有一种情况，调度器调用 swtch 不会返回到 sched。当一个新进程首次被调度时，它从 <code>forkret</code> 开始。</p>
+<p>forkret 的存在是为了释放 <code>p-&gt;lock</code>；否则，新进程可以从 <code>usertrapret</code> 开始。</p>
+<h5 id="p-lock-保护的其他内容"><a href="#p-lock-保护的其他内容" class="headerlink" title="p-&gt;lock 保护的其他内容"></a>p-&gt;lock 保护的其他内容</h5><p>p-&gt;lock 还保护其他内容：exit 和 wait 之间的交互，避免丢失唤醒通知的机制（见第 7.5 节），以及避免进程退出与其他进程读取或写入其状态之间的竞争（例如，exit 系统调用查看 p-&gt;pid 并设置 p-&gt;killed（kernel&#x2F;proc.c:611））。考虑是否可以将 p-&gt;lock 的不同功能拆分开来，可能会对代码的清晰度和性能有所帮助。</p>
+<h4 id="Code-mycpu-and-myproc"><a href="#Code-mycpu-and-myproc" class="headerlink" title="Code: mycpu and myproc"></a>Code: mycpu and myproc</h4><p>Xv6 经常需要指向当前进程的 proc 结构体指针。在单核处理器上可以通过一个全局变量解决，但在多核处理器上就可能需要上锁了，或者</p>
+<h5 id="struct-cpu"><a href="#struct-cpu" class="headerlink" title="struct cpu"></a>struct cpu</h5><a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820203349.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820203349.png" class title="Pasted image 20240820203349.png"></a>
+
+<p>这个结构体记录了当前cpu上运行的进程、保存的调度器线程的上下文、管理中断的自旋锁计数器</p>
+<h5 id="cpuid-与-mycpu"><a href="#cpuid-与-mycpu" class="headerlink" title="cpuid 与 mycpu"></a>cpuid 与 mycpu</h5><p>xv6为每个cpu编号，并将其id保存到寄存器 <code>tp</code> 中，访问 tp 即可获取 <code>id</code>，进而索引到正确的 cpu 结构体</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820203743.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820203743.png" class title="Pasted image 20240820203743.png"></a>
+
+<h5 id="如何确保-tp-是当前CPU-id？"><a href="#如何确保-tp-是当前CPU-id？" class="headerlink" title="如何确保 tp 是当前CPU id？"></a>如何确保 tp 是当前CPU id？</h5><p>确保每个 CPU 的 <code>tp</code> 寄存器始终保存该 CPU 的 <code>hartid</code> 需要一些额外的步骤。</p>
+<ul>
+<li><p><code>mstart</code> 在 CPU 启动序列的早期阶段（仍处于机器模式下）设置 tp 寄存器</p>
+</li>
+<li><p><code>usertrapret</code> 将 tp 保存在跳板页中，因为用户进程可能会修改 tp。</p>
+</li>
+<li><p>当从用户空间进入内核时，<code>uservec</code> 会恢复保存的 tp</p>
+</li>
+<li><p>编译器保证绝不会使用 tp 寄存器。</p>
+</li>
+</ul>
+<p>如果 <strong>RISC-V</strong> 允许 <strong>Xv6</strong> 直接读取当前的 hartid 会更方便，但这只能在机器模式下进行，而不能在超级用户模式下进行。</p>
+<h5 id="中断与tp"><a href="#中断与tp" class="headerlink" title="中断与tp"></a>中断与tp</h5><p>cpuid 和 mycpu 的返回值是脆弱的：如果定时器中断并导致线程让出 CPU 并移至另一个 CPU，那么先前返回的值将不再正确。</p>
+<p>为避免这个问题，<strong>Xv6</strong> 要求<code>调用者禁用中断</code>，并且只能在完成对返回的 struct cpu 的<code>使用后再启用中断</code>。</p>
+<h5 id="myproc"><a href="#myproc" class="headerlink" title="myproc"></a>myproc</h5><p>禁用中断–获取cpu–获取proc–启用中断–返回</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820204547.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820204547.png" class title="Pasted image 20240820204547.png"></a>
+
+
+<h3 id="线程概述"><a href="#线程概述" class="headerlink" title="线程概述"></a>线程概述</h3><p>今天我们将讨论XV6如何在多个线程之间完成切换。</p>
+<p>一个线程可以认为是<code>串行执行代码的单元</code>，它只占用一个CPU并且以普通的方式一个接一个的执行指令。</p>
+<h4 id="为什么需要多线程？"><a href="#为什么需要多线程？" class="headerlink" title="为什么需要多线程？"></a>为什么需要多线程？</h4><ul>
+<li><p>人们希望计算机可以<code>并发</code>执行任务。有可能计算机需要执行分时复用的任务</p>
+</li>
+<li><p>多线程可以<code>让程序变简单</code>。如 lab1 中的 primes</p>
+</li>
+<li><p>多线程可以进行<code>并行运算</code>，在拥有多核CPU的计算机上获得更快的处理速度</p>
+</li>
+</ul>
+<h4 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h4><ul>
+<li>PC。当前指令位置</li>
+<li>保存变量的寄存器</li>
+<li>stack。函数调用的记录，以及当前线程的执行点</li>
+</ul>
+<h4 id="并发策略"><a href="#并发策略" class="headerlink" title="并发策略"></a>并发策略</h4><ul>
+<li>一个核一个线程。无法应对过多线程的情况</li>
+<li>在线程间切换</li>
+</ul>
+<p>大多数操作系统结合了这两种策略。</p>
+<h4 id="线程系统与共享地址空间"><a href="#线程系统与共享地址空间" class="headerlink" title="线程系统与共享地址空间"></a>线程系统与共享地址空间</h4><h5 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h5><p>一个线程系统内部可以互相看到对方对共享的地址空间的修改，所以需要使用锁</p>
+<h5 id="内核线程"><a href="#内核线程" class="headerlink" title="内核线程"></a>内核线程</h5><p>对于每个用户进程都有一个内核线程来执行来自用户进程的系统调用。所有的内核线程都共享了内核内存</p>
+<h5 id="用户线程"><a href="#用户线程" class="headerlink" title="用户线程"></a>用户线程</h5><p>每一个用户进程都有独立的内存地址空间，并且仅包含了一个执行用户代码的线程，所以<code>XV6中的用户线程之间没有共享内存</code></p>
+<blockquote>
+<p>在一些其他更加复杂的系统中，例如Linux，允许在一个用户进程中包含多个线程，进程中的多个线程共享进程的地址空间。</p>
+</blockquote>
+<h4 id="并发，但是不使用线程"><a href="#并发，但是不使用线程" class="headerlink" title="并发，但是不使用线程"></a>并发，但是不使用线程</h4><p>event-driven programming、state machine</p>
+<h3 id="XV6线程调度"><a href="#XV6线程调度" class="headerlink" title="XV6线程调度"></a>XV6线程调度</h3><h4 id="面临的问题"><a href="#面临的问题" class="headerlink" title="面临的问题"></a>面临的问题</h4><p>实现内核中的线程系统存在以下挑战：</p>
+<ol>
+<li><p>如何实现线程切换，即如何进行<code>线程调度</code></p>
+</li>
+<li><p>需要保存并恢复线程的哪些<code>状态</code>？</p>
+</li>
+<li><p>如何从运算密集型线程 <code>compute bound thread</code> 中取得CPU的控制？</p>
+</li>
+</ol>
+<h4 id="定时器中断与-pre-emptive-scheduling"><a href="#定时器中断与-pre-emptive-scheduling" class="headerlink" title="定时器中断与 pre-emptive scheduling"></a>定时器中断与 pre-emptive scheduling</h4><p>强制从程序手中拿回CPU的控制。可以处理运算密集型线程。</p>
+<p>被中断的程序会进入<code>内核</code>，内核通过 <code>yield</code> 让出CPU，切换到<code>调度器线程</code>，然后由调度器决定下一个进程，再切换到该进程。这样的处理流程被称为<code>pre-emptive scheduling</code>，与之相对的是 <code>voluntary scheduling</code></p>
+<blockquote>
+<p>说起来幽默，pre-emptive 中内核会代表用户进程使用 voluntary scheduling</p>
+</blockquote>
+<h4 id="线程分类"><a href="#线程分类" class="headerlink" title="线程分类"></a>线程分类</h4><ul>
+<li><p><code>RUNNING</code>，当前在CPU上运行的线程</p>
+</li>
+<li><p><code>RUNABLE</code>，一旦CPU有空闲时间就想要运行在CPU上的线程</p>
+</li>
+<li><p><code>SLEEPING</code>，以及不想运行在CPU上的线程，因为这些线程可能在等待I&#x2F;O或者其他事件</p>
+</li>
+</ul>
+<p>这里不同的线程是由<code>状态</code>区分，但是实际上线程的完整状态会要复杂的多（包含了程序计数器，寄存器，栈等等）</p>
+<h5 id="pre-emptive-scheduling：running-runable"><a href="#pre-emptive-scheduling：running-runable" class="headerlink" title="pre-emptive scheduling：running-&gt;runable"></a>pre-emptive scheduling：running-&gt;runable</h5><p>通过出让CPU，pre-emptive scheduling将一个正在运行的线程转换成了一个当前不在运行但随时可以再运行的线程。即 running 转为 runable</p>
+<h5 id="CPU状态"><a href="#CPU状态" class="headerlink" title="CPU状态"></a>CPU状态</h5><p>切换进程时，需要保存CPU状态，通常指一部分寄存器。线程处于不同状态时，运行他的CPU状态需要保存到不同的地方</p>
+<ul>
+<li><p>RUNNING：保存到正在运行它的<code>CPU硬件</code>中</p>
+</li>
+<li><p>RUNABLE线程没有CPU与之关联，需要将这些数据拷贝到<code>内存</code>中</p>
+</li>
+</ul>
+<p>将一个线程从running 转为 runable时，需要将它的<code>CPU状态</code>拷贝到内存中。同理，一个线程转为 running 时，需要从内存中将CPU状态加载回去</p>
+<h3 id="XV6线程切换"><a href="#XV6线程切换" class="headerlink" title="XV6线程切换"></a>XV6线程切换</h3><h4 id="用户线程切换概述"><a href="#用户线程切换概述" class="headerlink" title="用户线程切换概述"></a>用户线程切换概述</h4><blockquote>
+<p>如果程序执行了一个系统调用或者因为响应中断走到了内核中，那么用户空间的状态会被保存到 trapframe 中，同时激活了属于这个用户进程的内核线程。</p>
+</blockquote>
+<p>如果需要切换到别的进程，那么会从原进程的内核线程切换到新进程的内核线程，然后再返回到新进程的用户线程，返回时会恢复 trapframe 中用户空间的数据。<code>即</code>：</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820142509.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240820142509.png" class title="Pasted image 20240820142509.png"></a>
+<h5 id="内核线程切换"><a href="#内核线程切换" class="headerlink" title="内核线程切换"></a>内核线程切换</h5><p>以上图为例，xv6首先将 shell 内核线程的寄存器保存到 <code>context</code> 中，恢复另一个内核线程的 context（会经过一个中间线程：调度器线程）</p>
+<blockquote>
+<p>scheduler 恢复前的状态是 runable</p>
+</blockquote>
+<p>然后继续这个内核线程之前的工作，最后返回新用户线程</p>
+<blockquote>
+<p>比如被定时器打断，则从yield返回，也就是说中断处理完毕，返回用户空间即可</p>
+</blockquote>
+<h4 id="更完整的故事"><a href="#更完整的故事" class="headerlink" title="更完整的故事"></a>更完整的故事</h4><p>假设我们有进程P1正在运行，进程P2是RUNABLE当前并不在运行。假设在XV6中我们有2个CPU核，这意味着在硬件层面我们有CPU0和CPU1。</p>
+<ol>
+<li><p>一个定时器中断强迫CPU从用户空间进程切换到内核，trampoline代码将用户寄存器保存于用户进程对应的trapframe对象中；</p>
+</li>
+<li><p>之后在内核中运行usertrap，来实际执行相应的中断处理程序。这时，CPU正在进程P1的内核线程和内核栈上，执行内核中普通的C代码；</p>
+</li>
+<li><p>假设进程P1对应的内核线程决定它想出让CPU，它会做很多工作，这个我们稍后会看，但是最后它会调用swtch函数（switch 是C 语言关键字，因此这个函数命名为swtch 来避免冲突），这是整个线程切换的核心函数之一；</p>
+</li>
+<li><p>swtch函数会保存用户进程P1对应内核线程的寄存器至context对象。所以目前为止有两类寄存器：用户寄存器存在trapframe中，内核线程的寄存器存在context中。</p>
+</li>
+</ol>
+<h4 id="swtch-概述"><a href="#swtch-概述" class="headerlink" title="swtch 概述"></a>swtch 概述</h4><h5 id="调度器线程"><a href="#调度器线程" class="headerlink" title="调度器线程"></a>调度器线程</h5><p>swtch函数并不是直接从一个内核线程切换到另一个内核线程。XV6中，一个CPU上运行的内核线程可以直接切换到的是这个<code>CPU对应的调度器线程</code>。</p>
+<p>每一个CPU都有一个完全不同的调度器线程。调度器线程也是一种内核线程，它也有自己的context对象。</p>
+<p>任何内核线程决定让出CPU时都要经过它，由它决定切换到哪个线程</p>
+<h5 id="swtch-的工作"><a href="#swtch-的工作" class="headerlink" title="swtch 的工作"></a>swtch 的工作</h5><p>swtch 会保存旧的寄存器到一个 context 对象，然后把新线程的 context 加载到寄存器中</p>
+<h5 id="恢复栈"><a href="#恢复栈" class="headerlink" title="恢复栈"></a>恢复栈</h5><p>恢复的寄存器中包含sp，于是也就恢复了栈，之后就可以在当前context下执行 <code>schedulder</code></p>
+<h4 id="schedulder-概述"><a href="#schedulder-概述" class="headerlink" title="schedulder 概述"></a>schedulder 概述</h4><p>schedulder 会做一些清理工作，然后找到下一个 <code>runable</code> 进程，调用 <code>swtch</code>；</p>
+<blockquote>
+<p>清理工作例如将进程P1设置成RUNABLE状态</p>
+</blockquote>
+<p>下一个进程必然也是从 swtch 进入 scheduler 然后变为 runable 状态的，于是我们就返回到了之前的 swtch，swtch 结束后就返回到了该进程所在的系统调用或中断handler中，紧接着我们就可以返回到用户空间，从 trapframe 中获取到用户上下文。最终，用户进程P2就恢复运行了。</p>
+<blockquote>
+<p>注：调用swtch函数肯定在系统调用或者中断处理程序中</p>
+</blockquote>
+<blockquote>
+<p>context 当然可以存储到 trapframe 中，但是出于简化代码的目的，trapframe 还是只包含用户空间的数据</p>
+</blockquote>
+<blockquote>
+<p>尽管有这么多种、这么多同类的线程，一个CPU在任意时间只能运行一个线程</p>
+</blockquote>
+<h4 id="demo-示例"><a href="#demo-示例" class="headerlink" title="demo 示例"></a>demo 示例</h4><a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821153935.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821153935.png" class title="Pasted image 20240821153935.png"></a>
+
+<p>两个运算密集型线程不断输出内容：</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821153938.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821153938.png" class title="Pasted image 20240821153938.png"></a>
+
+<p>它们都会响应定时器中断：</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821154446.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821154446.png" class title="Pasted image 20240821154446.png"></a>
+<ul>
+<li>（usertrap)</li>
+</ul>
+<p>在yield函数中，当前进程会出让CPU并让另一个进程运行。</p>
+<blockquote>
+<p>用户进程的pre-emptive scheduling能工作的原因是，用户进程运行时，中断总是打开的。xv6内核偶尔会关闭中断，但在返回前保证打开中断</p>
+<p>如果定时器中断的硬件坏了，那么就可能得买个新电脑了。有的时候软件会尝试弥补硬件的错误，但是对于计算机内部的问题，人们倾向于不用软件来尝试弥补硬件的错误。</p>
+</blockquote>
+<h4 id="yield-1"><a href="#yield-1" class="headerlink" title="yield"></a>yield</h4><p>接下来要修改和进程相关的元数据（如state），所以 <code>yield</code> 获取了进程的 <code>锁</code>，确保在释放锁前其他CPU不会运行这个线程：</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821155739.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821155739.png" class title="Pasted image 20240821155739.png"></a>
+<h4 id="sched-1"><a href="#sched-1" class="headerlink" title="sched"></a>sched</h4><p>sched 进行了一些参数检查，发现异样就会panic：</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821155953.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821155953.png" class title="Pasted image 20240821155953.png"></a>
+
+<h4 id="swtch-与-context"><a href="#swtch-与-context" class="headerlink" title="swtch 与 context"></a>swtch 与 context</h4><h5 id="context-1"><a href="#context-1" class="headerlink" title="context"></a>context</h5><p>线程切换中我们没有改变堆栈的任何数据，<code>寄存器是唯一的不稳定因素</code></p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821160206.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821160206.png" class title="Pasted image 20240821160206.png"></a>
+
+<p>context 不包含 <code>PC</code>，因为无论如何PC都会随着指令不断更新。我们关心的是谁调用了 swtch 以及返回到哪，这需要我们保存 <code>RA</code>，它是swtch的调用点。</p>
+<p>另外 context 中只保存了 <code>callee-saved register</code> 和 ra，因为 swtch 作为一个函数被调用，所以只需要保存它们</p>
+<h5 id="swtch"><a href="#swtch" class="headerlink" title="swtch"></a>swtch</h5><p>负责保存和恢复 <code>context</code>：</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821160127.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821160127.png" class title="Pasted image 20240821160127.png"></a>
+
+<p><code>ret</code> 前的sp为：</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821161148.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821161148.png" class title="Pasted image 20240821161148.png"></a>
+
+<p>这是启动顺序中非常早的一个位置，start.s在这个区域创建了栈，这样才可以调用第一个C函数。所以调度器线程运行在CPU对应的 <code>bootstack</code> 上。</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821161254.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821161254.png" class title="Pasted image 20240821161254.png"></a>
+
+<p>ra 指向 <code>scheduler</code> 中的一个固定位置</p>
+<h4 id="schedulder"><a href="#schedulder" class="headerlink" title="schedulder"></a>schedulder</h4><p><code>每一个进程都是从 swtch 进入到 scheduler 中的</code>，于是切换到某个进程的上下文时就会从它的 swtch 中返回</p>
+<p>下次本进程让出CPU、切换到调度器线程时，便会<code>切换到 c-&gt;proc=0</code>，这里是在告知其他CPU，没有任何CPU此时运行在这个线程上</p>
+<p>目前我们已经切换到了调度器线程，所以可以释放该进程的锁了（因为之前在 <code>yield</code> 中获取过）</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821161533.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821161533.png" class title="Pasted image 20240821161533.png"></a>
+
+<p>然后 scheduler 挑选一个 <code>runable</code> 的线程，然后修改它的运行状态、CPU上运行的线程，然后切换到该线程</p>
+<blockquote>
+<p>如果不是因为定时器中断进入的sched，那么swtch会返回到sched然后返回到别的函数中，比如系统调用中，而非yield</p>
+</blockquote>
+<h4 id="p-lock-的作用"><a href="#p-lock-的作用" class="headerlink" title="p-&gt;lock 的作用"></a>p-&gt;lock 的作用</h4><p>从调度的角度来说，这里的锁完成了两件事情。</p>
+<ol>
+<li><p>确保 <code>停止进程过程的原子性</code>：更新进程状态为runable、保存context、停止使用当前进程栈</p>
+</li>
+<li><p>确保 <code>进程启动过程的原子性</code>：更新进程状态为running、加载context</p>
+</li>
+</ol>
+<p>锁还关闭了中断，防止死锁</p>
+<h3 id="进程第一次被调度：forkret"><a href="#进程第一次被调度：forkret" class="headerlink" title="进程第一次被调度：forkret"></a>进程第一次被调度：forkret</h3><h4 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h4><blockquote>
+<p>Robert教授：Linux是支持一个进程包含多个线程，Linux的实现比较复杂，或许最简单的解释方式是：几乎可以认为Linux中的每个线程都是一个完整的进程。</p>
+<p>Linux中，我们平常说<code>一个进程中的多个线程，本质上是共享同一块内存的多个独立进程</code>。所以Linux中一个进程的多个线程仍然是通过一个内存地址空间执行代码。如果你在一个进程创建了2个线程，那基本上是2个进程共享一个地址空间。之后，调度就与XV6是一致的，也就是针对每个进程进行调度。</p>
+</blockquote>
+<h4 id="进程第一次被调度"><a href="#进程第一次被调度" class="headerlink" title="进程第一次被调度"></a>进程第一次被调度</h4><blockquote>
+<p>kernel&#x2F;proc.c：allocproc</p>
+</blockquote>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821171012.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821171012.png" class title="Pasted image 20240821171012.png"></a>
+
+<p>fork 会调用 allocproc 启用一个新进程，allocproc 会初始化新进程的context；这里还设置了ra和sp</p>
+<p>于是该进程首次被调度时 <code>swtch</code> 就会返回到 <code>forkret</code>，就好像forkret刚调用了swtch，此时正从它中返回一样——尽管我们并没有实际上在这个进程中调用swtch，我们仅仅设置了它context的ra</p>
+<h4 id="forkret"><a href="#forkret" class="headerlink" title="forkret"></a>forkret</h4><p>它只会在启动一个新进程时运行：</p>
+<p>释放调度器之前获取的锁，然后返回到 <code>usertrapret</code> —— 这也是一个伪造的调用，我们并没有从 usertrap 中调用 forkret，但此时就好像我们是从一个 trap 中返回用户空间一样</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821173051.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821173051.png" class title="Pasted image 20240821173051.png"></a>
+
+<p>由于fork拷贝了父进程的 trapframe，也就得到了epc，所以我们可以继续接着之前的指令执行</p>
+<blockquote>
+<p>学生提问：在fortret函数中，if(first)是什么意思？</p>
+<p>Robert教授：文件系统需要被初始化，具体来说，需要从磁盘读取一些数据来确保文件系统的运行，比如说文件系统究竟有多大，各种各样的东西在文件系统的哪个位置，同时还需要有crash recovery log。完成任何文件系统的操作都需要等待磁盘操作结束，但是XV6只能在进程的context下执行文件系统操作，比如等待I&#x2F;O。所以初始化文件系统需要等到我们有了一个进程才能进行。而这一步是在第一次调用forkret时完成的，所以在forkret中才有了if(first)判断。</p>
+</blockquote>
+<h4 id="第一个进程"><a href="#第一个进程" class="headerlink" title="第一个进程"></a>第一个进程</h4><p>唯一不是通过 fork 创建一个进程的场景就是第一个用户进程，在 userinit 中。此时我们需要设置 <code>epc</code> 为0</p>
+<a href="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821173617.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/21/6.s081%20lec11%20Scheduling/Pasted%20image%2020240821173617.png" class title="Pasted image 20240821173617.png"></a>
+
+
+
+
+
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-21</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
