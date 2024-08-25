@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lab7 network driver" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lab7 network driver
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#net"><span class="post-toc-text">net</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="post-toc-text">概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E4%B8%80%E8%88%AC%E6%B5%81%E7%A8%8B"><span class="post-toc-text">输入输出一般流程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%80%E8%88%AC%E6%83%85%E5%86%B5%E4%B8%8B%E9%9D%A2%E5%AF%B9%E7%9A%84%E5%B9%B6%E5%8F%91%E9%A3%8E%E9%99%A9"><span class="post-toc-text">一般情况下面对的并发风险</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#E1000-device"><span class="post-toc-text">E1000 device</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#QEMU%EF%BC%9Auser-mode-network-stack"><span class="post-toc-text">QEMU：user-mode network stack</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="post-toc-text">项目结构</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#E1000-Mannual-%E6%91%98%E5%BD%95"><span class="post-toc-text">E1000 Mannual 摘录</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Receive-and-Transmit-Description"><span class="post-toc-text">Receive and Transmit Description</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E6%8E%A5%E6%94%B6"><span class="post-toc-text">数据包接收</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E6%8E%A5%E6%94%B6%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="post-toc-text">接收数据存储</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E6%8E%A5%E6%94%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E6%A0%BC%E5%BC%8F"><span class="post-toc-text">接收描述符格式</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#Receive-Descriptor-Queue-Structure"><span class="post-toc-text">Receive Descriptor Queue Structure</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="post-toc-text">中断</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E4%BC%BC%E4%B9%8E%E6%B2%A1%E7%94%A8"><span class="post-toc-text">似乎没用</span></a></li></ol></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E5%8F%91%E9%80%81"><span class="post-toc-text">数据包发送</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E4%BC%A0%E8%BE%93%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="post-toc-text">传输数据存储</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E4%BC%A0%E8%BE%93%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="post-toc-text">传输描述符</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E5%8E%9F%E5%A7%8B%E6%8F%8F%E8%BF%B0%E7%AC%A6%E6%A0%BC%E5%BC%8F"><span class="post-toc-text">原始描述符格式</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E5%8F%91%E9%80%81%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%8E%AF%E7%BB%93%E6%9E%84"><span class="post-toc-text">发送描述符环结构</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E7%95%A5%E8%BF%87"><span class="post-toc-text">略过</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#e1000-init"><span class="post-toc-text">e1000_init</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#DMA"><span class="post-toc-text">DMA</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%EF%BC%9Ambuf"><span class="post-toc-text">数据包：mbuf</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#e1000-transmit"><span class="post-toc-text">e1000_transmit</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8F%91%E9%80%81%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="post-toc-text">发送缓冲区</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#e1000-recv"><span class="post-toc-text">e1000_recv</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%8E%A5%E6%94%B6%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="post-toc-text">接收缓冲区</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%AD%E6%96%AD-1"><span class="post-toc-text">中断</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%B0%83%E8%AF%95%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="post-toc-text">调试与测试</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%81%9A%E4%B8%80%E4%BB%B6%E4%BA%8Band-do-well"><span class="post-toc-text">做一件事and do well</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="net"><a href="#net" class="headerlink" title="net"></a>net</h2><p>本实验的最大难点在于看懂它让你干什么，为此需要阅读一堆手册文档。除此之外意义不大，建议跳过</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><h4 id="输入输出一般流程"><a href="#输入输出一般流程" class="headerlink" title="输入输出一般流程"></a>输入输出一般流程</h4><p>top 为上层提供接口，bottom 与下层交互</p>
+<p>存在缓冲区、读写指针、锁等</p>
+<p>通常几个几个字符写入，然后休眠，设备发送完成后引发中断唤醒进程继续写入</p>
+<p>基本流程可参考 uart、pipe 实现：</p>
+<ul>
+<li>syscall–device writer wrapper–writer：写入缓冲，唤醒 reader–reader ~</li>
+<li>中断–xxx handler：唤醒 reader–reader 检查是否确实完成发送，是则read下一个字符写入设备<ul>
+<li>前几个字节read由系统调用引发，后面的由中断引发</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>一堆的条件检查别忘了</p>
+<p>缓冲和中断 实现了解耦</p>
+<p>写入内存映射地址即可与设备交互，注意相应寄存器的行为</p>
+</blockquote>
+<h4 id="一般情况下面对的并发风险"><a href="#一般情况下面对的并发风险" class="headerlink" title="一般情况下面对的并发风险"></a>一般情况下面对的并发风险</h4><ul>
+<li>device reader 并发调用</li>
+<li>中断信号跑错进程了</li>
+</ul>
+<blockquote>
+<p>中断处理程序通常执行相对较少的工作，因为它们没有特定的上下文</p>
+</blockquote>
+<h4 id="E1000-device"><a href="#E1000-device" class="headerlink" title="E1000 device"></a>E1000 device</h4><p>由QEMU模拟，IP：10.0.2.2</p>
+<h4 id="QEMU：user-mode-network-stack"><a href="#QEMU：user-mode-network-stack" class="headerlink" title="QEMU：user-mode network stack"></a>QEMU：user-mode network stack</h4><p><a target="_blank" rel="noopener" href="https://wiki.qemu.org/Documentation/Networking#User_Networking_.28SLIRP.29">Documentation&#x2F;Networking - QEMU</a></p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825011246.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825011246.png" class title="Pasted image 20240825011246.png"></a>
+
+<p>QEMU 模拟一个计算机和其网络设备，其 IP 为 10.0.2.15，网关 IP 为 10.0.2.2，DNS…，SMB…</p>
+<p><code>SLIRP</code> 通过 QEMU 内置的 TCP&#x2F;IP 栈实现网络功能，并提供了一些基本的网络服务，例如网关和 DNS</p>
+<h4 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h4><ul>
+<li><p><code>kernel/e1000.c</code> 包含 E1000 的初始化代码以及用于<code>发送和接收数据包</code>的空函数（您将填写这些代码）</p>
+</li>
+<li><p><code>kernel/e1000_dev.h</code> 包含由 E1000 定义并在 Intel E1000<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2023/readings/8254x_GBe_SDM.pdf">软件开发人员手册</a>中描述的寄存器和标志位的定义</p>
+</li>
+</ul>
+<p> - <code>kernel/net.c</code> 和 <code>kernel/net.h</code> 包含一个实现<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Internet_Protocol">IP</a> 、 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/User_Datagram_Protocol">UDP</a>和<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Address_Resolution_Protocol">ARP</a>协议的简单网络堆栈。</p>
+<ul>
+<li><p>这些文件还包含用于保存数据包的灵活数据结构的代码，称为 <code>mbuf</code></p>
+</li>
+<li><p><code>kernel/pci.c</code> 包含当 xv6 引导时在 PCI 总线上搜索 E1000 卡的代码。</p>
+</li>
+</ul>
+<h3 id="E1000-Mannual-摘录"><a href="#E1000-Mannual-摘录" class="headerlink" title="E1000 Mannual 摘录"></a>E1000 Mannual 摘录</h3><h4 id="Receive-and-Transmit-Description"><a href="#Receive-and-Transmit-Description" class="headerlink" title="Receive and Transmit Description"></a>Receive and Transmit Description</h4><p>本节描述了用于 PCI&#x2F;PCI-X 家族千兆以太网控制器的：数据包接收、数据包传输、传输描述符环结构、TCP 分段以及传输校验和卸载功能。</p>
+<ul>
+<li>不支持 IPv6</li>
+</ul>
+<h5 id="数据包接收"><a href="#数据包接收" class="headerlink" title="数据包接收"></a>数据包接收</h5><p><code>基本流程</code>：识别数据包存在–地址过滤–存储数据包到 接收数据FIFO中–发送它到RAM的接收缓冲区–更新接收描述符状态</p>
+<h6 id="接收数据存储"><a href="#接收数据存储" class="headerlink" title="接收数据存储"></a>接收数据存储</h6><p>缓冲区大小由 RCTL.BSIZE &amp; RCTL.BSEX 控制，支持以下几种 buffer 大小：</p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825021220.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825021220.png" class title="Pasted image 20240825021220.png"></a>
+
+
+<p>详见第 13.4.22 节</p>
+<p> 硬件对缓冲区地址没有对齐限制，但强烈建议软件在可能的情况下在至少缓存线边界上分配接收缓冲区。</p>
+<h6 id="接收描述符格式"><a href="#接收描述符格式" class="headerlink" title="接收描述符格式"></a>接收描述符格式</h6><p>接收描述符是一种数据结构，包含接收数据缓冲区地址和用于硬件存储数据包信息的字段。在接收到数据包后，会将其写入RAM中指定的buffer内。</p>
+<p>其格式如下：</p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825021340.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825021340.png" class title="Pasted image 20240825021340.png"></a>
+
+<p>其中阴影区域表示数据包接收时硬件字段修改的字段。</p>
+<ul>
+<li><p>Checksum：似乎没用？见3.2.3</p>
+</li>
+<li><p>status：见3.2.3.1。我们会用到 <code>DD</code></p>
+</li>
+</ul>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825021935.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825021935.png" class title="Pasted image 20240825021935.png"></a>
+<ul>
+<li><p>error：似乎没用？见3.2.3.2</p>
+</li>
+<li><p>special：似乎没用？见3.2.3.3</p>
+</li>
+</ul>
+<h6 id="Receive-Descriptor-Queue-Structure"><a href="#Receive-Descriptor-Queue-Structure" class="headerlink" title="Receive Descriptor Queue Structure"></a>Receive Descriptor Queue Structure</h6><a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825024805.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825024805.png" class title="Pasted image 20240825024805.png"></a>
+
+<p>这是一个循环缓冲区，头指针 <code>RDH</code> 指向下一个将需要写回RAM的描述符，尾指针 <code>RDT</code> 标识硬件可以放数据包的最后一个的buffer 之后的位置，即第一个未被软件处理的数据包</p>
+<ul>
+<li>当 RDH &#x3D; RDT，硬件不被继续允许向RAM写入接收到的数据包，CPU处理不过来</li>
+<li>已写入 RAM 但未被软件识别的描述符为阴影。硬件可以写入RAM中白色的buffer。</li>
+</ul>
+<p>头指针和尾指针引用 16 字节的内存块，即这个结构体：</p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825031833.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825031833.png" class title="Pasted image 20240825031833.png"></a>
+
+<p>软件可以读取RAM中的buffer，检测 <code>status</code> 是否非0，即可判定这个buffer是否可以使用。将 <code>status 清0</code> 表示这个 buffer 软件已经用完了，硬件可以继续往里头写收到的包</p>
+<ul>
+<li>RDLEN 指定了 size，RDBAL 和 RDBAH 指定了基指针</li>
+<li>RDH：头指针，RDT：尾指针。<ul>
+<li>写入RAM后头指针由硬件自动递增</li>
+<li>尾指针的递增需要由软件进行，并清0 status。这意味着为硬件分配可用的 buffer</li>
+</ul>
+</li>
+</ul>
+<h6 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h6><blockquote>
+<p>详细解释见3.2.7</p>
+</blockquote>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825033550.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825033550.png" class title="Pasted image 20240825033550.png"></a>
+
+<p>以太网控制器可以生成四种与接收相关的中断：</p>
+<ul>
+<li><p>接收中断延迟定时器 <code>RDTR</code>：每次完成写入RAM一个数据包后都会重新启动，经过预设的时间后，生成中断。</p>
+<ul>
+<li>可减少生成的中断次数</li>
+<li>间隔设为0则禁用定时器，一旦完成写入就生成中断</li>
+<li>将 RDTR 的高位 FPD 设为1，则立刻产生中断</li>
+<li>RADV 和 RSRPD 中断被触发时，定时器会重置（但不会启动）</li>
+<li>更详细的细节见 13.4.30</li>
+</ul>
+</li>
+<li><p>接收中断绝对定时器： <code>E1000_RADV</code>，写入RAM一个包后启动，但新的包并不会重置该定时器，经过预设时间生成中断</p>
+<ul>
+<li>将 RADV 设置为 0b 或 RDTR 设置为 0b 会禁用绝对定时器。要仅禁用数据包定时器，应将 RDTR 设置为 RADV + 1b。</li>
+<li>当由于数据包定时器到期或小型接收包检测中断而生成接收定时器中断时，绝对定时器会被重新初始化（但不会启动）。</li>
+</ul>
+</li>
+<li><p>小型接收包检测：<code>E1000_RSRPD</code></p>
+<ul>
+<li>收到的包太小了。细节见 3.2.7.2</li>
+<li>会重置两个定时器中断（但不启动）</li>
+</ul>
+</li>
+<li><p>接收描述符最小阈值</p>
+<ul>
+<li>当硬件可用的描述符即将不足时，产生此中断</li>
+</ul>
+</li>
+<li><p>接收FIFO溢出</p>
+<ul>
+<li>描述符不足。多的包会被丢弃</li>
+<li>可能需要更新尾指针。可能因为其他原因</li>
+</ul>
+</li>
+</ul>
+<h6 id="似乎没用"><a href="#似乎没用" class="headerlink" title="似乎没用"></a>似乎没用</h6><ul>
+<li><p>地址过滤： 如果接收 FIFO 中没有足够的空间，硬件会丢弃数据包并在相应的统计寄存器中标示丢失的数据包。</p>
+<ul>
+<li>支持…过滤模式</li>
+<li>通常，只有优质数据包会被接收，即没有…错误的数据包会被接受….其他更新详细的说明见 3.2.1</li>
+</ul>
+</li>
+<li><p>描述符获取策略：3.2.4。描述符获取策略旨在支持跨 PCI 总线的大量突发传输。</p>
+</li>
+</ul>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825023315.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825023315.png" class title="Pasted image 20240825023315.png"></a>
+
+<ul>
+<li><p>接收描述符写回：3.2.5</p>
+</li>
+<li><p>不同版本（82544GC&#x2F;EI）的接收中断：3.2.8 </p>
+</li>
+<li><p>校验和 Offloading：3.2.9</p>
+<ul>
+<li>MAC Address Filter</li>
+<li>SNAP&#x2F;VLAN Filter</li>
+<li>IPv4 Filter</li>
+<li>IPv6 Filter</li>
+<li>UDP&#x2F;TCP Filter</li>
+</ul>
+</li>
+</ul>
+<h5 id="数据包发送"><a href="#数据包发送" class="headerlink" title="数据包发送"></a>数据包发送</h5><p>常规（非 TCP 分段）数据包的传输过程包括：</p>
+<ul>
+<li>从应用程序 接收 数据块</li>
+<li>协议栈根据媒体的 MTU 大小和所需的数据包头计算传输该数据块所需的 数据包数量</li>
+<li>对于数据块中的每个数据包：<ul>
+<li>协议栈准备以太网、IP 和 TCP&#x2F;UDP 头部。</li>
+<li>协议栈与驱动程序交互，指示它发送数据包</li>
+<li>驱动程序获取帧、操作硬件从RAM读取数据并发送</li>
+<li>当硬件完成帧的 DMA 传输时（由中断指示），驱动程序将数据包的所有权返回给网络操作系统（NOS）</li>
+</ul>
+</li>
+</ul>
+<p>输出数据包由指针-长度对组成，构成一个描述符链（即描述符基础传输）。</p>
+<p>软件通过组装指针-长度对的列表来形成传输数据包，将这些信息存储在传输描述符中，然后将芯片上的传输尾指针更新到该描述符。</p>
+<p>传输描述符和缓冲区存储在主机内存中。硬件通常在完全从主机内存中获取所有数据包数据并将其存入芯片上的传输 FIFO 之后才开始传输数据包。这允许计算 TCP 或 UDP 校验和，并避免 PCI 下溢的问题。</p>
+<h6 id="传输数据存储"><a href="#传输数据存储" class="headerlink" title="传输数据存储"></a>传输数据存储</h6><p>数据存储在由描述符指向的缓冲区中…一个数据包通常由两个（或更多）描述符组成，一个（或多个）用于头部，一个用于实际数据。</p>
+<p>一些软件实现将头部和数据包数据复制到一个缓冲区中，并且每个传输的数据包只使用一个描述符。</p>
+<h6 id="传输描述符"><a href="#传输描述符" class="headerlink" title="传输描述符"></a>传输描述符</h6><p>以太网控制器提供三种类型的传输描述符格式：</p>
+<ul>
+<li>原始描述符</li>
+<li>TCP&#x2F;IP 数据描述符。指向一个数据包数据块。替代了原始描述符。</li>
+<li>仅包含控制信息的描述符。加载到控制器的寄存器中后，会影响未来数据包的处理</li>
+</ul>
+<p>后两个统称为扩展描述符。扩展描述符类型通过将 TDESC.DEXT 位设置为 1b 来访问。如果设置了此位，则检查 TDESC.<code>DTYP</code> 字段以控制对描述符其余位的解释。</p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826031029.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826031029.png" class title="Pasted image 20240826031029.png"></a>
+
+<ul>
+<li>NR 与特定的描述符类型相关</li>
+<li>DEXT 和 DTYP 字段不连续，以适应传统模式操作。</li>
+</ul>
+<h6 id="原始描述符格式"><a href="#原始描述符格式" class="headerlink" title="原始描述符格式"></a>原始描述符格式</h6><blockquote>
+<p>3.3.3</p>
+</blockquote>
+<p>需将 DEXT 即 bit 29 设为0</p>
+<ul>
+<li>需提供 地址和长度</li>
+<li>CMD、Checksum Offset (CSO)、Checksum Start (CSS) 可选</li>
+</ul>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826031434.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826031434.png" class title="Pasted image 20240826031434.png"></a>
+
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826031722.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826031722.png" class title="Pasted image 20240826031722.png"></a>
+
+<ul>
+<li>STA &amp; RSV：status。要求CMD中设置RS位。我们会用到DD</li>
+</ul>
+<h6 id="发送描述符环结构"><a href="#发送描述符环结构" class="headerlink" title="发送描述符环结构"></a>发送描述符环结构</h6><a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826032653.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826032653.png" class title="Pasted image 20240826032653.png"></a>
+
+<p>环形缓冲区。尾指针指向最后一个由硬件拥有的描述符之后的一个条目，即下一个软件写入的位置。头指针指向正在发送的描述符。当head&#x3D;tail，数据全部发送完毕，缓冲区为空</p>
+<ul>
+<li>基地址 &#x3D; TDBAL + TDBAH，长度 &#x3D; TDLEN，头指针 &#x3D; TDH，尾指针 &#x3D; TDT</li>
+</ul>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826033145.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826033145.png" class title="Pasted image 20240826033145.png"></a>
+
+<ul>
+<li>软件可以设置 cmd 中的 <code>rs</code> 位，要求硬件在发送完成后，设置 status 中的 <code>DD</code> 位。之后硬件再递增头指针</li>
+</ul>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826033556.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826033556.png" class title="Pasted image 20240826033556.png"></a>
+
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826033549.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240826033549.png" class title="Pasted image 20240826033549.png"></a>
+
+<ul>
+<li>检查DD位可以避免竞争，这在软件和硬件之间引入了一个同步点，确保硬件已经完成了所有相关操作，防止因 IO 写入缓冲机制而使得数据发送落后于头指针的更新。</li>
+</ul>
+<p>通常，硬件在传输之前预取数据包数据。硬件通常在将数据存储在发送 FIFO1 中后更新头指针的值。</p>
+<p>检查已完成数据包的过程包括以下方法之一：</p>
+<ul>
+<li>扫描内存中的描述符状态写回。</li>
+<li>触发中断。当发送队列为空时（ICR.TXQE），可以生成中断条件。中断也可以通过其他方式触发。</li>
+</ul>
+<h6 id="略过"><a href="#略过" class="headerlink" title="略过"></a>略过</h6><ul>
+<li>3.3.5 TCP&#x2F;IP Context Transmit Descriptor Format</li>
+<li>3.3.6 TCP&#x2F;IP Context Descriptor Layout<ul>
+<li>3.3.6.1 TCP&#x2F;UDP Offload Transmit Descriptor Command Field</li>
+<li>3.3.6.2 TCP&#x2F;UDP Offload Transmit Descriptor Status Field</li>
+</ul>
+</li>
+<li>3.3.7 TCP&#x2F;IP Data Descriptor Format<ul>
+<li>3.3.7.1 TCP&#x2F;IP Data Descriptor Command Field</li>
+<li>3.3.7.2 TCP&#x2F;IP Data Descriptor Status Field</li>
+<li>3.3.7.3 TCP&#x2F;IP Data Descriptor Option Field</li>
+<li>3.3.7.4 TCP&#x2F;IP Data Descriptor Special Field</li>
+</ul>
+</li>
+<li><ul>
+<li>3.4.1 Transmit Descriptor Fetching</li>
+<li>3.4.2 Transmit Descriptor Write-back</li>
+</ul>
+</li>
+<li>3.4.3 Transmit Interrupts</li>
+<li>3.5 TCP Segmentation</li>
+</ul>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824040709.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824040709.png" class title="Pasted image 20240824040709.png"></a>
+
+
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824040801.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824040801.png" class title="Pasted image 20240824040801.png"></a>
+<h4 id="e1000-init"><a href="#e1000-init" class="headerlink" title="e1000_init"></a>e1000_init</h4><h5 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h5><p>e1000_init 配置E1000直接从RAM读写数据包，这被称为 <code>DMA</code></p>
+<h5 id="数据包：mbuf"><a href="#数据包：mbuf" class="headerlink" title="数据包：mbuf"></a>数据包：mbuf</h5><p>e1000_init() 使用 <code>mbufalloc()</code> 为 E1000 分配了用于 DMA 的 mbuf 数据包缓冲区。</p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824204559.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824204559.png" class title="Pasted image 20240824204559.png"></a>
+
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824201723.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824201723.png" class title="Pasted image 20240824201723.png"></a>
+
+<h4 id="e1000-transmit"><a href="#e1000-transmit" class="headerlink" title="e1000_transmit"></a>e1000_transmit</h4><a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824204740.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824204740.png" class title="Pasted image 20240824204740.png"></a>
+
+<p>你的发送代码必须将指向数据包数据的指针放入发送环（TX 环）中的描述符中。<code>struct tx_desc</code> 描述了描述符的格式</p>
+<p>你需要确保每个 mbuf 最终都被释放，但只能在 E1000 完成发送数据包后释放（<code>E1000_TXD_STAT_DD</code>）</p>
+<p>查看E1000<code>内存映射控制寄存器</code>的可用状态，以检测接收数据包的可用性，并告知 E1000 驱动程序已填充了一些带有要发送数据包的 TX 描述符</p>
+<p>全局变量 <code>regs</code> 持有一个指向 E1000 第一个控制寄存器的指针；你的驱动程序可以通过将 <code>regs</code> 作为数组来访问其他寄存器。你特别需要使用 <code>E1000_RDT</code> 和 <code>E1000_TDT</code> 索引。</p>
+<h4 id="发送缓冲区"><a href="#发送缓冲区" class="headerlink" title="发送缓冲区"></a>发送缓冲区</h4><a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825004528.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825004528.png" class title="Pasted image 20240825004528.png"></a>
+
+<p>一些有用的数据结构：</p>
+<ul>
+<li><p>循环缓冲区，大小 由 TDLEN 寄存器指定，该寄存器必须是128字节对齐的。</p>
+</li>
+<li><p>基地址：64位 Base &#x3D; TDBAH + TDBAL &#x3D; 32+32</p>
+</li>
+<li><p>头指针：E1000_TDH，正在处理的描述符</p>
+<ul>
+<li>被指向的描述符不允许软件修改</li>
+<li>数据包发送完毕后由硬件自动更新</li>
+</ul>
+</li>
+<li><p>尾指针：<code>E1000_TDT</code>，指向下一个可以添加数据包的地址。</p>
+<ul>
+<li>写入后需要手动更新</li>
+</ul>
+</li>
+</ul>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824204259.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824204259.png" class title="Pasted image 20240824204259.png"></a>
+
+<p>队列状态：</p>
+<ul>
+<li><p>队列为空：head &#x3D;&#x3D; tail</p>
+</li>
+<li><p>阴影部分：硬件已发送，但软件未释放其缓冲区</p>
+</li>
+<li><p>一个描述符传输完毕后，会自动更新 <code>E1000_TXD_STAT_DD</code> 位为1：</p>
+<ul>
+<li>应该是这里的 status？</li>
+</ul>
+</li>
+</ul>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825010544.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825010544.png" class title="Pasted image 20240825010544.png"></a>
+
+
+
+
+
+
+<h4 id="e1000-recv"><a href="#e1000-recv" class="headerlink" title="e1000_recv"></a>e1000_recv</h4><p>当 E1000 从以太网上接收到每个数据包时，它会通过 DMA 将数据包写入到下一个接收环（RX 环）描述符的 <code>addr</code> 指向的内存中。</p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824205022.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824205022.png" class title="Pasted image 20240824205022.png"></a>
+
+<p>你的 <code>e1000_recv()</code> 代码必须扫描 RX 环，并通过调用 <code>net_rx()</code> 将每个新数据包的 mbuf 交给网络栈（在 <code>net.c</code> 中）</p>
+<p>然后你需要分配一个新的 mbuf 并将其放入描述符中，以便当 E1000 再次到达 RX 环的这一点时，它能找到一个新的缓冲区来 DMA 新的数据包。</p>
+<h5 id="接收缓冲区"><a href="#接收缓冲区" class="headerlink" title="接收缓冲区"></a>接收缓冲区</h5><p>数据包的传输速率可能比处理速率快， e1000_init() 为 E1000 提供了多个<code>缓冲区</code>。这些缓冲区用一个数组描述，这些数组是一个循环接收队列：</p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824203737.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824203737.png" class title="Pasted image 20240824203737.png"></a>
+
+<p>每个缓冲区存放在RAM中，用 <code>rx_desc</code> 描述它的信息：</p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824201214.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240824201214.png" class title="Pasted image 20240824201214.png"></a>
+
+<h4 id="中断-1"><a href="#中断-1" class="headerlink" title="中断"></a>中断</h4><p>如果尚未有 E1000 中断挂起，则 E1000 会请求 PLIC 在启用中断后立即发送一个中断</p>
+<h4 id="调试与测试"><a href="#调试与测试" class="headerlink" title="调试与测试"></a>调试与测试</h4><p>显示历史输入输出数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcpdump -XXnr packets.pcap</span><br></pre></td></tr></table></figure>
+
+
+
+<p>要测试你的驱动程序，在一个窗口中运行 <code>make server</code>，在另一个窗口中运行 <code>make qemu</code>，然后在 xv6 中运行 <code>nettests</code>。<code>nettests</code> 中的第一个测试尝试将一个 UDP 数据包发送到主机操作系统，该数据包的目标是由 <code>make server</code> 运行的程序。如果你尚未完成实验，E1000 驱动程序将不会实际发送数据包，基本上什么也不会发生。</p>
+<p>完成实验后，E1000 驱动程序将发送数据包，qemu 将其传递给你的主机计算机，<code>make server</code> 会看到它，并发送一个响应数据包，E1000 驱动程序和 <code>nettests</code> 将看到响应数据包。然而，在主机发送回复之前，它会向 xv6 发送一个“ARP”请求数据包，以查找其 48 位以太网地址，并期望 xv6 响应一个 ARP 回复。一旦你完成了 E1000 驱动程序的工作，<code>kernel/net.c</code> 将处理这一点。如果一切顺利，<code>nettests</code> 将打印 <code>testing ping: OK</code>，而 <code>make server</code> 将打印一条来自 xv6 的消息。</p>
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825003032.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825003032.png" class title="Pasted image 20240825003032.png"></a>
+
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825003048.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825003048.png" class title="Pasted image 20240825003048.png"></a>
+
+<a href="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825003058.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/26/6.s081%20lab7%20network%20driver/Pasted%20image%2020240825003058.png" class title="Pasted image 20240825003058.png"></a>
+
+
+
+
+
+
+
+<h4 id="做一件事and-do-well"><a href="#做一件事and-do-well" class="headerlink" title="做一件事and do well"></a>做一件事and do well</h4><p>这句话背后是良好的抽象设计</p>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-26</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
