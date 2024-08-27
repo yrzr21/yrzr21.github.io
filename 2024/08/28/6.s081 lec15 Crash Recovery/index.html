@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec15 Crash Recovery" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec15 Crash Recovery
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#crash-recovery"><span class="post-toc-text">crash recovery</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D"><span class="post-toc-text">崩溃恢复</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B4%A9%E6%BA%83%E6%88%90%E5%9B%A0%E4%B8%8E%E5%88%9B%E5%BB%BA%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6"><span class="post-toc-text">崩溃成因与创建写入文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#logging-%E6%A6%82%E8%BF%B0"><span class="post-toc-text">logging 概述</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#log-blocks"><span class="post-toc-text">log blocks</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#log-write"><span class="post-toc-text">log_write</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#end-op"><span class="post-toc-text">end_op</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D%E6%B5%81%E7%A8%8B"><span class="post-toc-text">崩溃恢复流程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#bwrite%EF%BC%9A%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98"><span class="post-toc-text">bwrite：写入磁盘</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#fs-%E7%9A%84%E4%B8%89%E4%B8%AA%E6%8C%91%E6%88%98"><span class="post-toc-text">fs 的三个挑战</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#cache-eviction%EF%BC%9Apin-unpin"><span class="post-toc-text">cache eviction：pin&#x2F;unpin</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#fs-%E6%93%8D%E4%BD%9C%E5%BF%85%E9%A1%BB%E9%80%82%E9%85%8D-log-%E5%A4%A7%E5%B0%8F"><span class="post-toc-text">fs 操作必须适配 log 大小</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B9%B6%E5%8F%91%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="post-toc-text">并发文件系统调用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#begin-op"><span class="post-toc-text">begin_op</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#end-op-1"><span class="post-toc-text">end_op</span></a></li></ol></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="crash-recovery"><a href="#crash-recovery" class="headerlink" title="crash recovery"></a>crash recovery</h2><h3 id="崩溃恢复"><a href="#崩溃恢复" class="headerlink" title="崩溃恢复"></a>崩溃恢复</h3><blockquote>
+<p>这里的Crash safety并不是一个通用的解决方案，我们关心的是包含了多个步骤的文件系统操作过程中发生的故障。</p>
+</blockquote>
+<h4 id="崩溃成因与创建写入文件"><a href="#崩溃成因与创建写入文件" class="headerlink" title="崩溃成因与创建写入文件"></a>崩溃成因与创建写入文件</h4><ul>
+<li>断电</li>
+<li>内核崩溃</li>
+</ul>
+<p>磁盘是持久性存储设备，但是对一个fs操作可能包含多个对磁盘的操作，如果这个过程被打断则 fs 可能会处于错误的状态</p>
+<p>例如，创建一个文件需要以下步骤：</p>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/image%2032.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/image%2032.avif" class title="image 32.avif"></a>
+
+<blockquote>
+<p>x在根目录下</p>
+</blockquote>
+<p>如果在图示位置断电，这意味着我们分配了一个 inode，但是它不处于任何目录中——我们永远丢失了这个inode，无法从任何目录找到他</p>
+<p>如果先设置目录再标记inode已分配，则有可能导致重新分配一个已分配的inode</p>
+<blockquote>
+<p>文件系统有一个属性：每一个磁盘block要么是空闲的，要么是只属于一个文件</p>
+</blockquote>
+<p>下一个部分：写入文件</p>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/image%2033.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/image%2033.avif" class title="image 33.avif"></a>
+
+<p>bitmap中分配数据块–写入hi–更新inode：size 与 data addr</p>
+<p>在图示的位置发生崩溃则会丢失一个数据块。同样的，调整操作的顺序不会让情况变得更好</p>
+<p><code>我们需要让这一系列操作是一个原子性的操作，即一个事务</code></p>
+<h4 id="logging-概述"><a href="#logging-概述" class="headerlink" title="logging 概述"></a>logging 概述</h4><blockquote>
+<p>XV6的实现非常简单，几乎是最简单的实现logging的方法。但是即使是这么基本的logging实现，也包含了一些微妙的问题，例如性能</p>
+</blockquote>
+<p>logging 思想来源于数据库，它有一些属性：</p>
+<ul>
+<li>保证一个事务操作的原子性</li>
+<li>支持快恢复，不需要大量的操作才能恢复一个文件系统</li>
+<li>原则上来说，它可以非常的高效，尽管我们在XV6中看到的实现不是很高效</li>
+</ul>
+<p><code>基本思想</code>是，在写入磁盘时，并不会直接把数据写入目标块，而是写入log块，并记录它应该写入的目标块号</p>
+<ul>
+<li>commit op：在未来某个时间，事务的一些列操作写入完毕，我们 commit 这个事务<ul>
+<li>需要一个地方存储记录，与commit事务的个数</li>
+</ul>
+</li>
+<li>install log：然后，根据记录将数据从log复制到目标块</li>
+<li>clean log：全部完成后即可删除原来的log文件</li>
+</ul>
+<p>在文件系统<code>恢复时</code>，如果commit的事务个数大于0，则会 reinstall log &amp; clean</p>
+<ul>
+<li>任何commit前的操作都不会被执行</li>
+<li>commit 时所有log写入完毕，更新header。算不算commit成功就看header中的数字有没有改为非0（事务操作的个数）</li>
+<li>commit、install 之间，install期间，install、clean 之间被打断则会reinstall——这保证了一个事务的原子性</li>
+</ul>
+<blockquote>
+<p>恢复期间不能进行额外的磁盘操作</p>
+<p>install log是幂等操作，进行多次操作也会产生同样的结果</p>
+</blockquote>
+<blockquote>
+<p>下节课我们会看到更加复杂的logging协议，所有的这些协议都遵循了write ahead rule</p>
+<p>write ahead rule的含义是，你需要先将所有的block写入到log中，之后才能实际的更新文件系统block</p>
+</blockquote>
+<h4 id="log-blocks"><a href="#log-blocks" class="headerlink" title="log blocks"></a>log blocks</h4><p>log 块分为两个部分：header+log data，header中存放了log的commit record，它包含：</p>
+<ul>
+<li>n：事务对应的Block数</li>
+<li>bni：log data block 对应的实际块号</li>
+</ul>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/image%2035.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/image%2035.avif" class title="image 35.avif"></a>
+
+<p>当文件系统在运行时，在内存中也有header block的一份缓存</p>
+<h4 id="log-write"><a href="#log-write" class="headerlink" title="log_write"></a>log_write</h4><p>每个文件系统操作，都有 <code>begin_op</code> 和 <code>end_op</code> 分别表示事务的开始和结束，在end_op中，我们会将数据写入到log中，然后写入 log header &#x2F; commit record</p>
+<blockquote>
+<p>在end_op之前，磁盘并不会有实际的改变</p>
+</blockquote>
+<p>任何一个文件系统调用的begin_op和end_op之间的写操作总是会在修改缓存块后，走到 <code>log_write</code> 修改 log header</p>
+<blockquote>
+<p>文件系统中的所有bwrite都需要被log_write替换</p>
+</blockquote>
+<p>这里先获取 log header 的锁，然后更新log header</p>
+<ul>
+<li>如果log已经被记录了，则不需要做任何事</li>
+<li>否则，增加该事务的块计数，并记录实际应写入的块号</li>
+</ul>
+<blockquote>
+<p>这里会通过调用bpin函数将block 45固定在block cache中，我们稍后会介绍为什么要这么做</p>
+</blockquote>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828032321.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828032321.png" class title="Pasted image 20240828032321.png"></a>
+
+<h4 id="end-op"><a href="#end-op" class="headerlink" title="end_op"></a>end_op</h4><p>直接跳到正常且简单情况的代码：</p>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828041120.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828041120.png" class title="Pasted image 20240828041120.png"></a>
+
+<p>首先调用了 <code>commit</code>：</p>
+<ul>
+<li><p>commit 首先调用 <code>write_log</code>，把缓存中的 目标缓存块 写入到log块中、以及将缓存中的 log header 写入到磁盘中</p>
+<ul>
+<li>write_log 首先读出 log header，然后将缓存块写入log</li>
+</ul>
+</li>
+<li><p>然后调用 <code>write_head</code>，将log header写入磁盘</p>
+<ul>
+<li>write_head 首先读出 log header，然后将n和block号拷贝进去，最后写入磁盘</li>
+<li>如果在 <code>bwrite</code> 前系统崩溃，则 commit 失败</li>
+<li>在之后发生，则数据已经落盘，commit 成功，可以恢复<blockquote>
+<p>所以 write_head 中的 bwrite 是 <code>commit point</code>，在这之后文件系统崩溃才可恢复</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>然后是 install_trans：</p>
+<ul>
+<li>读取log block和目标block，写入目标缓存block，落盘</li>
+</ul>
+</li>
+<li><p>install结束之后，会将log header中的n设置为0，再将log header写回到磁盘中</p>
+</li>
+</ul>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828041217.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828041217.png" class title="Pasted image 20240828041217.png"></a>
+
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828041547.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828041547.png" class title="Pasted image 20240828041547.png"></a>
+
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828041839.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828041839.png" class title="Pasted image 20240828041839.png"></a>
+
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828042354.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828042354.png" class title="Pasted image 20240828042354.png"></a>
+
+<h4 id="崩溃恢复流程"><a href="#崩溃恢复流程" class="headerlink" title="崩溃恢复流程"></a>崩溃恢复流程</h4><p>在第一个用户进程启动前会初始化文件系统，并调用 <code>initlog</code>，initlog 会调用 <code>recover_from_log</code></p>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828043102.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828043102.png" class title="Pasted image 20240828043102.png"></a>
+
+<p>recover_from_log 读取 log header，然后 reinstall log、清空n并更新 log header</p>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828043209.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828043209.png" class title="Pasted image 20240828043209.png"></a>
+
+<blockquote>
+<p>如果我们在install_trans函数中又crash了，也不会有问题，因为之后再重启时，XV6会再次调用initlog函数，再调用recover_from_log来重新install log。如果我们在commit之前crash了多次，在最终成功commit时，log可能会install多次。</p>
+</blockquote>
+<h4 id="bwrite：写入磁盘"><a href="#bwrite：写入磁盘" class="headerlink" title="bwrite：写入磁盘"></a>bwrite：写入磁盘</h4><blockquote>
+<p>log_write只是更新log header缓存，并不能代表实际写磁盘的记录</p>
+</blockquote>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828043745.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828043745.png" class title="Pasted image 20240828043745.png"></a>
+
+<ul>
+<li>3、4、5 属于 log data block</li>
+<li>然后更新 log header</li>
+<li>33，46，32 即 intall 上面的 345 的log data</li>
+<li>然后clean log</li>
+<li>然后就是上面的流程的重复：<ul>
+<li>345写入log data</li>
+<li>2更新log header</li>
+<li>45、595、33 install log</li>
+<li>2 clean log</li>
+</ul>
+</li>
+</ul>
+<a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240826085715.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240826085715.png" class title="Pasted image 20240826085715.png"></a>
+
+<blockquote>
+<p>这里立刻可以想到的一个问题是，通过观察这些记录，这是一个很有效的实现吗？很明显不是的，因为数据被写了两次。如果我写一个大文件，我需要在磁盘中将这个大文件写两次。所以这必然不是一个高性能的实现，为了实现Crash safety我们将原本的性能降低了一倍。当你们去读ext3论文时，你们应该时刻思考如何避免这里的性能降低一倍的问题。</p>
+</blockquote>
+<h3 id="fs-的三个挑战"><a href="#fs-的三个挑战" class="headerlink" title="fs 的三个挑战"></a>fs 的三个挑战</h3><h4 id="cache-eviction：pin-unpin"><a href="#cache-eviction：pin-unpin" class="headerlink" title="cache eviction：pin&#x2F;unpin"></a>cache eviction：pin&#x2F;unpin</h4><p>假设在 intall log 过程中，我们install了block 45，此时缓存满了，假设我们决定撤回45，于是写入到block45中。这就破坏了 write ahead rule，即先写入log再更新fs块</p>
+<p><code>所以buffer cache不能撤回任何还位于log的block</code>，前面的 log_write 调用 <code>bpin</code> 增加block的引用计数即在防止块被撤回，在事务中的块都写入fs块后，<code>unpin</code> 这些block</p>
+<h4 id="fs-操作必须适配-log-大小"><a href="#fs-操作必须适配-log-大小" class="headerlink" title="fs 操作必须适配 log 大小"></a>fs 操作必须适配 log 大小</h4><p>在XV6中，总共有30个log block，如果一个事务需要写入更多的块，则意味着一部分块必须直接写入fs，这违反了 write ahead rule</p>
+<blockquote>
+<p>为什么XV6的log大小是30？因为30比任何一个文件系统操作涉及的写操作数都大，Robert和我看了一下所有的文件系统操作，发现都远小于30，所以就将XV6的log大小设为30。</p>
+</blockquote>
+<p>其解决方案是，将写操作分解为多个小一些的写操作，因此 <code>整个写操作不是原子的</code>，但这对于 write 是ok的，<code>我们只需要保证对于 fs 操作，log 放得下即可</code></p>
+<p>block在落盘之前需要在cache中pin住，所以<code>buffer cache</code>的尺寸也要大于log的尺寸。</p>
+<h4 id="并发文件系统调用"><a href="#并发文件系统调用" class="headerlink" title="并发文件系统调用"></a>并发文件系统调用</h4><p>太多的并发的执行的transaction的数据量可能突破log data的大小，我们需要<code>限制并发fs操作的个数</code>：</p>
+<blockquote>
+<p>如果有太多正在进行的文件系统操作，我们会通过sleep停止当前文件系统操作的运行，并等待所有其他所有的文件系统操作都执行完并commit之后再唤醒。这里的其他所有文件系统操作都会一起commit。有的时候这被称为group commit，因为这里将多个操作像一个大的transaction一样提交了，这里的多个操作要么全部发生了，要么全部没有发生。</p>
+</blockquote>
+<blockquote>
+<p>学生提问：前面说到cache size至少要跟log size一样大，如果它们一样大的话，并且log pin了30个block，其他操作就不能再进行了，因为buffer中没有额外的空间了。</p>
+<p>Frans教授：如果buffer cache中没有空间了，XV6会直接panic。这并不理想，实际上有点恐怖。所以我们在挑选buffer cache size的时候希望用一个不太可能导致这里问题的数字。这里为什么不能直接返回错误，而是要panic？因为很多文件系统操作都是多个步骤的操作，假设我们执行了两个write操作，但是第三个write操作找不到可用的cache空间，那么第三个操作无法完成，我们不能就直接返回错误，因为我们可能已经更新了一个目录的某个部分，为了保证文件系统的正确性，我们需要撤回之前的更新。所以如果log pin了30个block，并且buffer cache没有额外的空间了，会直接panic。当然这种情况不太会发生，只有一些极端情况才会发生。</p>
+</blockquote>
+<h5 id="begin-op"><a href="#begin-op" class="headerlink" title="begin_op"></a>begin_op</h5><a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828062305.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828062305.png" class title="Pasted image 20240828062305.png"></a>
+
+<ol>
+<li>如果log正在commit过程中，那么就等到log提交完成，<ul>
+<li>不能在install log的过程中写log</li>
+</ul>
+</li>
+<li>如果当前操作是允许并发的操作个数的后一个，那么当前操作可能会超过log区域的大小，也需要sleep</li>
+<li>如果当前操作可以继续执行，需要将log的outstanding字段加1，最后再退出函数并执行文件系统操作。</li>
+</ol>
+<h5 id="end-op-1"><a href="#end-op-1" class="headerlink" title="end_op"></a>end_op</h5><a href="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828062347.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/28/6.s081%20lec15%20Crash%20Recovery/Pasted%20image%2020240828062347.png" class title="Pasted image 20240828062347.png"></a>
+
+<ol>
+<li>在最开始首先会对log的outstanding字段减1，因为一个transaction正在结束</li>
+<li>其次检查committing状态，当前不可能在committing状态，所以如果是的话会触发panic；</li>
+<li>如果当前操作是整个并发操作的最后一个的话，接下来立刻就会执行commit</li>
+<li>否则，我们需要唤醒在begin_op中sleep的操作，让它们检查是不是能运行。</li>
+</ol>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-28</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
