@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec14 FS Intro &amp; Block cache" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec14 FS Intro &amp; Block cache
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#File-System"><span class="post-toc-text">File System</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="post-toc-text">概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#inode"><span class="post-toc-text">inode</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#fd"><span class="post-toc-text">fd</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="post-toc-text">文件系统层次结构</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#fs-%E4%B8%8E-disk"><span class="post-toc-text">fs 与 disk</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sector-%E4%B8%8E-block"><span class="post-toc-text">sector 与 block</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#fs-%E8%A7%86%E8%A7%92%E7%9A%84%E7%A3%81%E7%9B%98%E8%AF%BB%E5%86%99"><span class="post-toc-text">fs 视角的磁盘读写</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#fs%EF%BC%9A%E6%96%87%E4%BB%B6%E5%B8%83%E5%B1%80"><span class="post-toc-text">fs：文件布局</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#inode-1"><span class="post-toc-text">inode</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%89%A9%E5%B1%95%E6%96%87%E4%BB%B6%E5%A4%A7%E5%B0%8F"><span class="post-toc-text">扩展文件大小</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#block-%E8%AE%A1%E7%AE%97"><span class="post-toc-text">block 计算</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="post-toc-text">目录</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#xv6-dirent"><span class="post-toc-text">xv6 dirent</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%B7%AF%E5%BE%84%E5%90%8D%E6%9F%A5%E6%89%BE"><span class="post-toc-text">路径名查找</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#code%EF%BC%9Axv6-fs"><span class="post-toc-text">code：xv6 fs</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%A3%81%E7%9B%98%E5%B8%83%E5%B1%80"><span class="post-toc-text">磁盘布局</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#echo-%E2%80%9Chi%E2%80%9D-x"><span class="post-toc-text">echo “hi” &gt; x</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%88%9B%E5%BB%BA-inode"><span class="post-toc-text">创建 inode</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%BC%93%E5%AD%98%E9%94%81%E4%B8%8E%E5%9D%97%E9%94%81"><span class="post-toc-text">缓存锁与块锁</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#brelse"><span class="post-toc-text">brelse</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#sleep-lock"><span class="post-toc-text">sleep lock</span></a></li></ol></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="File-System"><a href="#File-System" class="headerlink" title="File System"></a>File System</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>文件系统的目的是<code>组织和存储数据</code>。文件系统通常支持用户和应用程序之间的<code>数据共享</code>，并且具有<code>持久性</code>。</p>
+<p>主要有三个主题：崩溃恢复、磁盘文件排布、性能。</p>
+<p>文件系统的路径名提供了文件的可读性，它内置 offset ，可为文件创建别名链接。其内部对文件的标识不依赖于文件名</p>
+<blockquote>
+<p>文件系统的目的是实现一系列API，也即是典型的文件系统API。但是，这并不是唯一构建一个存储系统的方式。例如数据库的API</p>
+<p>数据库如果没有直接访问磁盘的权限的话，通常是在文件系统之上实现的</p>
+</blockquote>
+<h4 id="inode"><a href="#inode" class="headerlink" title="inode"></a>inode</h4><ul>
+<li>fs 用 <code>inode</code> 表示一个文件对象，这个数字标识了一个文件。</li>
+<li>存在一个 <code>link count</code> 来跟踪指向这个inode的文件名的数量<ul>
+<li>为0时才删除文件</li>
+<li>实际中可能有 openfd count，二者均为0时才会删除文件</li>
+</ul>
+</li>
+<li></li>
+</ul>
+<h4 id="fd"><a href="#fd" class="headerlink" title="fd"></a>fd</h4><p>主要与用户进程进行交互</p>
+<ul>
+<li>为了追踪I&#x2F;O，fd 维护了读写的 <code>offset</code></li>
+</ul>
+<h4 id="文件系统层次结构"><a href="#文件系统层次结构" class="headerlink" title="文件系统层次结构"></a>文件系统层次结构</h4><ul>
+<li>磁盘层： 持久化存储</li>
+<li>block cache：<code>缓存</code>，避免频繁的读写磁盘</li>
+<li>logging：应对崩溃，维护持久性</li>
+<li>inode cache：同步</li>
+<li>inode：读写</li>
+<li>文件名、fd</li>
+</ul>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/image%2030.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/image%2030.avif" class title="image 30.avif"></a>
+
+<h3 id="fs-与-disk"><a href="#fs-与-disk" class="headerlink" title="fs 与 disk"></a>fs 与 disk</h3><blockquote>
+<p>实际中有非常非常多不同类型的存储设备，这些设备的区别在于性能，容量，数据保存的期限等。其中两种最常见，并且你们应该也挺熟悉的是SSD和HDD。这两类存储虽然有着不同的性能，但是都在合理的成本上提供了大量的存储空间。SSD通常是0.1到1毫秒的访问时间，而HDD通常是在10毫秒量级完成读写一个disk block。</p>
+</blockquote>
+<h4 id="sector-与-block"><a href="#sector-与-block" class="headerlink" title="sector 与 block"></a>sector 与 block</h4><ul>
+<li><p><code>sector</code> 通常是磁盘驱动可以读写的最小单元，它过去通常是512字节</p>
+</li>
+<li><p><code>block</code> 通常是操作系统或者文件系统视角的数据</p>
+<ul>
+<li>它由文件系统定义，在XV6中它是1024字节</li>
+<li>所以XV6中一个block对应两个sector</li>
+</ul>
+</li>
+</ul>
+<h4 id="fs-视角的磁盘读写"><a href="#fs-视角的磁盘读写" class="headerlink" title="fs 视角的磁盘读写"></a>fs 视角的磁盘读写</h4><p>抽象磁盘为一堆 block，然后用inode参数调用接口即可</p>
+<p>驱动会通过写设备的控制寄存器，然后设备就会完成相应的工作</p>
+<h4 id="fs：文件布局"><a href="#fs：文件布局" class="headerlink" title="fs：文件布局"></a>fs：文件布局</h4><a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240826085715.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240826085715.png" class title="Pasted image 20240826085715.png"></a>
+
+<ul>
+<li>block 0 要么用作引导扇区，要么完全没用</li>
+<li>block 1 用于描述文件系统，存放fs元数据</li>
+<li>在 XV 6中，log 从 block 2 开始，到 block 32 结束</li>
+<li>block32到block45之间，XV6存储了 inode<ul>
+<li>一个inode是64字节，所有inode大小相同</li>
+<li>多个inode会打包存在一个block中</li>
+</ul>
+</li>
+<li>之后是bitmap block，只占据一个 block，跟踪 block 是否空闲</li>
+<li>data block，存储文件和目录</li>
+</ul>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240826085715.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240826085715.png" class title="Pasted image 20240826085715.png"></a>
+
+<p>通常来说，bitmap block，inode blocks和log blocks被统称为metadata block。</p>
+<blockquote>
+<p>它们虽然不存储实际的数据，但是它们存储了能帮助文件系统完成工作的元数据。</p>
+</blockquote>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827080624.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827080624.png" class title="Pasted image 20240827080624.png"></a>
+
+<h4 id="inode-1"><a href="#inode-1" class="headerlink" title="inode"></a>inode</h4><p>这是一个64字节的数据结构，它的字段通常有：</p>
+<ul>
+<li>type、nlink、size</li>
+<li>数据的 block numbers，分为 direct 和 indirect</li>
+</ul>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827050527.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827050527.png" class title="Pasted image 20240827050527.png"></a>
+
+<p>Xv6 中，一个文件最大大小为：$(256+12)\times blocksize$，也即 268 KB</p>
+<blockquote>
+<p>学生提问：为什么每个block存储256个block编号？</p>
+<p>Frans教授：因为每个编号是4个字节。1024&#x2F;4 &#x3D; 256。这又带出了一个问题，如果block编号只是4个字节，磁盘最大能有多大？是的，2的32次方（注，4TB）。有些磁盘比这个数字要大，所以通常人们会使用比32bit更长的数字来表示block编号。</p>
+</blockquote>
+<h5 id="扩展文件大小"><a href="#扩展文件大小" class="headerlink" title="扩展文件大小"></a>扩展文件大小</h5><p>类似于页表的方式，顶级表包含一堆 indirect block 的 inode number，然后不断向下扩展即可</p>
+<p>一个二级的结构可以支持 256*256*1 KB 大小的最大文件</p>
+<blockquote>
+<p>也可以按照B树或者其他更复杂的树结构实现</p>
+</blockquote>
+<h5 id="block-计算"><a href="#block-计算" class="headerlink" title="block 计算"></a>block 计算</h5><blockquote>
+<p>假设我们需要读取文件的第8000个字节，那么你该读取哪个block呢？从inode的数据结构中该如何计算呢？<br>s<br>8000 &#x2F; blocksize &#x3D; 7，因此 index 7；8000 % 1024 &#x3D; 832，所以我们需要读取第7个block的第832个字节</p>
+</blockquote>
+<h4 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h4><p>提供了层次化的命名空间（hierarchical namespace），你可以在文件系统中保存对用户友好的文件名。</p>
+<p>Unix 中，一个目录本质上是一个文件加上一些文件系统能够理解的结构。</p>
+<h5 id="xv6-dirent"><a href="#xv6-dirent" class="headerlink" title="xv6 dirent"></a>xv6 dirent</h5><p>xv6 中这里的结构极其简单，每一个目录包含了directory entries，每一条 entry 被称为 dirent，其格式为：</p>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827083105.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827083105.png" class title="Pasted image 20240827083105.png"></a>
+
+<blockquote>
+<p>ushort：2B，DIRSIZ：14</p>
+</blockquote>
+<p>所以每个entry总共是16个字节。</p>
+<h5 id="路径名查找"><a href="#路径名查找" class="headerlink" title="路径名查找"></a>路径名查找</h5><blockquote>
+<p>inode从block 32开始</p>
+</blockquote>
+<p>假设我们要查找路径名“&#x2F;y&#x2F;x”</p>
+<ol>
+<li>首先得到 root inode，xv6中其编号为1，则位于block 32的64到128字节的位置</li>
+<li>扫描它的内容，得到目录项，在目录项中匹配 y，得到y的 inum</li>
+<li>查找 inode y，得到其目录项，匹配x，得到其 inum</li>
+</ol>
+<blockquote>
+<p>很明现，这里的结构不是很有效。为了找到一个目录名，你需要线性扫描。实际的文件系统会使用更复杂的数据结构来使得查找更快，当然这又是设计数据结构的问题，而不是设计操作系统的问题。你可以使用你喜欢的数据结构并提升性能。出于简单和更容易解释的目的，XV6使用了这里这种非常简单的数据结构。</p>
+</blockquote>
+<h4 id="code：xv6-fs"><a href="#code：xv6-fs" class="headerlink" title="code：xv6 fs"></a>code：xv6 fs</h4><p>启动XV6的过程中，调用了makefs指令，来创建一个文件系统：</p>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827095926.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827095926.png" class title="Pasted image 20240827095926.png"></a>
+
+<p>makefs创建了一个全新的磁盘镜像，在这个磁盘镜像中包含了我们在指令中传入的一些文件。</p>
+<h5 id="磁盘布局"><a href="#磁盘布局" class="headerlink" title="磁盘布局"></a>磁盘布局</h5><p>从指令的下方可以看出有46个meta block，其中包括了：</p>
+<ul>
+<li>boot block</li>
+<li>super block</li>
+<li>30 个 log block</li>
+<li>13 个 inode block</li>
+<li>1 个 bitmap block</li>
+</ul>
+<p>之后是954个data block。所以这是一个袖珍级的文件系统，总共就包含了1000个block。</p>
+<h5 id="echo-“hi”-x"><a href="#echo-“hi”-x" class="headerlink" title="echo “hi” &gt; x"></a>echo “hi” &gt; x</h5><a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827100152.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827100152.png" class title="Pasted image 20240827100152.png"></a>
+
+<p>这里会有几个阶段：</p>
+<ol>
+<li>第一阶段是创建文件</li>
+<li>第二阶段将“hi”写入文件</li>
+<li>第三阶段将“\n”换行符写入到文件</li>
+</ol>
+<p>后两个操作即 echo 的实现方式：</p>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827100415.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827100415.png" class title="Pasted image 20240827100415.png"></a>
+
+<p>创建文件阶段：</p>
+<ul>
+<li>写入33：即写一个inode，它位于 block 33<ul>
+<li>第一个是为了标记inode将要被使用，标记他的类型</li>
+<li>第二个write 33就是实际的写入inode的内容，会修改它的元数据</li>
+</ul>
+</li>
+<li>46：向第一个data block写数据<ul>
+<li>block 46是根目录的第一个block，我们此时在向根目录下写入文件，它的目录项变了</li>
+</ul>
+</li>
+<li>32：根目录的大小变了</li>
+<li>33：再次更新了文件x的inode， 尽管我们没有写入任何数据</li>
+</ul>
+<p>向文件写入“hi”：</p>
+<ul>
+<li>45：更新位图<ul>
+<li>此时fs已经找到了一个空闲的 data block，使用它存接下来的数据</li>
+</ul>
+</li>
+<li>595 x 2：写入 hi 和 \n</li>
+<li>33：更新数据所在的block，和大小</li>
+</ul>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/image%2031.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/image%2031.avif" class title="image 31.avif"></a>
+
+
+<h5 id="创建-inode"><a href="#创建-inode" class="headerlink" title="创建 inode"></a>创建 inode</h5><p>分配inode发生在sys_open函数中，这个函数会负责创建文件。在sys_open函数中，会调用create函数。</p>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827102059.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827102059.png" class title="Pasted image 20240827102059.png"></a>
+
+<ol>
+<li><code>create</code> 函数中首先会解析路径名并找到最后一个目录，之后会查看文件是否存在，如果存在的话会返回错误。</li>
+<li>之后就会调用 <code>ialloc</code>（inode allocate），这个函数会为文件x分配inode</li>
+<li>ialloc 会调用 <code>bread</code> 遍历所有可能的inode，寻找一个空闲的inode<ul>
+<li>找到后将其type字段设置为文件，这会将inode标记为已被分配</li>
+<li>bread 会调用 <code>bget</code></li>
+</ul>
+</li>
+<li>bget 会获取bcache.lock，然后查看块缓存寻找目标块<ul>
+<li>找到则引用++，释放bcache.lock，获取缓存块的锁，返回块指针</li>
+<li>未找到则</li>
+</ul>
+</li>
+</ol>
+<h5 id="缓存锁与块锁"><a href="#缓存锁与块锁" class="headerlink" title="缓存锁与块锁"></a>缓存锁与块锁</h5><p>进程可能并行运行，两个进程可能同时会调用到ialloc函数，然后进而调用 bread，bread 调用 bget</p>
+<p>bget 返回一个带锁的缓存块，意味着进程可以独占并修改此缓存块，而无需担心其他进程的影响。</p>
+<ul>
+<li><code>一个磁盘block只能有一个缓存</code></li>
+</ul>
+<blockquote>
+<p>缓存块是进程唯一写入磁盘的方式。如果buffer cache中有两份block 33的cache将会出现问题，可能出现更新丢失的问题。所以必须带锁</p>
+</blockquote>
+<blockquote>
+<p>另外 XV6 中对bcache做任何修改的话，都必须持有bcache的锁</p>
+</blockquote>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827193528.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827193528.png" class title="Pasted image 20240827193528.png"></a>
+
+<h5 id="brelse"><a href="#brelse" class="headerlink" title="brelse"></a>brelse</h5><p>如果第一个进程结束了对block 33的读写操作，它会对block的cache调用brelse（block cache release）函数</p>
+<p>这个函数会对refcnt减1，并释放sleep lock</p>
+<ul>
+<li>如果引用为0，还会撤回这个 block，其策略为 <code>LRU</code></li>
+<li>LRU是一个良好的策略，它遵循了局部性原理</li>
+</ul>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827194446.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827194446.png" class title="Pasted image 20240827194446.png"></a>
+
+
+
+
+
+
+
+
+
+
+
+<h5 id="sleep-lock"><a href="#sleep-lock" class="headerlink" title="sleep lock"></a>sleep lock</h5><p>block cache使用的是sleep lock。</p>
+<blockquote>
+<p>sleep lock是基于spinlock实现的。</p>
+</blockquote>
+<ul>
+<li>磁盘操作需要很长的时间，spinlock 会浪费大量时间在轮询上，所以<code>使用了 sleeplock</code></li>
+<li>另外，sleep lock 还允许在 I&#x2F;O 过程中持有锁，在开启中断的情况下”持有锁“</li>
+</ul>
+<a href="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827194733.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/6.s081%20lec14%20FS%20Intro%20&%20Block%20cache/Pasted%20image%2020240827194733.png" class title="Pasted image 20240827194733.png"></a>
+
+
+
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-27</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>

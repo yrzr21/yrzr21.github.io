@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="Supply &amp; Demand, Preferences and Utility Functions" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    Supply &amp; Demand, Preferences and Utility Functions
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Supply-Demand"><span class="post-toc-text">Supply &amp; Demand</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%AF%BE%E7%A8%8B%E5%AF%BC%E5%85%A5"><span class="post-toc-text">课程导入</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BE%9B%E9%9C%80%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">供需模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%AE%9E%E8%AF%81%E5%88%86%E6%9E%90-vs-%E8%A7%84%E8%8C%83%E5%88%86%E6%9E%90"><span class="post-toc-text">实证分析 vs. 规范分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B8%82%E5%9C%BA%E5%A4%B1%E7%81%B5%EF%BC%9A%E7%90%86%E8%AE%BA%E5%A4%B1%E6%95%88"><span class="post-toc-text">市场失灵：理论失效</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%AC%E5%B9%B3"><span class="post-toc-text">公平</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%A1%8C%E4%B8%BA%E7%BB%8F%E6%B5%8E%E5%AD%A6"><span class="post-toc-text">行为经济学</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B8%82%E5%9C%BA%E7%BB%8F%E6%B5%8E"><span class="post-toc-text">市场经济</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Preferences-and-Utility-Functions"><span class="post-toc-text">Preferences and Utility Functions</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E5%86%B3%E7%AD%96%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">消费者决策模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%81%8F%E5%A5%BD%E5%81%87%E8%AE%BE"><span class="post-toc-text">偏好假设</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#indifference-curve%EF%BC%9A%E5%81%8F%E5%A5%BD%E5%9B%BE"><span class="post-toc-text">indifference curve：偏好图</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%B8%80%E4%B8%AA%E5%BA%94%E7%94%A8%E4%BE%8B%E5%AD%90"><span class="post-toc-text">一个应用例子</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#utility-function"><span class="post-toc-text">utility function</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BE%B9%E9%99%85%E6%95%88%E7%94%A8%E4%B8%8E%E8%BE%B9%E9%99%85%E9%80%92%E5%87%8F"><span class="post-toc-text">边际效用与边际递减</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#e-g-%E7%AC%AC%E4%BA%8C%E6%9D%AF%E5%8D%8A%E4%BB%B7"><span class="post-toc-text">e.g. 第二杯半价</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BE%B9%E9%99%85%E6%9B%BF%E4%BB%A3%E7%8E%87-MRS"><span class="post-toc-text">边际替代率 MRS</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="Supply-Demand"><a href="#Supply-Demand" class="headerlink" title="Supply &amp; Demand"></a>Supply &amp; Demand</h2><h3 id="课程导入"><a href="#课程导入" class="headerlink" title="课程导入"></a>课程导入</h3><p>微经：研究决策主体的交互，<code>稀缺性</code>是驱动的核心</p>
+<p>使用简单的<code>模型</code>对其进行建模，试图解释它们</p>
+<p><code>机会成本</code>，每个决策都伴随着得到与失去</p>
+<h3 id="供需模型"><a href="#供需模型" class="headerlink" title="供需模型"></a>供需模型</h3><a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827004610.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827004610.png" class title="Pasted image 20240827004610.png"></a>
+
+<p>相交点被称为 <code>市场均衡</code></p>
+<h3 id="实证分析-vs-规范分析"><a href="#实证分析-vs-规范分析" class="headerlink" title="实证分析 vs. 规范分析"></a>实证分析 vs. 规范分析</h3><ul>
+<li>positive：what will happen？</li>
+<li>normative：should we？</li>
+</ul>
+<h4 id="市场失灵：理论失效"><a href="#市场失灵：理论失效" class="headerlink" title="市场失灵：理论失效"></a>市场失灵：理论失效</h4><p>有很多原因，比如：欺诈、不完全信息</p>
+<h4 id="公平"><a href="#公平" class="headerlink" title="公平"></a>公平</h4><p>高价物品只有富人可能拥有</p>
+<h4 id="行为经济学"><a href="#行为经济学" class="headerlink" title="行为经济学"></a>行为经济学</h4><p>人并不是理性人，由于认知偏差、心理因素可能做出不合理的事情</p>
+<p>没用正确评估自己获得的信息</p>
+<h3 id="市场经济"><a href="#市场经济" class="headerlink" title="市场经济"></a>市场经济</h3><p>亚当斯密的假设：每个人追求自身利益最大化的同时，也带来了整个社会的利益最大化——市场的作用</p>
+<blockquote>
+<p>还是有一些问题。局部最优解并不等于整体最优解；另外，追求利益最大化不等于可以达到利益最大化</p>
+<p>当然很多情况下，达到局部优解已经非常很不错了</p>
+</blockquote>
+<h2 id="Preferences-and-Utility-Functions"><a href="#Preferences-and-Utility-Functions" class="headerlink" title="Preferences and Utility Functions"></a>Preferences and Utility Functions</h2><a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827004610.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827004610.png" class title="Pasted image 20240827004610.png"></a>
+
+
+<h3 id="消费者决策模型"><a href="#消费者决策模型" class="headerlink" title="消费者决策模型"></a>消费者决策模型</h3><p>有两个主要限制条件：消费偏好、消费预算，我们的目的是在这两个条件的限制下，得到 utility max</p>
+<h4 id="偏好假设"><a href="#偏好假设" class="headerlink" title="偏好假设"></a>偏好假设</h4><ul>
+<li>完备性：消费者对任意商品都有偏好</li>
+<li>传递性：a&gt;b，b&gt;c，则 a&gt;c</li>
+<li><code>非饱和假设</code>：more is always better than less</li>
+</ul>
+<blockquote>
+<p>面对假设时，我们需要考虑这些对现实的简化假设是否合理</p>
+</blockquote>
+<h4 id="indifference-curve：偏好图"><a href="#indifference-curve：偏好图" class="headerlink" title="indifference curve：偏好图"></a>indifference curve：偏好图</h4><a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827012027.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827012027.png" class title="Pasted image 20240827012027.png"></a>
+
+<p>对于同一条曲线上的选项，你的偏好没有差异，即 <code>无差异曲线</code>，有四个特性：</p>
+<ul>
+<li>消费者偏好更高的无差异曲线（无饱和性）<ul>
+<li>C严格好于A、B</li>
+</ul>
+</li>
+<li>IC 向下倾斜（无饱和性）</li>
+<li>IC 永不相交（传递性）</li>
+<li>一个选项只能存在于一个 IC 上</li>
+</ul>
+<h5 id="一个应用例子"><a href="#一个应用例子" class="headerlink" title="一个应用例子"></a>一个应用例子</h5><a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827012829.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827012829.png" class title="Pasted image 20240827012829.png"></a>
+
+<p>尽管 IMF 同事质量 &lt; P，地理位置不如SC，一个人仍然选择了 IMF</p>
+<h4 id="utility-function"><a href="#utility-function" class="headerlink" title="utility function"></a>utility function</h4><p>——以数学形式表示哪个偏好更“好”，也即更好的 utility</p>
+<blockquote>
+<p>utility 仅作为一个排序选项的工具，以在当前模型下分析出哪个选项更好</p>
+<p>另外，utility function 针对于特定的决策集合</p>
+<p>成瘾性物品会改变效用函数本身</p>
+</blockquote>
+<a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827020103.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827020103.png" class title="Pasted image 20240827020103.png"></a>
+
+<h4 id="边际效用与边际递减"><a href="#边际效用与边际递减" class="headerlink" title="边际效用与边际递减"></a>边际效用与边际递减</h4><ul>
+<li>边际效用：导数，一点点改变会带来的影响，逐步的决策</li>
+<li>边际递减：尽管越多越好，但随着物品的增加，每个物品带来的效用在逐渐减少</li>
+</ul>
+<a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827020315.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827020315.png" class title="Pasted image 20240827020315.png"></a>
+
+<blockquote>
+<p>边际效用总是从1开始，且是正的</p>
+</blockquote>
+<h5 id="e-g-第二杯半价"><a href="#e-g-第二杯半价" class="headerlink" title="e.g. 第二杯半价"></a>e.g. 第二杯半价</h5><p>核心还是边际递减</p>
+<ul>
+<li>如果你只有一个人，在已经喝到一杯的基础上，你对第二杯的购买意愿更低</li>
+<li>对商家来说，二者的制造成本完全相同</li>
+</ul>
+<p>如果相同的价格下，物品更便宜，那么消费者需求自然会增加：</p>
+<a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827023014.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827023014.png" class title="Pasted image 20240827023014.png"></a>
+
+<p>所以商家降低第二杯的价格以期望增加购买意愿</p>
+<p>而随着时间的增加，你的需求可能会重置。所以非易腐性物品的不同体量商品的价格差异并没有易腐性商品那么大</p>
+<h4 id="边际替代率-MRS"><a href="#边际替代率-MRS" class="headerlink" title="边际替代率 MRS"></a>边际替代率 MRS</h4><p>两点间的斜率，代表愿意用一种商品替换另一种商品的比例</p>
+<a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827020844.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827020844.png" class title="Pasted image 20240827020844.png"></a>
+
+<blockquote>
+<p>AB：一块饼干换，两块披萨<br>BC：一块饼干，半块披萨</p>
+</blockquote>
+<ul>
+<li>边际替代率总是递减的：随着x增加，mup增加，muc减少</li>
+</ul>
+<blockquote>
+<p>为啥不加个绝对值？</p>
+</blockquote>
+<a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827021136.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827021136.png" class title="Pasted image 20240827021136.png"></a>
+
+<p>MRS 总是凸向原点，这种情况不可能：</p>
+<a href="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827021752.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/08/27/14.01%20Microeconomics%20Supply%20&%20Demand,%20Preferences%20and%20Utility%20Functions/Pasted%20image%2020240827021752.png" class title="Pasted image 20240827021752.png"></a>
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-08-27</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/14-01-Microeconomics/'>
+                            14.01 Microeconomics
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
