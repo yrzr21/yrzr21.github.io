@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec16 ext3" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec16 ext3
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ext3"><span class="post-toc-text">ext3</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#xv6-logging-%E5%9B%9E%E9%A1%BE"><span class="post-toc-text">xv6 logging 回顾</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%97%AE%E9%A2%98"><span class="post-toc-text">问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ext3-fs-log-format"><span class="post-toc-text">ext3 fs log format</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%BC%93%E5%AD%98"><span class="post-toc-text">缓存</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#transaction-%E4%BF%A1%E6%81%AF"><span class="post-toc-text">transaction 信息</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%A3%81%E7%9B%98%E5%B8%83%E5%B1%80"><span class="post-toc-text">磁盘布局</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#log-%E5%8C%BA"><span class="post-toc-text">log 区</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#magic-number%EF%BC%9A%E5%8C%BA%E5%88%86-log-data"><span class="post-toc-text">magic number：区分 log data</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ext3-%E5%A6%82%E4%BD%95%E6%8F%90%E5%8D%87-logging-%E6%80%A7%E8%83%BD"><span class="post-toc-text">ext3 如何提升 logging 性能</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%BC%82%E6%AD%A5syscall"><span class="post-toc-text">异步syscall</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%89%B9%E9%87%8F%E6%89%A7%E8%A1%8C"><span class="post-toc-text">批量执行</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#concurrency"><span class="post-toc-text">concurrency</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A%E6%AD%A3%E5%9C%A8-commit-%E7%9A%84%E7%BC%93%E5%AD%98%E5%9D%97%E8%A2%AB%E6%9B%B4%E6%96%B0"><span class="post-toc-text">问题：正在 commit 的缓存块被更新</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ext3-fs-syscall"><span class="post-toc-text">ext3 fs syscall</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ext3-transaction-commit"><span class="post-toc-text">ext3 transaction commit</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%B9%81%E5%BF%99-fs-%E7%B3%BB%E7%BB%9F"><span class="post-toc-text">繁忙 fs 系统</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ext3-crash-recovery"><span class="post-toc-text">ext3 crash recovery</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%89%B4%E5%88%AB-descriptor-commit-block"><span class="post-toc-text">鉴别 descriptor&#x2F;commit block</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B6%E4%BB%96%E7%BB%86%E8%8A%82"><span class="post-toc-text">其他细节</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%96%B0transaction%E9%9C%80%E8%A6%81%E7%AD%89%E5%89%8D%E4%B8%80%E4%B8%AAtransaction%E4%B8%AD%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E6%89%A7%E8%A1%8C%E5%AE%8C%E6%88%90"><span class="post-toc-text">为什么新transaction需要等前一个transaction中系统调用执行完成</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">文件系统线程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#descriptor-commit-%E5%8C%B9%E9%85%8D"><span class="post-toc-text">descriptor&#x2F;commit 匹配</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%9C%A8descriptor-block%E5%AE%9E%E7%8E%B0commit-block%EF%BC%9F"><span class="post-toc-text">为什么不在descriptor block实现commit block？</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#log%E4%B8%AD%E7%9A%84data-block%E6%98%AF%E6%80%8E%E4%B9%88%E5%86%99%E5%85%A5%E5%88%B0%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%EF%BC%9F"><span class="post-toc-text">log中的data block是怎么写入到文件系统中的？</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h3 id="ext3"><a href="#ext3" class="headerlink" title="ext3"></a>ext3</h3><p>大部分 logging 系统需要遵循以下规则：</p>
+<ul>
+<li>write ahead rule：先把事务的所有写记录到log中，然后才更新</li>
+<li>freeing rule：log 块未写入fs前不可被复用</li>
+</ul>
+<h4 id="xv6-logging-回顾"><a href="#xv6-logging-回顾" class="headerlink" title="xv6 logging 回顾"></a>xv6 logging 回顾</h4><ul>
+<li>用户程序可能调用write&#x2F;create修改fs，其第一作用对象是缓存块</li>
+<li>在系统调用中，每个syscall的一系列的写操作会被包装在 begin_op 和 end_op 中，使其成为一个原子操作</li>
+<li>在 end_op 前，所有的写操作只会操作缓存中的块，并将其 pin，记录它的块号、以及本事务写操作的个数</li>
+<li>end_op 会将所有本事务的缓存块写入到log中，然后写入 log header<ul>
+<li>成功写入log header后，此事务便被成功记录，可以进行崩溃恢复，这是 commit point</li>
+</ul>
+</li>
+<li>然后将log中的数据复制到对应的块中；最后清理log header</li>
+</ul>
+<p>在崩溃恢复时，需要有程序可以阅读 log 区，以识别是否需要进行崩溃恢复</p>
+<h5 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h5><p>xv6 的logging有一些问题：</p>
+<ul>
+<li>xv6 只有一个log header块，所以其<code>系统调用只能一个一个执行</code>，这意味着必须等待缓慢的磁盘操作</li>
+<li>另外，<code>数据被写入了磁盘两次</code>，一次是log，另一次是实际写入数据块</li>
+</ul>
+<h4 id="ext3-fs-log-format"><a href="#ext3-fs-log-format" class="headerlink" title="ext3 fs log format"></a>ext3 fs log format</h4><blockquote>
+<p>ext3文件系统就是基于今天要阅读的<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2020/readings/journal-design.pdf">论文</a>，再加上几年的开发得到的，并且ext3也曾经广泛的应用过。ext3是针对之前一种的文件系统（ext2）logging方案的修改，所以ext3就是在几乎不改变之前的ext2文件系统的前提下，在其上增加一层logging系统。所以某种程度来说，logging是一个容易升级的模块。</p>
+</blockquote>
+<h5 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h5><p>与xv6类似，ext3也有缓存块，其写回策略为 write-back。于是缓存中的数据可分为：干净块、脏块、pinned 块</p>
+<ul>
+<li>干净：与磁盘数据一致</li>
+<li>脏：有写入</li>
+<li>pinned：稍后会写入 log</li>
+</ul>
+<h5 id="transaction-信息"><a href="#transaction-信息" class="headerlink" title="transaction 信息"></a>transaction 信息</h5><p>可以维护<code>多个</code>在不同阶段的transaction的信息，每个信息包含：</p>
+<ul>
+<li>序列号</li>
+<li>本事务的一系列块号</li>
+<li>一系列handle，handle对应了系统调用，并且这些系统调用是transaction的一部分，会读写cache中的block</li>
+</ul>
+<h5 id="磁盘布局"><a href="#磁盘布局" class="headerlink" title="磁盘布局"></a>磁盘布局</h5><p>与xv6一样：</p>
+<ul>
+<li>会有一个文件系统树，包含了inode，目录，文件等等</li>
+<li>会有bitmap block来表明每个data block是被分配的还是空闲的</li>
+<li>在磁盘的一个指定区域，会保存log</li>
+</ul>
+<h5 id="log-区"><a href="#log-区" class="headerlink" title="log 区"></a>log 区</h5><ul>
+<li>log 最开始是 <code>super block</code>，包含 <code>第一个</code> 有效事务的起始块号、以及其序列号</li>
+<li>每个事务包含了：<ul>
+<li>开始的 <code>descriptor block</code>，记录了log块对应的块号</li>
+<li><code>log data block</code></li>
+<li>当事务完成并commit后，会有一个<code>commit block</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>因为log中可能有多个transaction，commit block之后可能会跟着下一个transaction的descriptor block，data block和commit block。所以log可能会很长并包含多个transaction。</p>
+<p>我们可以认为super block中的起始位置和序列号属于最早的，排名最靠前的，并且是有效的transaction。</p>
+</blockquote>
+<a href="/2024/09/01/6.s081%20lec16%20ext3/image%2036.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/01/6.s081%20lec16%20ext3/image%2036.avif" class title="image 36.avif"></a>
+
+<blockquote>
+<p>磁盘上的这些事务都是 commit 过的，正在进行的事务在内存中。且内存中同一时间只有一个正在进行的事务，当结束当前事务时，会将其写入log，并在末尾放上一个 commit block</p>
+</blockquote>
+<h5 id="magic-number：区分-log-data"><a href="#magic-number：区分-log-data" class="headerlink" title="magic number：区分 log data"></a>magic number：区分 log data</h5><p>在crash之后的恢复过程会扫描log，为了将descriptor block和commit block与data block区分开，descriptor block和commit block会以一个 <code>32bit的魔法数字</code> 作为起始</p>
+<blockquote>
+<p>这个魔法数字不太可能出现在数据中，并且可以帮助恢复软件区分不同的block。</p>
+</blockquote>
+<h4 id="ext3-如何提升-logging-性能"><a href="#ext3-如何提升-logging-性能" class="headerlink" title="ext3 如何提升 logging 性能"></a>ext3 如何提升 logging 性能</h4><ul>
+<li><code>asynchronous</code> syscall：syscall修改完缓存块就返回，不用等待写磁盘操作<ul>
+<li>当然，可以选择等待</li>
+</ul>
+</li>
+<li><code>batching</code> 批量执行：可以将多个系统调用打包成一个transaction</li>
+<li><code>concurrency</code> 并发（这个似乎是前面两个带来的副产物）</li>
+</ul>
+<h5 id="异步syscall"><a href="#异步syscall" class="headerlink" title="异步syscall"></a>异步syscall</h5><p>这带来了几个好处：</p>
+<ul>
+<li><code>I/O concurrency</code>：系统调用能够快速返回并继续计算，磁盘可以并行的写入数据</li>
+<li>使得大量的<code>批量执行</code>变得容易。</li>
+</ul>
+<p>但是也带来一个缺点：</p>
+<ul>
+<li>syscall 返回不代表实际存盘，此时断电则可能<code>丢失数据</code></li>
+</ul>
+<p>所以对于某些关键数据，unix 提供了<code>fsync(fd)</code>，使得对于该文件，所有的syscall都是在数据存盘后才返回，即同步I&#x2F;O</p>
+<blockquote>
+<p>所有的UNIX都有这个系统调用。这也可称为 flush，将写操作刷新到磁盘中</p>
+</blockquote>
+<h5 id="批量执行"><a href="#批量执行" class="headerlink" title="批量执行"></a>批量执行</h5><ul>
+<li>在任何时候，ext3只会有一个open transaction</li>
+<li>一个transaction可以包含多个不同的 syscalll</li>
+</ul>
+<blockquote>
+<p>所以ext3是这么工作的：它首先会宣告要开始一个新的transaction，接下来的几秒所有的系统调用都是这个大的transaction的一部分</p>
+<p>例如，每5秒钟都会创建一个新的transaction，一次性向磁盘写入这个包含了可能有数百个更新的大transaction。</p>
+</blockquote>
+<p>批量执行带来了几个好处：</p>
+<ul>
+<li>多个 syscall <code>均摊固有损耗</code>，固有损耗包括：<ul>
+<li>写 descriptor block和commit block</li>
+<li>磁盘旋转——只用旋转一次，就可以执行完一堆</li>
+</ul>
+</li>
+<li>更容易触发 <code>write absorption</code>，极大地减少了磁盘的写入次数：<ul>
+<li>如果操作反复更新同一个block，批量执行使得可以在内存中反复修改它，然后将结果存盘</li>
+</ul>
+</li>
+<li>便于 <code>disk scheduling</code>，使磁盘尽量以顺序写入的方式调度这些写入：<ul>
+<li>写log就是顺序写入，同样的数据分多次写肯定不如一次写完块</li>
+<li>驱动程序可以将写请求按轨道号排序，从而调度磁盘，尽量以顺序的方式写入</li>
+</ul>
+</li>
+</ul>
+<h5 id="concurrency"><a href="#concurrency" class="headerlink" title="concurrency"></a>concurrency</h5><ul>
+<li>允许多个<code>并行系统调用</code>，同一个事务的syscall可以直接修改本事务缓存块</li>
+<li>可以有多个不同状态的 <code>transaction 同时存在</code>， 不同状态的事务包含：<ul>
+<li>一个 open 事务</li>
+<li>多个正在 commit 到 log 的事务</li>
+<li>多个 commit 过、正在 install 的事务</li>
+<li>多个正在 clean 的事务</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>concurrency之所以能帮助提升性能，是因为它可以帮助我们并行的运行系统调用，我们可以得到多核的并行能力。如果我们可以在运行应用程序和系统调用的同时，来写磁盘，我们可以得到I&#x2F;O concurrency，也就是同时运行CPU和磁盘I&#x2F;O。这些都能帮助我们更有效，<code>更精细的使用硬件资源</code>。</p>
+</blockquote>
+<h5 id="问题：正在-commit-的缓存块被更新"><a href="#问题：正在-commit-的缓存块被更新" class="headerlink" title="问题：正在 commit 的缓存块被更新"></a>问题：正在 commit 的缓存块被更新</h5><p>——很可能丢失数据</p>
+<p>解决方案是基于<code>拷贝</code>的 commit：将所有本事务相关的块拷贝一份，然后commit</p>
+<ul>
+<li>正在 commit 的缓存块被更新会更新另一份，而不是原来的缓存块</li>
+<li>为了保证效率，这里使用 <code>cow</code> 拷贝</li>
+</ul>
+<h4 id="ext3-fs-syscall"><a href="#ext3-fs-syscall" class="headerlink" title="ext3 fs syscall"></a>ext3 fs syscall</h4><ul>
+<li><p>每个 syscall 都需要声明一系列写操作的开始和结束，即 <code>start 和 end</code></p>
+</li>
+<li><p>start 会用 <code>handle</code> 标识当前 syscall 属于哪个 <code>transaction</code>，从而跟踪写操作</p>
+</li>
+<li><p>在调用 syscall 时，会传递<code>直接修改缓存块</code>，修改缓存块的函数会拿到handle和blockno，从而 <code>将 blockno 与事务关联起来</code></p>
+</li>
+<li><p>stop 使用 handle 作为参数，<code>它不会结束本事务</code>，而是代表着本事务中正在进行的syscall少了一个</p>
+</li>
+<li><p>当本事务中的所有 syscall stop 后即可 <code>commit</code> 事务</p>
+</li>
+</ul>
+<h4 id="ext3-transaction-commit"><a href="#ext3-transaction-commit" class="headerlink" title="ext3 transaction commit"></a>ext3 transaction commit</h4><ul>
+<li><p>每隔5秒，文件系统都会commit当前的open transaction</p>
+</li>
+<li><p>首先需要 <code>阻止任何新的 syscall</code></p>
+<ul>
+<li>新的syscall需要等待——这会损害性能</li>
+</ul>
+</li>
+<li><p>等待本事务所有 syscall <code>stop</code>；拷贝所有相关的block</p>
+<ul>
+<li>写入log data block时即用的副本</li>
+<li>cow copy</li>
+</ul>
+</li>
+<li><p>如果剩余的 log 空间足够大，开始commit前为后续 syscall <code>open</code> 一个新的事务</p>
+<ul>
+<li>否则，等待至有足够的log空间</li>
+<li>需要预先声明需要多大的log空间</li>
+<li>fs会记录每个事务的大小，从而得知需要等待多久</li>
+</ul>
+</li>
+<li><p>根据记录写 <code>descriptor block</code>，包含记录本事务所有被修改了的 blockno</p>
+</li>
+<li><p>写 data block。前面二者完成后写 commit block</p>
+<ul>
+<li>写完 commit block 后即达到 <code>commit point</code></li>
+</ul>
+</li>
+<li><p><code>install</code> log</p>
+</li>
+<li><p>install 后即可 <code>re-use</code> 原来的 <code>log空间</code></p>
+<ul>
+<li>没有clean？</li>
+</ul>
+</li>
+</ul>
+<h5 id="繁忙-fs-系统"><a href="#繁忙-fs-系统" class="headerlink" title="繁忙 fs 系统"></a>繁忙 fs 系统</h5><p>可能没有足够的 log 空间，所以<code>或许不能直接 commit</code> 一个新的transaction，需要等待某个事务完成</p>
+<ul>
+<li>也就<code>不能开始任何syscall</code></li>
+</ul>
+<p>如果空出来的空间不够大，还是需要继续等待，直到等到足够大的空间</p>
+<h4 id="ext3-crash-recovery"><a href="#ext3-crash-recovery" class="headerlink" title="ext3 crash recovery"></a>ext3 crash recovery</h4><p>当决定释放某段log空间时，文件系统会更新 <code>super block的指针</code> 将其指向当前最早的transaction的起始位置。</p>
+<a href="/2024/09/01/6.s081%20lec16%20ext3/image%2038.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/01/6.s081%20lec16%20ext3/image%2038.avif" class title="image 38.avif"></a>
+
+<ul>
+<li><p>恢复软件会读取super block，并找到log的起始位置</p>
+<ul>
+<li>crash或许会打断任何在进行中的transaction</li>
+</ul>
+</li>
+<li><p>不断地根据 descriptor 扫描，寻找 log 的结束位置，直到：</p>
+<ul>
+<li>commit block 后的下一个块不以魔数开头</li>
+<li>或者以~开头，则是descriptor，但根据他找到的不是一个commit block<ul>
+<li>这可能是一个正在commit的事务，但未commit成功</li>
+<li>这里不会有偶然，data block的魔数开头被替换为全0，这必然是一个descriptor</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>恢复所有有效的事务，然后启动os</p>
+</li>
+</ul>
+<h5 id="鉴别-descriptor-commit-block"><a href="#鉴别-descriptor-commit-block" class="headerlink" title="鉴别 descriptor&#x2F;commit block"></a>鉴别 descriptor&#x2F;commit block</h5><p>descriptor 与 commit 以32bit的魔法数字开头，如果一个 data block 以~开头，则会在descriptor中标记这个block，并把log中的data block开头用全0替换，在写入实际块时，恢复原来的魔法数字</p>
+<h4 id="其他细节"><a href="#其他细节" class="headerlink" title="其他细节"></a>其他细节</h4><h5 id="为什么新transaction需要等前一个transaction中系统调用执行完成"><a href="#为什么新transaction需要等前一个transaction中系统调用执行完成" class="headerlink" title="为什么新transaction需要等前一个transaction中系统调用执行完成"></a>为什么新transaction需要等前一个transaction中系统调用执行完成</h5><a href="/2024/09/01/6.s081%20lec16%20ext3/image%2040.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/01/6.s081%20lec16%20ext3/image%2040.avif" class title="image 40.avif"></a>
+
+<p>t1使用t2释放的y的inode为x创建文件，但是t2丢失了…此时x和y就共用一个inode</p>
+<h5 id="文件系统线程"><a href="#文件系统线程" class="headerlink" title="文件系统线程"></a>文件系统线程</h5><p>有一个文件系统线程会做这里所有的工作，但也可以是多个…只要加锁</p>
+<h5 id="descriptor-commit-匹配"><a href="#descriptor-commit-匹配" class="headerlink" title="descriptor&#x2F;commit 匹配"></a>descriptor&#x2F;commit 匹配</h5><blockquote>
+<p>如果T8在crash的时候还没有commit，并且T5的commit block正好在T8的descriptor block所指定的位置，这样会不会不正确的表明T8已经被commit了（注，这时T8有一个假的commit block）？</p>
+</blockquote>
+<a href="/2024/09/01/6.s081%20lec16%20ext3/image%2041.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/01/6.s081%20lec16%20ext3/image%2041.avif" class title="image 41.avif"></a>
+
+<p>二者序列号不同，不能匹配</p>
+<h5 id="为什么不在descriptor-block实现commit-block？"><a href="#为什么不在descriptor-block实现commit-block？" class="headerlink" title="为什么不在descriptor block实现commit block？"></a>为什么不在descriptor block实现commit block？</h5><p>XV6与这个提议非常像，完全可以这么做，虽然需要在完成后返回去修改descriptor block，但至少在ext3中这么做了不会牺牲性能、可以节省一个commit block的空间</p>
+<blockquote>
+<p>Linux文件系统的后续版本实现了你的提议，ext4做了以下工作来更有效的写commit block。</p>
+<p>ext4会<code>同时写入所有的data block和commit block</code>，它并不是等待所有的data block写完了之后才写的commit block。</p>
+<p>但是这里有个问题，磁盘可以无序的执行写操作，所以磁盘可能会先写commit block之后再写data block。如果中间有了crash，那么我们有了commit block，但是却没有全部的data block。</p>
+<p>ext4通过在commit block中增加<code>校验和</code>来避免这种问题。所以commit block写入之后发生了crash，如果data block没有全写入那么校验和不能得出正确的结果，恢复软件可以据此判断出错了。ext4可以通过这种方式在机械硬盘上写入一批block而避免磁碟旋转，进而提升磁盘性能。</p>
+</blockquote>
+<h5 id="log中的data-block是怎么写入到文件系统中的？"><a href="#log中的data-block是怎么写入到文件系统中的？" class="headerlink" title="log中的data block是怎么写入到文件系统中的？"></a>log中的data block是怎么写入到文件系统中的？</h5><p>ext3有三种模式：</p>
+<ul>
+<li>journaled data：先写log data再写实际块</li>
+<li>ordered data：将metadata block写入log，而data会被直接写到实际位置</li>
+<li>writeback</li>
+</ul>
+<p>ordered data是最流行的模式，这种模式要快得多，但是它也会导致更多的复杂性。</p>
+<blockquote>
+<p>假设你执行一个写操作导致一个新的block被分配给一个文件，并将包含了新分配block编号的inode写入到log中并commit，在实际写入文件内容至刚刚分配的data block之前发生crash。在稍后的恢复流程中，你将会看到包含了新分配的block编号的inode，但是对应data block里面的内容却属于之前使用了这个data block的旧的文件。如果你运行的是一个类似Athena的多用户系统，那么可能就是一个用户拥有一个文件，其中的内容又属于另一个用户已经删除的文件，如果我们不是非常小心的处理写入数据和inode的顺序就会有这样的问题。</p>
+<p>ext3的ordered data通过先写入文件内容到磁盘中，再commit修改了的inode来解决这里的问题。如果你是个应用程序，你写了一个文件并导致一个新的文件系统data block被分配出来，文件系统会将新的文件内容写到新分配的data block中，之后才会commit transaction，进而导致inode更新并包含新分配的data block编号。如果在写文件数据和更新inode之间发生了crash，你也看不到其他人的旧的数据，因为这时就算有了更新了的data block，但是也没关系，因为现在不仅inode没有更新，连bitmap block也没更新，相应的data block还处于空闲状态，并且可以分配给其他的程序，你并不会因此丢失block。这里的效果就是我们写了一个data block但是最终并没有被任何文件所使用。</p>
+</blockquote>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-01</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
