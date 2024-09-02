@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="逻辑学简短入门" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    逻辑学简短入门
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%9C%89%E6%95%88%E6%80%A7%EF%BC%9A%E4%BB%8E%E4%BB%80%E4%B9%88%E5%8F%AF%E4%BB%A5%E6%8E%A8%E5%87%BA%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="post-toc-text">有效性：从什么可以推出什么？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%A4%E7%A7%8D%E6%9C%89%E6%95%88%E6%8E%A8%E6%96%AD"><span class="post-toc-text">两种有效推断</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%83%85%E5%BD%A2"><span class="post-toc-text">情形</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%9C%9F%E5%80%BC%E5%87%BD%E6%95%B0%E2%80%94%E2%80%94%E4%BA%A6%E6%88%96%E4%B8%8D%E6%98%AF%EF%BC%9F"><span class="post-toc-text">真值函数——亦或不是？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%A9%BA%E6%B4%9E%E6%9C%89%E6%95%88"><span class="post-toc-text">空洞有效</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%80%BB%E8%BE%91%E5%B7%A5%E5%85%B7%E7%9A%84%E6%81%B0%E5%BD%93%E6%80%A7"><span class="post-toc-text">逻辑工具的恰当性</span></a></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><p>符号给困难问题带来的明晰性，使得任何掌握这些符号可能遇到的麻烦都是值得的</p>
+<h3 id="有效性：从什么可以推出什么？"><a href="#有效性：从什么可以推出什么？" class="headerlink" title="有效性：从什么可以推出什么？"></a>有效性：从什么可以推出什么？</h3><p>大多数人喜欢自认为是有逻辑性的，没逻辑通常是一种批评。</p>
+<p>逻辑即根据 <code>已知</code> 进行 <code>推理</code>，以及判断这种推理是否合理，或者说 <code>valid</code> 有效</p>
+<h4 id="两种有效推断"><a href="#两种有效推断" class="headerlink" title="两种有效推断"></a>两种有效推断</h4><ul>
+<li><p>_deductively valid_，演绎有效的：前提为真，则结论一定为真</p>
+<ul>
+<li>反过来，结论为假则前提必为假</li>
+</ul>
+</li>
+<li><p>_inductively valid_，归纳有效的：前提为真，则结论有可能为真，但也可能为假</p>
+<ul>
+<li>上面的反过来在此不成立</li>
+</ul>
+</li>
+<li><p>以及无效推理</p>
+</li>
+</ul>
+<blockquote>
+<p>除非特别说明，“有效”以后就指“演绎有效”。</p>
+</blockquote>
+<h4 id="情形"><a href="#情形" class="headerlink" title="情形"></a>情形</h4><p>有效性更进一步的解释是：</p>
+<ul>
+<li>在所有前提为真的情形，结论都为真</li>
+<li>换句话说，不存在前提为真而结论不为真的情形</li>
+</ul>
+<p>假定上面的解释是正确的，假定我们可以分辨有效与无效，由于我们不可能考察所有的情形，所以判断正确仍需要某种特别的规则</p>
+<p>英语中语法是否有效由人为规定，逻辑有效的规则天生存在吗？我们通常用自己的直觉判断有效性，但直觉不总是对的，我们需要借助一些数学工具</p>
+<h3 id="真值函数——亦或不是？"><a href="#真值函数——亦或不是？" class="headerlink" title="真值函数——亦或不是？"></a>真值函数——亦或不是？</h3><p>真值函数的取值只有真假，没有中间项。</p>
+<ul>
+<li>_disjunction_：或式，松散的结构，任取一项为真即真</li>
+<li>_negation_：否定</li>
+<li>_conjunction_：与式，紧密的结构，需要同时考虑所有项</li>
+</ul>
+<p>为判断推断是否有效，只需考虑前提为真结论是否为真即可。例如：</p>
+<ul>
+<li>$q &#x2F;q∨p$ 有效</li>
+</ul>
+<a href="/2024/09/02/%E9%80%9A%E8%AF%86%20%E9%80%BB%E8%BE%91%E5%AD%A6%E7%AE%80%E7%9F%AD%E5%85%A5%E9%97%A8/Pasted%20image%2020240902165631.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/02/%E9%80%9A%E8%AF%86%20%E9%80%BB%E8%BE%91%E5%AD%A6%E7%AE%80%E7%9F%AD%E5%85%A5%E9%97%A8/Pasted%20image%2020240902165631.png" class title="Pasted image 20240902165631.png"></a>
+
+<ul>
+<li>$q∨p,¬q &#x2F; p$ 有效<ul>
+<li>多个前提则需要取其与式</li>
+</ul>
+</li>
+</ul>
+<a href="/2024/09/02/%E9%80%9A%E8%AF%86%20%E9%80%BB%E8%BE%91%E5%AD%A6%E7%AE%80%E7%9F%AD%E5%85%A5%E9%97%A8/Pasted%20image%2020240902170222.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/02/%E9%80%9A%E8%AF%86%20%E9%80%BB%E8%BE%91%E5%AD%A6%E7%AE%80%E7%9F%AD%E5%85%A5%E9%97%A8/Pasted%20image%2020240902170222.png" class title="Pasted image 20240902170222.png"></a>
+
+<h4 id="空洞有效"><a href="#空洞有效" class="headerlink" title="空洞有效"></a>空洞有效</h4><ul>
+<li>$q,¬q&#x2F;p$</li>
+</ul>
+<a href="/2024/09/02/%E9%80%9A%E8%AF%86%20%E9%80%BB%E8%BE%91%E5%AD%A6%E7%AE%80%E7%9F%AD%E5%85%A5%E9%97%A8/Pasted%20image%2020240902170343.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/02/%E9%80%9A%E8%AF%86%20%E9%80%BB%E8%BE%91%E5%AD%A6%E7%AE%80%E7%9F%AD%E5%85%A5%E9%97%A8/Pasted%20image%2020240902170343.png" class title="Pasted image 20240902170343.png"></a>
+
+<p>这个推断的前提永远为假，然鹅这也符合我们对有效的定义：没有一个前提为真时，结论为假的情形。这种有效被称为 <em>vacuously</em> 空洞有效。</p>
+<p><code>前提永远为假，那么无论得出什么结论，这个推断逻辑都可以是有效合理的</code></p>
+<h4 id="逻辑工具的恰当性"><a href="#逻辑工具的恰当性" class="headerlink" title="逻辑工具的恰当性"></a>逻辑工具的恰当性</h4><p>a∧b 和 b ∧a 看起来带来完全相同的结果，但是在语言中并不总是如此：</p>
+<ul>
+<li>约翰撞了头，且跌倒了。</li>
+<li>约翰跌倒了，且撞了头。</li>
+</ul>
+<p>当第二句为假时第一句也可以为真，反之亦然。或也有类似的问题</p>
+<p>所以我们的逻辑工具并不总是恰当的，例如此处的真值函数</p>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-02</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/%E9%80%9A%E8%AF%86/'>
+                            通识
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
