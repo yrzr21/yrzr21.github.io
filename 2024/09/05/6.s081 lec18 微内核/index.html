@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec18 微内核" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec18 微内核
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OS-organization%EF%BC%9A%E5%BE%AE%E5%86%85%E6%A0%B8"><span class="post-toc-text">OS organization：微内核</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#monolithic-kernel"><span class="post-toc-text">monolithic kernel</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#micro-kernel-%E6%A6%82%E8%BF%B0%EF%BC%9AIPC-%E4%B8%8E-tiny-kernel"><span class="post-toc-text">micro kernel 概述：IPC 与 tiny kernel</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%BE%AE%E5%86%85%E6%A0%B8%E7%9A%84%E4%BC%98%E5%8A%BF%E4%B8%8E%E6%8C%91%E6%88%98"><span class="post-toc-text">微内核的优势与挑战</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#L4-micro-kernel"><span class="post-toc-text">L4 micro kernel</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="post-toc-text">系统调用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B%E9%97%B4%E5%88%87%E6%8D%A2"><span class="post-toc-text">线程间切换</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Pager"><span class="post-toc-text">Pager</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#IPC%E7%9A%84%E9%80%9F%E5%BA%A6"><span class="post-toc-text">IPC的速度</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#pipe%EF%BC%9Abuffered"><span class="post-toc-text">pipe：buffered</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Synchronized-IPC%EF%BC%9Aunbuffered"><span class="post-toc-text">Synchronized IPC：unbuffered</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%BE%AE%E5%86%85%E6%A0%B8%E7%9A%84OS%E6%9C%8D%E5%8A%A1"><span class="post-toc-text">微内核的OS服务</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#L4-Linux%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="post-toc-text">L4 Linux性能分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%80%A7%E8%83%BD"><span class="post-toc-text">性能</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%BE%AE%E5%86%85%E6%A0%B8%E6%B5%81%E8%A1%8C%E5%BA%A6"><span class="post-toc-text">微内核流行度</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%BE%AE%E5%86%85%E6%A0%B8%E6%80%9D%E6%83%B3"><span class="post-toc-text">微内核思想</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="OS-organization：微内核"><a href="#OS-organization：微内核" class="headerlink" title="OS organization：微内核"></a>OS organization：微内核</h2><p>一个完全值得思考的问题是，一个操作系统内核本身应该具备什么功能？内核可以看做是一种程序员的开发平台</p>
+<p>操作系统的传统实现方式以及应该具备的功能。</p>
+<h3 id="monolithic-kernel"><a href="#monolithic-kernel" class="headerlink" title="monolithic kernel"></a>monolithic kernel</h3><p>一个完成了各种事情的大的程序，它包含许多组件，例如fs；提供了许多接口，例如人以fd为代表的fs。</p>
+<ul>
+<li>monolithic kernel通常有着例如fs这样的强大<code>抽象</code>概念，实现了可移植的接口、隐蔽了复杂性、简化了应用程序、保护了硬件</li>
+<li>这种kernel的内部是<code>高度耦合</code>的，许多功能可以访问彼此的数据接口，简化了实现，但在崩溃时也会导致整个系统瘫痪</li>
+<li>它运行在 <code>Supervisor mode</code>，以最大的硬件权限在运行</li>
+</ul>
+<p>但他同样也存在一些缺点：</p>
+<ul>
+<li>高度耦合的复杂系统的<code>编程及其困难</code>，很容易就造出一个<code>bug与安全漏洞</code></li>
+<li>monolithic 内核倾向于发展所有的功能，这使得它非常通用，但<code>无法针对特定场景进行优化</code>。<ul>
+<li>很多步骤、很多功能完全是多余的</li>
+</ul>
+</li>
+<li>复杂系统必然会<code>削弱抽象能力</code>，因为应用程序需要遵循设计考虑。例如<ul>
+<li>一个进程只能wait子进程，而不能wait孙进程、其他不相关的进程</li>
+<li>无法直接修改其他进程的地址空间</li>
+<li>你想要在磁盘上快速展开B树，但fs并不知道这一件事，所以它做的很慢</li>
+</ul>
+</li>
+<li>另外，monolithic kernel的可扩展性很弱，你无法实时更改kernel的工作方式</li>
+</ul>
+<blockquote>
+<p>以上就是人们认为的monolithic kernel的问题。这些问题使得人们去思考操作系统的其他架构。这里有很多不同的想法，其中一些想法非常的激进，我们今天只会讨论其中的一种，也是现在非常流行的一种，这就是微内核，Micro kernel。</p>
+</blockquote>
+<h3 id="micro-kernel-概述：IPC-与-tiny-kernel"><a href="#micro-kernel-概述：IPC-与-tiny-kernel" class="headerlink" title="micro kernel 概述：IPC 与 tiny kernel"></a>micro kernel 概述：IPC 与 tiny kernel</h3><p>微内核的核心就是实现了IPC（Inter-Process Communication）以及线程和任务的tiny kernel，<code>它只提供了进程的抽象以及 IPC 进程间通信的方式</code>。</p>
+<p>例如fs这样的功能只会通过一个用户进程实现。假设 vi 需要读取一个文件，他会通过 IPC 和 fs 通信，fs与磁盘驱动程序通信，并返回数据</p>
+<blockquote>
+<p>内核中没有任何文件系统，没有任何设备驱动，没有网络协议栈，所有这些东西以普通用户进程在运行。所以这提供给你一种非常小的内核，以及相对少的代码去优化，你可以优化IPC，除此之外也没有别的东西了。</p>
+</blockquote>
+<a href="/2024/09/05/6.s081%20lec18%20%E5%BE%AE%E5%86%85%E6%A0%B8/image%2045.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec18%20%E5%BE%AE%E5%86%85%E6%A0%B8/image%2045.avif" class title="image 45.avif"></a>
+
+<blockquote>
+<p>微内核中的用户进程通过IPC通信，这在很多操作系统都存在。例如我现在运行的macOS，它就是一个普通的monolithic kernel，它也很好的支持用户进程通过IPC进行通信。所以用户进程通过内核内的IPC相互通信，这是一个成功的思想并且被广泛采用。</p>
+</blockquote>
+<h3 id="微内核的优势与挑战"><a href="#微内核的优势与挑战" class="headerlink" title="微内核的优势与挑战"></a>微内核的优势与挑战</h3><ul>
+<li>更小的内核使得更容易检查出bug，更加<code>安全</code>，能够验证os的正确性，例如seL4</li>
+<li>小内核容易被<code>优化</code></li>
+<li>小内核运行得更<code>快</code></li>
+<li>设计限制更少，程序更加自由<code>灵活</code></li>
+<li><code>模块化</code>内核功能，例如fs</li>
+<li>很多内核功能放在用户空间，这使得系统更加<code>健壮</code></li>
+<li>可以在微内核上模拟或者<code>运行多个os</code></li>
+</ul>
+<p>以上就是人们在微内核这条道路上期望得到的一些好处。当然，这里也有一些挑战。</p>
+<ul>
+<li>微内核的系统调用接口需要尽可能的简单，如何找到<code>系统调用的最小集</code>？</li>
+<li>kernel完全不知道例如fs，如何<code>开发用户空间实现os的其他部分功能</code>？</li>
+<li><code>IPC 足够快吗</code>？支撑得起大量进程间的通信吗？</li>
+</ul>
+<h3 id="L4-micro-kernel"><a href="#L4-micro-kernel" class="headerlink" title="L4 micro kernel"></a>L4 micro kernel</h3><ul>
+<li>L4微内核只有 <code>7</code> 个系统调用，作为对比，linux有三百多个系统调用</li>
+<li>它只包含 <code>4</code> 个非常基础的抽象：<ul>
+<li><code>Task</code> 或者 <code>地址空间</code>：包含了一些内存，地址从0开始，并且可以像进程一样执行指令，每个Task可以有多个 <code>线程</code>，L4会调度每个Task内的多个线程的执行</li>
+<li><code>IPC</code>：每一个线程都有一个标识符，其中一个线程可以说，我想要向拥有这个标识符的另一个线程发送几个字节</li>
+</ul>
+</li>
+</ul>
+<h4 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h4><ul>
+<li><code>Threadcreate</code>：提供一个地址空间ID并要求创建一个新的线程<ul>
+<li>如果地址空间或者Task不存在，系统调用会创建一个新的Task</li>
+</ul>
+</li>
+<li><code>Send/Recv IPC</code>系统调用</li>
+<li><code>Mapping</code>：映射内存page到当前或其他Task的地址空间中<ul>
+<li>这实际上是通过IPC完成的，你会发送一个特殊的IPC消息到目标线程，内核可以识别这个IPC消息，并会修改目标线程的地址空间。如果有足够的权限。</li>
+<li>通常的流程是：<ul>
+<li>先调用Threadcreate系统调用来创建新的线程，新的Task和地址空间</li>
+<li>你创建一个特殊 IPC，将你自己内存中的一部分，其中包含了指令和数据，映射到新的Task的地址空间中。</li>
+<li>之后你再发送一个特殊的Start IPC消息到这个新的Task，其中包含了你期望新的Task开始执行程序的PC和Stack Pointer。</li>
+<li>新的Task会在你设置好的内存中，从你要求的程序计数器位置开始执行。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>Privileged Task</code>可以将硬件控制寄存器映射到自己的地址空间中。</li>
+<li>可以设置L4将任何一个设备的<code>中断转换成IPC消息</code></li>
+<li>一个Task可以设置L4内核<code>通知</code>自己有关另一个Task的<code>Page Fault</code><ul>
+<li>通过它可以实现类似copy-on-write fork或者lazy allocation。</li>
+</ul>
+</li>
+</ul>
+<h4 id="线程间切换"><a href="#线程间切换" class="headerlink" title="线程间切换"></a>线程间切换</h4><p>L4能提供的一件事情是完成线程间切换，进行线程调度和context switch</p>
+<ul>
+<li>为每个Task保存寄存器，切换到那个线程对应Task的Page Table</li>
+<li>定时器是L4知道的一个设备，定时器中断会使代码执行返回到L4内核</li>
+<li>选择一个Task来运行，恢复寄存器并切换PT</li>
+</ul>
+<h4 id="Pager"><a href="#Pager" class="headerlink" title="Pager"></a>Pager</h4><p>Pager Task可以实现基于Page Fault的各种技巧。</p>
+<p>如果一个进程触发了Page Fault，通过trap走到了内核，内核会将Page Fault转换成IPC消息并发送到指定的Pager Task，并告诉Pager Task是哪个线程的哪个地址触发了Page Fault。</p>
+<ul>
+<li>在Pager Task中，如果它实现了lazy allocation，那么它会负责从L4分配一些内存，向触发Page Fault的Task发送一个特殊的IPC，来恢复程序的运行。</li>
+</ul>
+<h3 id="IPC的速度"><a href="#IPC的速度" class="headerlink" title="IPC的速度"></a>IPC的速度</h3><h4 id="pipe：buffered"><a href="#pipe：buffered" class="headerlink" title="pipe：buffered"></a>pipe：buffered</h4><p>一种 IPC 设计基于Unix Pipe，非常简单但也很慢</p>
+<blockquote>
+<p>在实际中，几乎很少情况你会只想要发送一个消息，你几乎总是想要能再得到一个回复。这是RPC的用武之地</p>
+</blockquote>
+<p>举个例子：</p>
+<ul>
+<li>P1在调用完send系统调用之后，send会从用户空间将消息逐字节地拷贝到内核的缓存中</li>
+<li>过了一会，P2调用recv系统调用，这个系统调用会返回发送消息线程的ID，并将消息从内核拷贝到P2的内存中。</li>
+<li>如果P1要完成一次完整的消息发送和接收，那么可以假设有两个buffer，一个用来发送消息，一个用来接收消息</li>
+</ul>
+<blockquote>
+<p>这种方式被称为异步传输，也被称作是buffered system</p>
+</blockquote>
+<p>在一个单核系统中，这样的设计为了让消息能够发送和回复，将要包含：</p>
+<ul>
+<li>4个系统调用：两个send，两个recv</li>
+<li>对应8次用户空间内核空间之间的切换，而每一次切换明显都会很慢</li>
+<li>在recv的时候，需要通过sleep来等待数据出现</li>
+<li>并且需要至少一次线程调度和context switching来从P1切换到P2</li>
+</ul>
+<p>每一次用户空间和内核空间之间的切换和context switching都很费时，都需要切换PT、清空TLB。此外消息的拷贝、缓存的分配也很费时</p>
+<h4 id="Synchronized-IPC：unbuffered"><a href="#Synchronized-IPC：unbuffered" class="headerlink" title="Synchronized IPC：unbuffered"></a>Synchronized IPC：unbuffered</h4><p>P1的send会等待P2调用recv，当P1和P2都到达了内核中，这时才会发生一些事情。</p>
+<ul>
+<li><code>优点</code>：内核可以直接将消息从用户空间P1拷贝到用户空间P2，而不用先拷贝到内核中，再从内核中拷出来。</li>
+<li>如果<code>消息超级小</code>，比如说只有几十个字节，它可以在寄存器中传递，而不需要拷贝，你可以称之为<code>Zero Copy</code>。<ul>
+<li>当然切换到内核空间还是有损耗，且需要一次内存读取</li>
+</ul>
+</li>
+<li>对于<code>非常长的消息</code>，L4可以在一个IPC消息中携带一个Page映射，共享部分地址空间</li>
+<li><code>RPC</code>：减少一半的内核用户空间切换<ul>
+<li>在消息的接收端，会有一个sendrecv系统调用将回复发出，之后等待来自任何人的request消息。</li>
+<li>发送端有一个call系统调用，它基本上结合了send和recv。收到response后返回到用户</li>
+<li>发送response与发送request是同一个代码路径，只是方向相反</li>
+</ul>
+</li>
+</ul>
+<p>从P2的角度来看，就像是从recv中返回一样，完全不需要context switching、保存寄存器等等缓慢的操作</p>
+<p>这种方式也被称为unbuffered。它不需要buffer一部分原因是因为它是同步的。</p>
+<h3 id="微内核的OS服务"><a href="#微内核的OS服务" class="headerlink" title="微内核的OS服务"></a>微内核的OS服务</h3><p>——我们该怎么处理操作系统剩下的部分？</p>
+<blockquote>
+<p>实际上在一些特殊的应用场合，以上的问题并不是问题，例如车里的点火控制器完全不需要fs。</p>
+</blockquote>
+<p>一种可能是，重新以微内核的方式，以大量的进程实现所有的内容。</p>
+<blockquote>
+<p>这涉及到大量的工作，需要提供相同的系统调用或者更高层的服务接口，完全兼容一些现有的操作系统</p>
+</blockquote>
+<p>另一种方式是，<code>将一个现有的 monolithic kernel 运行在微内核之上</code>，现在Linux kernel是一个用户空间进程。</p>
+<p>需要对Linux的底层做一些修改，以将它们改成调用L4微内核的系统调用，或者发送IPC，而不是直接访问硬件。</p>
+<blockquote>
+<p>例如Linux中期望能直接修改Page Table的内容，读写CPU寄存器。</p>
+<p>Linux的大部分内容都可以不做修改而直接运行。所以按照这种方式，作为Linux的一部分，现在得到了文件系统，网络支持，各种设备驱动等等，而不需要自己实现这些。</p>
+<p>所有的程序都以为它们运行在Linux中</p>
+</blockquote>
+<ul>
+<li>Linux不会直接修改进程的Page Table，而是会向L4发送正确的IPC让L4来修改进程的Page Table。</li>
+<li>对于Linux进程，会有一个小的库与之关联，这个库会将类似于fork，exec，pipe，read，write的系统调用，转换成发送到Linux kernel Task的IPC消息，并等待Linux kernel Task的返回，然后再返回到进程中。</li>
+</ul>
+<p>这意味着，如果Linux kernel Task没有做其他事情的话，它会在一个recv系统调用中等待接收从任何一个进程发来的下一个系统调用请求IPC。这导致了这里的Linux和普通的Linux明显不同的工作方式，普通linux的内核线程与每个进程是一对一关系，这里的Linux kernel运行在一个L4线程中</p>
+<a href="/2024/09/05/6.s081%20lec18%20%E5%BE%AE%E5%86%85%E6%A0%B8/image%2046.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec18%20%E5%BE%AE%E5%86%85%E6%A0%B8/image%2046.avif" class title="image 46.avif"></a>
+
+<p>但是哪个用户进程可以运行，是由L4决定的。所以在这里的设置中，Linux kernel或许在内核线程中执行来自VI的系统调用，同时，L4又使得Shell在用户空间运行了。这在XV6或者Linux极不可能发生，在这两个系统中，活跃的内核线程和用户进程有直接的对应关系，而L4会运行它喜欢的任何Task。</p>
+<blockquote>
+<p>你或许会想知道为什么不直接使用L4线程来实现Linux内的内核线程，或者说Linux为什么要实现自己内部的内核线程，而不是使用L4线程，答案是，</p>
+<ul>
+<li><p>在论文发表时，还没有用到多核CPU硬件，他们使用的是单核CPU硬件。所以在内核中同时运行多个内核线程并没有性能优势，因为只有一个CPU核，所以第二个线程不能执行，由于硬件的限制，一次只能执行一个线程。</p>
+</li>
+<li><p>另一个或许是更强大的原因是，在论文发表时，他们使用的Linux版本并不支持将Linux kernel运行在多个CPU核上。所以他们使用的是旧版本的单核Linux，一次只能期望在内核中使用一个CPU，它并没有类似于XV6的spinlock，可以使得它能正确的在内核中使用多核。所以在Linux内核中使用多个L4线程并没有性能优势。如果一定要使用的话，在没有性能优势的前提下，又需要加入spinlock和其他的内容来支持并发。所以论文中没有在Linux内核使用L4线程。</p>
+</li>
+</ul>
+</blockquote>
+<p>这种架构的一个缺点是，Linux完全控制不了哪些进程可以运行，因为现在是L4而不是Linux在完成调度，这些进程都是被L4所调度。</p>
+<blockquote>
+<p>我相信L4的后续版本有一些方法能够让Linux通知L4调度器，来给某个进程更高优先级等等。</p>
+</blockquote>
+<h3 id="L4-Linux性能分析"><a href="#L4-Linux性能分析" class="headerlink" title="L4 Linux性能分析"></a>L4 Linux性能分析</h3><h4 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h4><a href="/2024/09/05/6.s081%20lec18%20%E5%BE%AE%E5%86%85%E6%A0%B8/Pasted%20image%2020240905164318.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec18%20%E5%BE%AE%E5%86%85%E6%A0%B8/Pasted%20image%2020240905164318.png" class title="Pasted image 20240905164318.png"></a>
+
+<p>论文的表二做了性能对比，运行在硬件上的原生Linux执行一个简单的系统调用getpid花费1.7us，对于上一节的实现，需要发送一个IPC request，并获取一个IPC response，以实现getpid系统调用，这需要花费接近4us，这是原生Linux的两倍多。主要是因为这里有两倍的工作，这里涉及到两次用户空间到内核空间的切换，而不是一个简单的系统调用。这也说明L4已经将这种基于IPC的系统调用的代价降到了最低，也就是2倍于一个原生Linux的系统调用。因此，它可以做的大概与你期望的一样好。</p>
+<p>当然这里的系统调用仍然只有原生Linux一半的速度。现在还不清楚这是否是一个灾难，还是说并没有问题。如果你执行大量的系统调用或许就是个问题；如果你执行了相对较少的系统调用，或者系统调用本身就有很多工作，或者你的系统调用比getpid要复杂的多，这又或许不是个问题。论文中通过使用AIM做的测试结果，给出了答案。测试结果在论文的图8。</p>
+<a href="/2024/09/05/6.s081%20lec18%20%E5%BE%AE%E5%86%85%E6%A0%B8/Pasted%20image%2020240905164521.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec18%20%E5%BE%AE%E5%86%85%E6%A0%B8/Pasted%20image%2020240905164521.png" class title="Pasted image 20240905164521.png"></a>
+
+<p>AIM会执行各种系统调用，例如read&#x2F;write文件，创建进程等等。从图8可以看出，在AIM设置的一个更完整的应用中，基于L4的Linux之比原生Linux慢几个百分点。因此，理想情况下你可以期望你想要运行在计算机上行的应用，如果在L4+Linux上运行可以与运行在原生操作系统上一样快。因为可以以近似原生Linux的速度运行，所以你们现在应该认真对待微内核。图8是一个非常不错的结果，有点超出预期。</p>
+<h4 id="微内核流行度"><a href="#微内核流行度" class="headerlink" title="微内核流行度"></a>微内核流行度</h4><p>让时间快进20年，如果之前所说，现在人们实际上在一些嵌入式系统中使用L4，尤其在智能手机里有很多L4实例在运行，它们与Unix并没有兼容性。在一些更通用的场景下，像是工作站和服务器， 微内核从来没有真正的流行过，并不是因为这里的设计有什么问题，只是为了能够吸引一些软件，微内核需要做的更好，这样人们才会有动力切换到微内核。</p>
+<p>对于人们来说很难决定微内核是否足够好，这样才值得让他们经历从现在正在运行的Linux或者其他系统迁移到微内核的所需要的各种麻烦事。所以，微内核从来没有真正流行过，因为它们并没有明显的更好。</p>
+<h4 id="微内核思想"><a href="#微内核思想" class="headerlink" title="微内核思想"></a>微内核思想</h4><p>另一方面来看，微内核的很多思想都有持久的影响。</p>
+<ul>
+<li><p>人们实现了更加灵活和有趣的方法来在微内核上使用虚拟内存。这些复杂的多的接口导致了mmap这样的系统调用合并到了例如Linux的主流操作系统中。</p>
+</li>
+<li><p>论文中将一个操作系统作为一个用户程序运行另一个操作系统之上，今天以另一种方式非常流行的存在：在Virtual Machine Monitor上运行虚拟机。这种方式在各种场景，例如云主机上，都有使用。</p>
+</li>
+<li><p>为了让内核能够具有一个用户空间服务一样的可扩展性，在Linux中演进成了可加载的内核模块，这使得你可以在线修改Linux的工作方式。</p>
+</li>
+<li><p>当然，这里基于IPC的Client-Server支持，也在macOS有所体现，macOS中也有好用的IPC。</p>
+</li>
+</ul>
+<blockquote>
+<p>学生提问：看起来一些任务更适合在内核中，但是内核的方案中，要么所有东西都在内核要么都不在。所以要么你有一个monolithic kernel可以完成所有的事情，要么有个micro kernel什么也不做。我认为虚拟内存、文件系统和一些其他的事情在内核中做会非常的有效。不能有些系统具备有一些功能，然后你又可以选择用不用这些功能吗？</p>
+<p>Robert教授：所有你说的都有非常有道理。实际上有很多微内核相关的项目都构建了各种hybrid内核，MACH有一些不同的版本，其中一些就是hybrid内核，这些内核的核心是包括了IPC的微内核，同时在内核中又是一个完整的Unix系统，比如MACH 2.5就是这样一个hybrid内核，其中一些东西是按照微内核的方式构建，一些东西又是按照Unix方式构建。现代的macOS也以与你描述类似的方式构建，macOS本身是个完整的操作系统，包含了文件系统，同时也很好的支持了IPC和其他用来构建微内核的东西。Google Fuchsia也实现了一些这里的想法。</p>
+</blockquote>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-05</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
