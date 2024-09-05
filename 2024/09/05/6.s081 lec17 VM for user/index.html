@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec17 VM for user" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec17 VM for user
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#VM-for-user"><span class="post-toc-text">VM for user</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#user-%E6%89%80%E9%9C%80%E7%9A%84VM%E7%89%B9%E6%80%A7"><span class="post-toc-text">user 所需的VM特性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#syscall-for-user-VM"><span class="post-toc-text">syscall for user VM</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#mmap"><span class="post-toc-text">mmap</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Anonymous-Memory"><span class="post-toc-text">Anonymous Memory</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#munmap"><span class="post-toc-text">munmap</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#mprotect"><span class="post-toc-text">mprotect</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sigaction"><span class="post-toc-text">sigaction</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%8E%E7%89%B9%E6%80%A7%E7%9A%84%E5%AF%B9%E5%BA%94"><span class="post-toc-text">与特性的对应</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#VM-for-user-%E5%AE%9E%E7%8E%B0%E5%9F%BA%E7%A1%80"><span class="post-toc-text">VM for user 实现基础</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#VMAs"><span class="post-toc-text">VMAs</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#User-level-trap"><span class="post-toc-text">User level trap</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#VM-for-user%EF%BC%9Aapplication"><span class="post-toc-text">VM for user：application</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BC%93%E5%AD%98%E8%A1%A8"><span class="post-toc-text">缓存表</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Garbage-Collector"><span class="post-toc-text">Garbage Collector</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#copying-GC"><span class="post-toc-text">copying GC</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Baker-s-Real-Time-GC"><span class="post-toc-text">Baker&#96;s Real-Time GC</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#VM-GC"><span class="post-toc-text">VM GC</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#VM-GC-1"><span class="post-toc-text">VM GC</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%9F%BA%E6%9C%ACidea"><span class="post-toc-text">基本idea</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#VM%EF%BC%9A%E7%AE%80%E5%8C%96GC%E5%B9%B6%E5%8F%91"><span class="post-toc-text">VM：简化GC并发</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#map2"><span class="post-toc-text">map2</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#code-%E7%A4%BA%E4%BE%8B%EF%BC%88%E7%95%A5%EF%BC%89"><span class="post-toc-text">code 示例（略）</span></a></li></ol></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="VM-for-user"><a href="#VM-for-user" class="headerlink" title="VM for user"></a>VM for user</h2><p>用户应用程序也应该从灵活的虚拟内存中获得收益：使用与内核相同的机制，来产生Page Fault并响应Page Fault。为此，用户User Mode需要能够修改PTE的RW位</p>
+<blockquote>
+<p>今天的话题是用户应用程序使用的虚拟内存，它主要是受这篇1991年的<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2020/readings/appel-li.pdf">论文</a>的启发。论文通过查看6-7种不同的应用程序，来说明用户应用程序使用虚拟内存的必要性。这些应用程序包括了：<br>Garbage Collector、Data Compression Application、Shared Virtual Memory</p>
+</blockquote>
+<h3 id="user-所需的VM特性"><a href="#user-所需的VM特性" class="headerlink" title="user 所需的VM特性"></a>user 所需的VM特性</h3><ul>
+<li>user mode 需要可以感知到 page fault，并做出相应的回应，即 <code>trap</code></li>
+<li>user 需要可以提升和降低 pte 的RW权限，即 <code>Prot1</code> 和 <code>Unprot</code></li>
+<li>需要可以查看内存是否被修改，即 <code>dirty</code></li>
+<li>需要可以重复映射某处内存，即 <code>map2</code></li>
+<li>每次修改虚拟内存权限后都需要flus TLB，需要有一种方法一次性flush 所有的 TLB，即 <code>ProtN</code><ul>
+<li>ProtN 均摊了N个Prot1的损耗，损耗 &#x3D; 修改PTE+一次flush，而非N次flush</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>如今这些特性都已经在现代的Unix系统中广泛支持了</p>
+</blockquote>
+<h3 id="syscall-for-user-VM"><a href="#syscall-for-user-VM" class="headerlink" title="syscall for user VM"></a>syscall for user VM</h3><h4 id="mmap"><a href="#mmap" class="headerlink" title="mmap"></a>mmap</h4><blockquote>
+<p>memory mapped file</p>
+</blockquote>
+<a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902030914.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902030914.png" class title="Pasted image 20240902030914.png"></a>
+
+<p>将某个文件（fd）的从指定偏移量（offset）开始的指定长度（length）的数据映射到指定的 addr，可以指定权限（prot）</p>
+<blockquote>
+<p>addr填0则系统会自动分配并返回地址。不填0系统也会评估映射到指定地址的合理性，并选择是否映射到该地址</p>
+</blockquote>
+<blockquote>
+<p>The <code>flags</code> argument determines whether updates to the mapping are visible to other processes mapping the same region, and whether updates are carried through to  the  underlying  file. This behavior is determined by including exactly one of the following values in flags: MAP_SHARED 等</p>
+</blockquote>
+<p>进而只需要方便的通过普通的指针操作，而不用调用read&#x2F;write系统调用，就可以从磁盘读写文件内容。</p>
+<h5 id="Anonymous-Memory"><a href="#Anonymous-Memory" class="headerlink" title="Anonymous Memory"></a>Anonymous Memory</h5><p>除了可以映射文件之外，还可以用来映射匿名的内存，即fd填-1，表示分配一段匿名内存</p>
+<p>这是 <code>sbrk</code> 的替代方案，你可以向内核申请物理内存，然后映射到特定的虚拟内存地址。</p>
+<h5 id="munmap"><a href="#munmap" class="headerlink" title="munmap"></a>munmap</h5><blockquote>
+<p>memory unmap</p>
+</blockquote>
+<a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902032439.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902032439.png" class title="Pasted image 20240902032439.png"></a>
+
+<p>取消某部分虚拟内存的映射</p>
+<h4 id="mprotect"><a href="#mprotect" class="headerlink" title="mprotect"></a>mprotect</h4><blockquote>
+<p>modify protect，set protection on a region of memory</p>
+</blockquote>
+<a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902032041.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902032041.png" class title="Pasted image 20240902032041.png"></a>
+
+<p>修改从某个虚拟地址开始的指定长度的虚拟内存的权限</p>
+<blockquote>
+<p>但这是在<code>page粒度</code>工作，任何包含指定范围地址的pte都会被修改为指定权限</p>
+</blockquote>
+<h4 id="sigaction"><a href="#sigaction" class="headerlink" title="sigaction"></a>sigaction</h4><a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902032752.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902032752.png" class title="Pasted image 20240902032752.png"></a>
+
+<p>为特定的信号相应做出特定的处理，例如用一个函数处理 segfault 信号，而非杀死程序</p>
+<blockquote>
+<p>此时，通常需要修复Page Table，例如通过调用mprotect</p>
+<p>之前实验中的 sigalarm 与这个很相似，但这个更通用</p>
+</blockquote>
+<h4 id="与特性的对应"><a href="#与特性的对应" class="headerlink" title="与特性的对应"></a>与特性的对应</h4><blockquote>
+<p>trap：sigaction<br>Prot1，ProtN和Unprot：mprotect<br>map2：多次调用 mmap<br>Dirty：并没有一个直接的系统调用实现这个特性，不过你可以使用一些技巧完成它，稍后会介绍它。</p>
+</blockquote>
+<h3 id="VM-for-user-实现基础"><a href="#VM-for-user-实现基础" class="headerlink" title="VM for user 实现基础"></a>VM for user 实现基础</h3><h4 id="VMAs"><a href="#VMAs" class="headerlink" title="VMAs"></a>VMAs</h4><p>地址空间由硬件Page Table来体现的，此外还包含一些os相关的数据结构，统称为Virtual Memory Areas（<code>VMAs</code>），它们会记录一些有关连续虚拟内存地址段的信息</p>
+<blockquote>
+<p>信息例如：文件的权限，文件描述符，文件的offset等</p>
+</blockquote>
+<p>每个VMA对象对应一个连续地址的 <code>section</code>，每个section内部的所有page的 <code>权限</code> 一致</p>
+<blockquote>
+<p>你可以在VMA中记录mmap系统调用参数中的文件描述符和offset</p>
+</blockquote>
+<h4 id="User-level-trap"><a href="#User-level-trap" class="headerlink" title="User level trap"></a>User level trap</h4><ul>
+<li>user 尝试操作某个地址，引发page fault跳转到kernel</li>
+<li>内核调用page fault的handler，返回到用户空间执行handler</li>
+<li>handler 返回到内核，内核恢复原先的用户上下文执行<ul>
+<li>如果出错还会再次进入内核</li>
+</ul>
+</li>
+</ul>
+<p>这并不会破坏任何隔离性，我们的接口只允许用户直接操作vm，而没有直接操纵任何与之相关的pte与pa，接口是否可以被执行需要经过一系列检查</p>
+<h3 id="VM-for-user：application"><a href="#VM-for-user：application" class="headerlink" title="VM for user：application"></a>VM for user：application</h3><h4 id="缓存表"><a href="#缓存表" class="headerlink" title="缓存表"></a>缓存表</h4><p>什么是缓存表？它是用来记录一些运算结果的表单。</p>
+<blockquote>
+<p>例如记录一个费时函数的从0到n参数的计算结果，这是一种 <code>预计算</code> 的方式</p>
+</blockquote>
+<p>缓存表可能会非常巨大，这里便可以使用VM：</p>
+<ul>
+<li>指定表单占用一个巨大的虚拟地址段<ul>
+<li>但pte并未被初始化，无pa分配以及对应</li>
+</ul>
+</li>
+<li>请求某个参数的计算结果时，会根据表单查找到某个地址，此时触发 page fault</li>
+<li>分配一个页，设置pte，计算页中所有项的结果</li>
+<li>最后恢复原程序</li>
+</ul>
+<p>即便如此物理内存人可能会耗尽，此时需要 <code>回收</code> 某个page，修改他们的 pte</p>
+<h4 id="Garbage-Collector"><a href="#Garbage-Collector" class="headerlink" title="Garbage Collector"></a>Garbage Collector</h4><blockquote>
+<p>GC是指编程语言替程序员完成内存释放，这样程序员就不用像在C语言中一样调用free来释放内存。程序员只需要调用类似malloc的函数来申请内存，但是又不需要担心释放内存的过程。</p>
+<p>Java，Python，Golang 都有GC，即几乎除了C和Rust，其他所有的编程语言都带有GC。</p>
+</blockquote>
+<h5 id="copying-GC"><a href="#copying-GC" class="headerlink" title="copying GC"></a>copying GC</h5><p>将内存空间划分为两部分，from和to。程序从from空间中申请了一些内存，并分配形成了如下图所属的树形对象指向关系，每个对象可能包含指向另一个对象的指针。</p>
+<p>在from空间耗尽时，copying GC的思路是停止程序的运行，然后将正在使用的对象全部拷贝到to空间去</p>
+<ul>
+<li>首先通过根指针找到根对象，将它拷贝到to空间。此时它的指针还是指向from空间的对象</li>
+<li>然后通过指针找到它指向的对象，拷贝到to空间，并更新原指针指向to空间的对象。</li>
+<li>然后在原来的from空间中留下一个 <code>forwarding</code> 指针，指向拷贝到to空间的对象</li>
+<li>在继续向to空间拷贝对象时，发现它指向的from空间的对象处是一个forwarding指针，于是更新它指向to空间的对象</li>
+</ul>
+<p>在所有的from空间中的正在使用的对象被拷贝到to中后，原来的一切即可被丢弃（包括forwarding 指针），于是from空间就变成了空闲区域</p>
+<p>现在恢复程序的运行</p>
+<a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/image%2042.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/image%2042.avif" class title="image 42.avif"></a>
+<h5 id="Baker-s-Real-Time-GC"><a href="#Baker-s-Real-Time-GC" class="headerlink" title="Baker`s Real-Time GC"></a>Baker`s Real-Time GC</h5><p>一种incremental GC，GC并不是一次做完，而是分批分步骤完成</p>
+<ul>
+<li>from空间耗尽时，只把根节点拷贝到to空间</li>
+<li>在申请新内存时，在to空间申请，并在from空间留下几个转发指针</li>
+<li>dereference 时可能会解引用到from空间的对象——这是不应该的，所以<code>编译器需要为其包装上一层检查</code>，如果属于from空间的话，会把对象拷贝到to空间，并留下一个forward指针</li>
+<li>在把from空间所有的对象forward完时，则可以继续重用from空间</li>
+</ul>
+<a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/image%2044.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/image%2044.avif" class title="image 44.avif"></a>
+
+<p>论文对于这里的方案提出了两个问题：</p>
+<ul>
+<li><p>第一个是每次dereference都需要有以上的额外步骤，每次dereference不再是对于内存地址的单个load或者store指令，而是多个load或者store指令，这增加了应用程序的开销。</p>
+</li>
+<li><p>第二个问题是并不能容易并行运行GC。如果程序运行在多核CPU的机器上，并且你拥有大量的空闲CPU，我们本来可以将GC运行在后台来遍历对象的图关系，并渐进的拷贝对象。但是如果应用程序也在操作对象，那么这里可能会有抢占。应用程序或许在运行dereference检查并拷贝一个对象，而同时GC也在拷贝这个对象。如果我们不够小心的话，我们可能会将对象拷贝两遍，并且最后指针指向的不是正确的位置。所以这里存在GC和应用程序race condition的可能。</p>
+</li>
+</ul>
+<h5 id="VM-GC"><a href="#VM-GC" class="headerlink" title="VM GC"></a>VM GC</h5><h4 id="VM-GC-1"><a href="#VM-GC-1" class="headerlink" title="VM GC"></a>VM GC</h4><h5 id="基本idea"><a href="#基本idea" class="headerlink" title="基本idea"></a>基本idea</h5><p>基本思想还是把数据从from空间拷贝到to空间，但是利用了可以使用虚拟内存来避免指针检查的损耗，同时仍是一个 incremental GC</p>
+<p>VM GC将一个空间划分为<code>scanned，unscanned</code>。开始时，任何空间中的页都是unscanned，用户没有任何权限</p>
+<ul>
+<li>开始GC时，将根节点拷贝到to空间，并标记from空间中的所有数据为unscanned<ul>
+<li>to空间中的根节点也是unscanned</li>
+</ul>
+</li>
+<li>尝试访问根节点时会触发page fault，handler会：<ul>
+<li>扫描这个节点所在页中的所有对象</li>
+<li>将其指向的对象转发（复制）到to空间的unscanned区域</li>
+<li>恢复原页中的所有对象的权限，标记其为scanned区域</li>
+</ul>
+</li>
+<li>恢复程序的运行</li>
+</ul>
+<a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902071319.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902071319.png" class title="Pasted image 20240902071319.png"></a>
+
+<h5 id="VM：简化GC并发"><a href="#VM：简化GC并发" class="headerlink" title="VM：简化GC并发"></a>VM：简化GC并发</h5><ul>
+<li>GC现在可以遍历未被扫描的内存Page，并且一次扫描一个Page，同时可以确保应用程序不能访问这个内存Page。这是一种显式的同步机制。<ul>
+<li>应用程序尝试访问unscaned page时即会被阻塞并调用handler</li>
+</ul>
+</li>
+<li>只有GC可以访问 unscaned Page，而应用程序只能访问 scanned page。<ul>
+<li>由于GC永远只会访问unscanned的页，二者永远会并行运行</li>
+</ul>
+</li>
+</ul>
+<h5 id="map2"><a href="#map2" class="headerlink" title="map2"></a>map2</h5><p>有一个问题：GC怎么访问无权限的unscanned页？mmap，两种权限不同的PTE。GC的视角中，我们仍然有from和to空间。在to空间的unscanned区域中，Page具有读写权限。</p>
+<a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902073654.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902073654.png" class title="Pasted image 20240902073654.png"></a>
+
+<h5 id="code-示例（略）"><a href="#code-示例（略）" class="headerlink" title="code 示例（略）"></a>code 示例（略）</h5><blockquote>
+<p>为了更清晰的说明上一节的内容，这里有个针对论文中方法的简单实现，可以肯定它包含了一些bug，因为我们并没有认真的测试它。</p>
+</blockquote>
+<p>应用程序线程的工作是循环1000次，每次创建list，再检查list，这回产生大量的垃圾：</p>
+<a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902113532.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902113532.png" class title="Pasted image 20240902113532.png"></a>
+
+<p>我们有两个API：new 和 readptr，在没有VM时他们会这样：</p>
+<a href="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902113730.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/05/6.s081%20lec17%20VM%20for%20user/Pasted%20image%2020240902113730.png" class title="Pasted image 20240902113730.png"></a>
+
+
+
+
+
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-05</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
