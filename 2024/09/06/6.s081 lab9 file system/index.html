@@ -4,7 +4,7 @@
     <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
-    <meta name="description" content="categories" />
+    <meta name="description" content="lab9 file system" />
     <meta name="hexo-theme-A4" content="v1.9.2" />
     <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
     <title>Toki</title>
@@ -140,11 +140,7 @@
             
         
             
-                <li><i>
-                    
-                        <a style="color: #4e7dde;" href="/categories/">分类</a>
-                    
-                </i></li>
+                <li><a href="/categories/">分类</a></li>
             
         
             
@@ -156,51 +152,106 @@
         
                     
                     
-                            <br>
-<span><span class="darkmode-ignore">🔖</span><i>categories</i></span>
-<ul class="" >
-  
-
-  
-
-  
-
-  
-  
-  
-  
-  
-      
-        <li class="">
-            <a href="/categories/14.01%20Microeconomics">14.01 Microeconomics</a>
-            <span><i>1</i></span>
-        </li>
-    
-        <li class="">
-            <a href="/categories/6.s081">6.s081</a>
-            <span><i>23</i></span>
-        </li>
-    
-        <li class="">
-            <a href="/categories/Manual">Manual</a>
-            <span><i>2</i></span>
-        </li>
-    
-        <li class="">
-            <a href="/categories/%E9%80%9A%E8%AF%86">通识</a>
-            <span><i>1</i></span>
-        </li>
-    
-    
-
-    
-</ul>
-                    
 
                     
                     
                     
                     <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lab9 file system
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Large-files"><span class="post-toc-text">Large files</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Symbolic-links-%E8%BD%AF%E9%93%BE%E6%8E%A5"><span class="post-toc-text">Symbolic links 软链接</span></a></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><p>在编写代码之前，应该阅读<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2023/xv6/book-riscv-rev3.pdf">xv6书中</a>的“第8章：文件系统”并研究相应的代码。</p>
+<h2 id="Large-files"><a href="#Large-files" class="headerlink" title="Large files"></a>Large files</h2><p>使用类似页表的结构，增加 xv6 文件的最大大小。下图的addr11改为一级间接块，addr12改为二级间接块</p>
+<a href="/2024/09/06/6.s081%20lab9%20file%20system/Pasted%20image%2020240827050527.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/06/6.s081%20lab9%20file%20system/Pasted%20image%2020240827050527.png" class title="Pasted image 20240827050527.png"></a>
+
+<p>最大大小 &#x3D; 11 + 256 + 256*256 &#x3D; 65308 块，约64MB</p>
+<ul>
+<li>需要特别注意宏：NDIRECT、NINDIRECT、MAXFILE，且可能需要修改上述宏</li>
+<li>需要添加一个宏 NDOUBLE_INDIRECT</li>
+<li>需要修改dinode以及inode的addrs[]</li>
+</ul>
+<p>查找磁盘块号通过bmap实现，它将一个相对块号转换为磁盘上的块号；注意修改释放文件块的 itrunc</p>
+<h2 id="Symbolic-links-软链接"><a href="#Symbolic-links-软链接" class="headerlink" title="Symbolic links 软链接"></a>Symbolic links 软链接</h2><p>实现：symlink(char *target, char *path)</p>
+<p>符号链接（或软链接）通过路径名引用链接文件，可以跨设备。但硬链接不行。</p>
+<p>软链接可能引用另一个软链接。还可能形成循环软链接。</p>
+<p><code>基本思路</code> 是：</p>
+<ul>
+<li>添加一个symlink系统调用，该syscall在path处创建一个文件，然后将target_path写入到该文件的数据块中<ul>
+<li>target_path比较小，完全可以存放到inode中，后续可以改下</li>
+</ul>
+</li>
+<li>添加文件类型定义：T_SYMLINK，添加最大深度定义：MAX_SYMLINK_DEPTH，添加文件打开模式：O_NOFOLLOW</li>
+<li>在 open 中需要对O_NOFOLLOW模式打开的T_SYMLINK文件做特殊处理，找到一个非软链接类型的文件<ul>
+<li>需要应对多级软链接和循环软链接的情形</li>
+</ul>
+</li>
+</ul>
+<p>在此过程中需要小心避免<code>死锁</code>，例如create返回的是带锁的inode</p>
+<p>巨坑：<code>strncpy</code> 复制时要加个1</p>
+<a href="/2024/09/06/6.s081%20lab9%20file%20system/Pasted%20image%2020240906141842.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/06/6.s081%20lab9%20file%20system/Pasted%20image%2020240906141842.png" class title="Pasted image 20240906141842.png"></a>
+
+
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-06</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
                     
                     
                     <div class="footer">
