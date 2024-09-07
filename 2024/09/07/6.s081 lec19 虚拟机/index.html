@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="lec19 虚拟机" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    lec19 虚拟机
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Virtual-Machine%EF%BC%9A%E4%B8%8D%E5%90%8C%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84OS"><span class="post-toc-text">Virtual Machine：不同视角下的OS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A6%82%E8%BF%B0"><span class="post-toc-text">虚拟机概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#why-virtual-machine"><span class="post-toc-text">why virtual machine?</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AF%B9%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E8%A6%81%E6%B1%82"><span class="post-toc-text">对虚拟机的要求</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#VMM%E6%9E%B6%E6%9E%84%EF%BC%9A%E4%B8%8D%E5%90%8C%E8%A7%86%E8%A7%92%E7%9A%84OS"><span class="post-toc-text">VMM架构：不同视角的OS</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%9E%84%E5%BB%BAVMM%EF%BC%9ATrap-and-Emulate"><span class="post-toc-text">构建VMM：Trap and Emulate</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Trap"><span class="post-toc-text">Trap</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Emulate"><span class="post-toc-text">Emulate</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Trap-and-Emulate-%E9%A3%8E%E6%A0%BC"><span class="post-toc-text">Trap and Emulate 风格</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Page-Table"><span class="post-toc-text">Page Table</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#gva%EF%BC%8Cgpa%EF%BC%8Chpa"><span class="post-toc-text">gva，gpa，hpa</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Shadow-Page-Table"><span class="post-toc-text">Shadow Page Table</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%80%A7%E8%83%BD"><span class="post-toc-text">性能</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Device"><span class="post-toc-text">Device</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%AD%96%E7%95%A51%EF%BC%9A%E6%A8%A1%E6%8B%9F%E8%AE%BE%E5%A4%87"><span class="post-toc-text">策略1：模拟设备</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%AD%96%E7%95%A52%EF%BC%9A%E8%99%9A%E6%8B%9F%E8%AE%BE%E5%A4%87"><span class="post-toc-text">策略2：虚拟设备</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%AD%96%E7%95%A53%EF%BC%9Apass-through"><span class="post-toc-text">策略3：pass-through</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%A1%AC%E4%BB%B6%E5%AF%B9%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E6%94%AF%E6%8C%81"><span class="post-toc-text">硬件对虚拟机的支持</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#why%EF%BC%9F"><span class="post-toc-text">why？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#root-non-root-mode"><span class="post-toc-text">root&#x2F;non-root mode</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Virtual-Machine-Control-Structure%EF%BC%9AVMCS"><span class="post-toc-text">Virtual Machine Control Structure：VMCS</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%8D%E9%9C%80root-mode%EF%BC%9F"><span class="post-toc-text">为什么仍需root mode？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%A1%B5%E8%A1%A8%EF%BC%9Acr3-EPT"><span class="post-toc-text">页表：cr3+EPT</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#DUNE%EF%BC%9ASafe-User-level-Access-to-Privileged-CPU-Features"><span class="post-toc-text">DUNE：Safe User-level Access to Privileged CPU Features</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#dune-%E6%A6%82%E8%BF%B0"><span class="post-toc-text">dune 概述</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BF%90%E8%A1%8C%E6%9C%AA%E8%A2%AB%E4%BF%A1%E4%BB%BB%E7%9A%84%E6%8F%92%E4%BB%B6%E4%BB%A3%E7%A0%81"><span class="post-toc-text">运行未被信任的插件代码</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GC"><span class="post-toc-text">GC</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="Virtual-Machine：不同视角下的OS"><a href="#Virtual-Machine：不同视角下的OS" class="headerlink" title="Virtual Machine：不同视角下的OS"></a>Virtual Machine：不同视角下的OS</h2><p>今天的内容包含三个部分:</p>
+<ul>
+<li>Trap and Emulate，这部分会介绍如何在RISC-V或者QEMU上构建属于自己的Virtual Machine Monitor（有些场合也称为Hypervisor）。</li>
+<li>第二部分会描述最近在硬件上对于虚拟化的支持。</li>
+<li>最后是讨论一下今天的<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2020/readings/belay-dune.pdf">论文</a>，它使用了第二部分中硬件上的支持。</li>
+</ul>
+<h3 id="虚拟机概述"><a href="#虚拟机概述" class="headerlink" title="虚拟机概述"></a>虚拟机概述</h3><p>虚拟机：模拟一个OS。其架构大致如下：</p>
+<a href="/2024/09/07/6.s081%20lec19%20%E8%99%9A%E6%8B%9F%E6%9C%BA/Pasted%20image%2020240906174639.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/07/6.s081%20lec19%20%E8%99%9A%E6%8B%9F%E6%9C%BA/Pasted%20image%2020240906174639.png" class title="Pasted image 20240906174639.png"></a>
+
+<ul>
+<li><code>Guest空间</code> 运行了一堆模拟的内核，每个内核之上运行了一堆用户进程<ul>
+<li>Guest空间又可以分为Guest Supervisor Mode&#x2F;Guest User Mode</li>
+<li>每个内核感觉自己就是普通的内核，windows&#x2F;linux&#x2F;…</li>
+</ul>
+</li>
+<li>其最底层的Virtual Machine Monitor（<code>VMM</code>）替代了原本的内核，和硬件交互</li>
+</ul>
+<h4 id="why-virtual-machine"><a href="#why-virtual-machine" class="headerlink" title="why virtual machine?"></a>why virtual machine?</h4><ul>
+<li>服务占用资源不多，但是又需要运行独立的OS</li>
+<li>虚拟机提供了额外的灵活性，一个服务器可以服务多个用户</li>
+<li>开发内核，容易调试</li>
+<li>利用VMM抽象实现更多功能，例如快照、安全迁移计算机</li>
+<li>隔离危险的软件</li>
+</ul>
+<h4 id="对虚拟机的要求"><a href="#对虚拟机的要求" class="headerlink" title="对虚拟机的要求"></a>对虚拟机的要求</h4><p>虚拟机都必须提供提供对于<code>硬件的完全相同的模拟</code>，这样任何在真实硬件上能工作的代码，也同样能在虚拟机中工作。</p>
+<blockquote>
+<p>实际中出于性能的考虑，这个目标很难达到。在VMM允许的前提下，Linux某些时候知道自己正在与VMM交互，以获得对于设备的高速访问权限。但这是一种被仔细控制的例外，实现虚拟机的大致策略还是完全准确的模拟物理服务器。</p>
+</blockquote>
+<p>除了不希望Guest能够发现自己是否运行在虚拟机中，我们也不希望Guest可以从虚拟机中逃逸，这需要非常严格的<code>隔离</code>。</p>
+<blockquote>
+<p>虚拟机在很多方面比普通的Linux进程提供了更加严格的隔离。Linux进程经常可以相互交互，它们可以杀掉别的进程，它们可以读写相同的文件，或者通过pipe进行通信。但是在一个普通的虚拟机中，所有这些都不被允许。运行在同一个计算机上的不同虚拟机，彼此之间是通过VMM完全隔离的。所以出于安全性考虑人们喜欢使用虚拟机，这是一种可以运行未被信任软件的方式，同时又不用担心bug和恶意攻击。</p>
+</blockquote>
+<h4 id="VMM架构：不同视角的OS"><a href="#VMM架构：不同视角的OS" class="headerlink" title="VMM架构：不同视角的OS"></a>VMM架构：不同视角的OS</h4><ul>
+<li>OS架构中，内核上的 <code>container</code> 是进程</li>
+<li>VMM架构中，VMM上的 container 是计算机的模拟</li>
+</ul>
+<p>VMM的架构使得我们可以从另一个角度重新审视我们讨论过的内容，例如内存分配，线程调度等等，这或许可以给我们一些新的思路并带回到传统的操作系统内核中。</p>
+<p>某种程度上来说，传统操作系统内核的内容下移了一层到了VMM。</p>
+<h3 id="构建VMM：Trap-and-Emulate"><a href="#构建VMM：Trap-and-Emulate" class="headerlink" title="构建VMM：Trap and Emulate"></a>构建VMM：Trap and Emulate</h3><p>我们该如何构建我们自己的VMM呢？一种实现方式是完全通过<code>软件</code>来实现，这种方式很慢</p>
+<blockquote>
+<p>你的VMM在解析每一条Guest指令的时候，都可能要转换成几十条实际的机器指令</p>
+</blockquote>
+<h4 id="Trap"><a href="#Trap" class="headerlink" title="Trap"></a>Trap</h4><p>一种广泛使用的策略是在<code>真实的CPU</code>上运行Guest指令。</p>
+<ul>
+<li>这要求你的计算机拥有XV6期望的处理器</li>
+<li>但是实际中你又不能直接这么做，因为当你的Guest操作系统执行了一个privileged指令之后，就会出现问题</li>
+</ul>
+<p>所以这里会使用一些技巧。</p>
+<ol>
+<li>Guest kernel运行在宿主机的<code>User mode</code></li>
+<li>VMM加载xv6的kernel指令，设置页表，使用trap跳转到guest os第一条指令</li>
+<li>guest使用privileged指令时会因user mode<code>触发trap进入VMM</code>，并进行相应的处理</li>
+</ol>
+<blockquote>
+<p>VMM运行在Supervisor mode，替代原本kernel的功能，可以直接在硬件上启动。其他方案比如硬件上启动Linux，之后要么Linux自带一个VMM，要么通过可加载的内核模块将VMM加载至Linux内核中，这样VMM可以在Linux内核中以Supervisor mode运行。</p>
+</blockquote>
+<h4 id="Emulate"><a href="#Emulate" class="headerlink" title="Emulate"></a>Emulate</h4><p>VMM会为每一个Guest维护一套<code>虚拟状态信息</code>，例如csr寄存器、mode、hartid。</p>
+<ul>
+<li>guest在guest S-mode下执行privileged指令时，触发的handler会根据它们做出响应</li>
+<li>VMM 根据 <code>sret &amp; ecall</code>  得知guest变换了当前的mode，二者都是特权指令<blockquote>
+<p>guest永远运行在宿主机的user mode</p>
+</blockquote>
+</li>
+<li>VMM需要hartid得知当前模拟的是哪个CPU</li>
+</ul>
+<blockquote>
+<p>XV6有一个针对每个CPU的变量表明当前运行的是哪个进程，类似的VMM也有一个针对每个CPU的变量表明当前是哪个虚拟机在运行，进而查看对应的虚拟状态信息。</p>
+</blockquote>
+<h4 id="Trap-and-Emulate-风格"><a href="#Trap-and-Emulate-风格" class="headerlink" title="Trap and Emulate 风格"></a>Trap and Emulate 风格</h4><blockquote>
+<p>你可以完全通过软件实现这种风格的VMM，也即你的真实计算机可能运行了windows，windows上的软件实现了VMM，VMM之上有一堆guest，每个guest之上有一堆进程</p>
+</blockquote>
+<p>不同类型的CPU上实现Trap and Emulate虚拟机会有不同的难度，不过RISC-V特别适合实现Trap and Emulate虚拟机</p>
+<blockquote>
+<p>举个例子，设计人员确保了每个在Supervisor mode下才能执行的privileged指令，如果在User mode执行都会触发trap。你可以通过这种机制来确保VMM针对Guest中的每个privileged指令，都能看到一个trap。</p>
+</blockquote>
+<h4 id="Page-Table"><a href="#Page-Table" class="headerlink" title="Page Table"></a>Page Table</h4><p>guest修改satp寄存器时会进入VMM，但我们不能简单的直接使用用户提供的值</p>
+<p>但是我们的确又需要为SATP寄存器做点什么，因为我们需要让Guest操作系统觉得Page Table被更新了。且需要能够访问正确的内存地址</p>
+<h5 id="gva，gpa，hpa"><a href="#gva，gpa，hpa" class="headerlink" title="gva，gpa，hpa"></a>gva，gpa，hpa</h5><ul>
+<li>Guest kernel包含了Page Table，将 <code>gva</code> 映射到 <code>gpa</code>，<ul>
+<li>Guest物理地址是VMM分配给Guest的地址空间</li>
+</ul>
+</li>
+<li>gpa在真实硬件上并不是连续的，会被映射到主机物理内存地址 <code>hpa</code>，对应的映射表与PT类似</li>
+</ul>
+<h5 id="Shadow-Page-Table"><a href="#Shadow-Page-Table" class="headerlink" title="Shadow Page Table"></a>Shadow Page Table</h5><p>guest写入satp切换页表时，trap handler会创建一个Shadow Page Table，<code>将gva映射到hpa</code>，Shadow Page Table的地址将会是写入<code>真实satp</code>的值</p>
+<p>Shadow Page Table是这么构建的：</p>
+<ul>
+<li>从Guest Page Table中取出每一条记录，查看gpa</li>
+<li>使用VMM中的映射关系，将gpa翻译成hpa</li>
+<li>再将gva和hpa存放于Shadow Page Table</li>
+</ul>
+<p>然后返回guest kernel</p>
+<blockquote>
+<p>所以，Guest kernel认为自己使用的是一个正常的Page Table，但是实际的硬件使用的是Shadow Page Table。这是VMM实现隔离的一个关键部分。</p>
+</blockquote>
+<p>Shadow Page Table是实现VMM时一个比较麻烦的地方</p>
+<ul>
+<li>RISC-V上修改PTE并不是一个权限操作，也不保证硬件可以立刻注意到PTE的修改</li>
+<li>需要使用sfence.vma刷新页表使硬件注意到，这是一个权限操作，VMM这时才会注意到PTE的修改</li>
+</ul>
+<h5 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h5><blockquote>
+<p>如果你的操作系统执行了大量的privileged指令，那么你也会有大量的trap，这会对性能有大的损耗。这里的损耗是现代硬件增加对虚拟机支持的动机。今天要讨论的论文使用的就是现在硬件对于虚拟机的支持，Intel和AMD在硬件上支持更加有效的trap，或者说对于虚拟机方案，会有少得多的trap。所以是的，性能很重要。但是上面介绍的方案，人们也使用了很多年，它能工作并且也很成功，尽管它会慢的多，但是还没有慢到让人们讨厌的程度，人们其实很喜欢这个方案。</p>
+</blockquote>
+<h4 id="Device"><a href="#Device" class="headerlink" title="Device"></a>Device</h4><p>虚拟机的外设，例如磁盘、网卡、声卡、显卡、鼠标键盘等等</p>
+<h5 id="策略1：模拟设备"><a href="#策略1：模拟设备" class="headerlink" title="策略1：模拟设备"></a>策略1：模拟设备</h5><p>guest通过Memory Map控制寄存器与设备进行交互，而VMM并不会映射这些gpa，而是将其设为无效。在guest试图访问时，触发handler，然后VMM会模拟外设。最后返回到guest中</p>
+<p>这种方式可能会非常的低效，因为每一次Guest与外设硬件的交互，都会触发一个trap。在真实的设备中，trap会被频繁的触发</p>
+<blockquote>
+<p>如果你的目标就是能启动操作系统并使得它们完全不知道自己运行在虚拟机上，你只能使用这种策略。</p>
+</blockquote>
+<h5 id="策略2：虚拟设备"><a href="#策略2：虚拟设备" class="headerlink" title="策略2：虚拟设备"></a>策略2：虚拟设备</h5><blockquote>
+<p>在这种情况下，OS知道自己运行在虚拟机上</p>
+</blockquote>
+<p>提供虚拟设备接口，而不是模拟一个真实的设备。</p>
+<ul>
+<li>guest直接使用<code>虚拟设备接口</code>，而非使用mm寄存器</li>
+<li>相应的，在内存中会有一个<code>命令队列</code>，Guest操作系统将读写设备的命令写到队列中</li>
+<li>vmm会将其应用到一个文件，而非磁盘。<ul>
+<li>对于XV6来说就是fs.image</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>在这个驱动里面要么只使用了很少的，要么没有使用Memory Mapped寄存器，所以它基本不依赖trap，效率比模拟设备高</p>
+</blockquote>
+<h5 id="策略3：pass-through"><a href="#策略3：pass-through" class="headerlink" title="策略3：pass-through"></a>策略3：pass-through</h5><p>这里典型的例子就是网卡。现代的网卡具备硬件的支持，可以与VMM运行的多个Guest操作系统交互。</p>
+<p>你可以配置你的网卡，使得它表现的就像多个独立的子网卡，每个Guest操作系统拥有其中一个子网卡，且效率非常高</p>
+<blockquote>
+<p>在这种方式中，Guest操作系统驱动可以知道它们正在与这种特别的网卡交互。</p>
+</blockquote>
+<h3 id="硬件对虚拟机的支持"><a href="#硬件对虚拟机的支持" class="headerlink" title="硬件对虚拟机的支持"></a>硬件对虚拟机的支持</h3><h4 id="why？"><a href="#why？" class="headerlink" title="why？"></a>why？</h4><p>为什么Intel和其他的硬件厂商会为虚拟机提供直接的硬件支持呢？</p>
+<ul>
+<li>虚拟机应用的非常广泛</li>
+<li>Trap and Emulate方案会涉及到大量高成本的trap</li>
+</ul>
+<p>例如：Intel的VT-x硬件，每个CPU核都有一套独立的VT-x</p>
+<h4 id="root-non-root-mode"><a href="#root-non-root-mode" class="headerlink" title="root&#x2F;non-root mode"></a>root&#x2F;non-root mode</h4><p>现在，<code>这些虚拟状态信息会保存在硬件中</code>。这样Guest中的软件可以直接执行privileged指令来修改保存在硬件中的虚拟寄存器，而不用触发trap</p>
+<a href="/2024/09/07/6.s081%20lec19%20%E8%99%9A%E6%8B%9F%E6%9C%BA/image%2048.avif" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/07/6.s081%20lec19%20%E8%99%9A%E6%8B%9F%E6%9C%BA/image%2048.avif" class title="image 48.avif"></a>
+
+<ul>
+<li>guest mode下读写的控制寄存器并不是真实的寄存器，而是硬件中的拷贝。这套寄存器与真实的寄存器完全独立</li>
+<li>这套方案有一些术语，guest模式被称为non-root mode，host模式被称为root mode</li>
+</ul>
+<h4 id="Virtual-Machine-Control-Structure：VMCS"><a href="#Virtual-Machine-Control-Structure：VMCS" class="headerlink" title="Virtual Machine Control Structure：VMCS"></a>Virtual Machine Control Structure：VMCS</h4><p>VMM创建一个新的虚拟机时，需要配置guest信息。这些信息用一个VMCS结构体表示，并通过一些特殊的指令控制虚拟机：</p>
+<ul>
+<li>VMLAUNCH：创建新虚拟机，需要VMCS指针</li>
+<li>VMRESUME：从vmm返回到guest kernel</li>
+<li>VMCALL：退出non-root mode，通过trap进入vmm</li>
+</ul>
+<h4 id="为什么仍需root-mode？"><a href="#为什么仍需root-mode？" class="headerlink" title="为什么仍需root mode？"></a>为什么仍需root mode？</h4><ul>
+<li>VMCALL</li>
+<li>设备中断</li>
+<li>设置页表，在intel的方案中是修改<code>cr3</code>寄存器</li>
+</ul>
+<h4 id="页表：cr3-EPT"><a href="#页表：cr3-EPT" class="headerlink" title="页表：cr3+EPT"></a>页表：cr3+EPT</h4><p>我们不能让用户随意设置自己的页表，所以本方案中有另一个寄存器：<code>EPT</code> Extended Page Table，来对用户提供的gpa进行二次翻译到hpa</p>
+<p>也即guest的每一个虚拟地址都会经过两次翻译：gva–gpa–hpa</p>
+<h3 id="DUNE：Safe-User-level-Access-to-Privileged-CPU-Features"><a href="#DUNE：Safe-User-level-Access-to-Privileged-CPU-Features" class="headerlink" title="DUNE：Safe User-level Access to Privileged CPU Features"></a>DUNE：Safe User-level Access to Privileged CPU Features</h3><h4 id="dune-概述"><a href="#dune-概述" class="headerlink" title="dune 概述"></a>dune 概述</h4><p>利用上述的硬件支持可以实现一些有趣的功能。利用这种完全是为了虚拟机而设计的硬件，可以用来做一些与虚拟机完全无关的事情，例如在一个guest进程中使用特权指令</p>
+<p>我们将会在Linux中加载Dune可加载模块，作为kernel的一部分。</p>
+<p>我们允许一个进程切换到<code>dune</code>模式，在dune模式下，即<code>non-root Supervisor mode</code>或Guest Supervisor mode，允许用户运行一些特权指令。</p>
+<blockquote>
+<p>例如设置自己的cr3寄存器，更加灵活的管理自己的内存。同时这不会使得虚拟机逃逸，它无法突破EPT的阻拦</p>
+</blockquote>
+<h4 id="运行未被信任的插件代码"><a href="#运行未被信任的插件代码" class="headerlink" title="运行未被信任的插件代码"></a>运行未被信任的插件代码</h4><p>通过dune，处于user mode下的进程可以设置自己的页表，隔离guest正常的内存，然后运行一些运行未被信任的插件代码。</p>
+<h4 id="GC"><a href="#GC" class="headerlink" title="GC"></a>GC</h4><p>GC会扫描所有PTE找到正在使用的对象，而GC与程序并行运行，程序会修改GC已扫描过的对象。dune 之后会检查PTE的dirty位，如果被设置则会重新扫描该页</p>
+<blockquote>
+<p>实际中，获取PTE dirty位的过程在普通的Linux中既困难又慢，我甚至都不确定Linux是否支持这个操作，在一些其他操作系统中你可以通过系统调用来查询PTE的dirty位。但是如果你使用Dune和 VT-x，进程可以很快的使用普通的load和store指令获取PTE，进而获取dirty位。所以这里，Dune使得某些需要频繁触发GC的程序明显变得更快。</p>
+</blockquote>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-07</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/6-s081/'>
+                            6.s081
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
