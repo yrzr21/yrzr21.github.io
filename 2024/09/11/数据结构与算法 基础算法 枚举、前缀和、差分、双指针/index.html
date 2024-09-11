@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="基础算法 枚举、前缀和、差分、双指针" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    基础算法 枚举、前缀和、差分、双指针
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95"><span class="post-toc-text">基础算法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%9A%B4%E5%8A%9B-%E6%9E%9A%E4%B8%BE"><span class="post-toc-text">暴力&#x2F;枚举</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B4%9B%E8%B0%B7P1003-%E9%93%BA%E6%AF%AF%E5%AD%90"><span class="post-toc-text">洛谷P1003 铺毯子</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8A%9B%E6%89%A359-%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5"><span class="post-toc-text">力扣59 螺旋矩阵</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B4%9B%E8%B0%B7P1328-%E7%9F%B3%E5%A4%B4%E5%89%AA%E5%88%80%E5%B8%83plus"><span class="post-toc-text">洛谷P1328 石头剪刀布plus</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%89%8D%E7%BC%80%E5%92%8C-%E5%B7%AE%E5%88%86"><span class="post-toc-text">前缀和 &amp; 差分</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B4%9B%E8%B0%B7B3612-%E5%8C%BA%E9%97%B4%E5%92%8C"><span class="post-toc-text">洛谷B3612 区间和</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B4%9B%E8%B0%B7P1387-%E6%9C%80%E5%A4%A7%E9%95%BF%E6%96%B9%E5%BD%A2"><span class="post-toc-text">洛谷P1387 最大长方形</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B4%9B%E8%B0%B7P3397-%E5%9C%B0%E6%AF%AF"><span class="post-toc-text">洛谷P3397 地毯</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B0%BA%E5%8F%96%E6%B3%95-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3-%E5%8F%8C%E6%8C%87%E9%92%88"><span class="post-toc-text">尺取法&#x2F;滑动窗口&#x2F;双指针</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LCR-008-%E9%95%BF%E5%BA%A6%E5%A4%A7%E4%BA%8Ek%E7%9A%84%E6%9C%80%E5%B0%8F%E5%AD%90%E6%95%B0%E7%BB%84"><span class="post-toc-text">LCR 008 长度大于k的最小子数组</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LC-713-%E6%88%90%E7%BB%A9%E5%B0%8F%E4%BA%8EK%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84"><span class="post-toc-text">LC 713 成绩小于K的子数组</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LC-2379-%E5%BE%97%E5%88%B0K%E4%B8%AA%E9%BB%91%E5%9D%97%E7%9A%84%E6%9C%80%E5%B0%91%E6%B6%82%E8%89%B2%E6%AC%A1%E6%95%B0"><span class="post-toc-text">LC 2379 得到K个黑块的最少涂色次数</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="基础算法"><a href="#基础算法" class="headerlink" title="基础算法"></a>基础算法</h2><h3 id="暴力-枚举"><a href="#暴力-枚举" class="headerlink" title="暴力&#x2F;枚举"></a>暴力&#x2F;枚举</h3><p>暴力模拟，码量较大，需要对各个变量、函数的用途有清晰的定义；否则很容易迷失</p>
+<h4 id="洛谷P1003-铺毯子"><a href="#洛谷P1003-铺毯子" class="headerlink" title="洛谷P1003 铺毯子"></a>洛谷P1003 铺毯子</h4><ol>
+<li>正常的思路是提供一个二维数组，然后对于每个数据更新所指定的矩形区域的编号，但这样的复杂度特别高</li>
+<li>但是注意到，只需要求一个点的毯子编号，于是可以先记录下所有的数据，然后遍历一遍求结果</li>
+<li>而且因为后来者居上，可以倒着求</li>
+</ol>
+<h4 id="力扣59-螺旋矩阵"><a href="#力扣59-螺旋矩阵" class="headerlink" title="力扣59 螺旋矩阵"></a>力扣59 螺旋矩阵</h4><ul>
+<li>关键点在于使用四个边界变量</li>
+<li>以及定义清晰各个变量的用途、临界条件</li>
+</ul>
+<h4 id="洛谷P1328-石头剪刀布plus"><a href="#洛谷P1328-石头剪刀布plus" class="headerlink" title="洛谷P1328 石头剪刀布plus"></a>洛谷P1328 石头剪刀布plus</h4><ul>
+<li>打个表定输赢关系</li>
+<li>另外两个人出拳的周期不同，可以定义一个函数专门处理下一个出什么拳</li>
+</ul>
+<h3 id="前缀和-差分"><a href="#前缀和-差分" class="headerlink" title="前缀和 &amp; 差分"></a>前缀和 &amp; 差分</h3><p>核心目的在于<code>避免重复计算</code>，复用从前的运算结果</p>
+<p>二维前缀和的计算公式为：​​​$sum_{i,j} &#x3D; sum_{i-1,j}+sum_{i,j-1}-sum_{i-1,j-1}+a_{i,j}$ </p>
+<ul>
+<li>需要特殊处理0处的元素，为此0行0列全部初始化为0，不放实际数据</li>
+</ul>
+<p>利用和数组可以求出特定位置的元素：$a_{i,j}&#x3D;sum_{i,j}-sum_{i-1,j}-sum_{i,j-1}+sum_{i-1,j-1}$</p>
+<ul>
+<li>即差分</li>
+</ul>
+<p>常见的情形有：</p>
+<ol>
+<li>n个数，求任意[l,r]的和<ul>
+<li>遍历一遍求和数组，然后sum[j] - sum[l-1]</li>
+<li>同样要留一个位置放0</li>
+</ul>
+</li>
+<li>n*n个数，求(x1,y1)到(x2,y2)矩形区域的和(x1&lt;x2,y1&lt;y2)<ul>
+<li>先求sum数组，然后 $ans&#x3D;sum[x2][y2]-sum[x2][y1-1]+sun[x1-1][y1-1]-sum[x1-1][y2]$</li>
+</ul>
+</li>
+<li><code>差分标记</code>：对数组[l,r]范围内所有元素进行m次加某个随机的数q，求最终的数组<ul>
+<li>利用求和数组的特性，定义一个标记数组，mark[l]+&#x3D;q，mark[r+1]&#x3D;-q</li>
+<li>m次均使用此方法，最后对其求和，加到原数组上</li>
+</ul>
+</li>
+<li>上述题目的二维情形<ul>
+<li>还是求和数组的特性，求和可以看作影响从自身开始的往右往下所有的求和点</li>
+<li>$mark[x1][y1] +&#x3D; q$</li>
+<li>$mark[x1][y2+1] -&#x3D; q$</li>
+<li>$mark[x2+1][y1]-&#x3D;q$</li>
+<li>$mark[x2+1][y2+1]+&#x3D;q$</li>
+</ul>
+</li>
+<li>更高维度的情形原理一样，均为容斥</li>
+</ol>
+<h4 id="洛谷B3612-区间和"><a href="#洛谷B3612-区间和" class="headerlink" title="洛谷B3612 区间和"></a>洛谷B3612 区间和</h4><ul>
+<li>没什么可说的，按上面的思路来就行</li>
+</ul>
+<h4 id="洛谷P1387-最大长方形"><a href="#洛谷P1387-最大长方形" class="headerlink" title="洛谷P1387 最大长方形"></a>洛谷P1387 最大长方形</h4><ul>
+<li>前缀和+枚举</li>
+<li>从高往低枚举更快</li>
+</ul>
+<h4 id="洛谷P3397-地毯"><a href="#洛谷P3397-地毯" class="headerlink" title="洛谷P3397 地毯"></a>洛谷P3397 地毯</h4><ul>
+<li>上述的情形4</li>
+</ul>
+<h3 id="尺取法-滑动窗口-双指针"><a href="#尺取法-滑动窗口-双指针" class="headerlink" title="尺取法&#x2F;滑动窗口&#x2F;双指针"></a>尺取法&#x2F;滑动窗口&#x2F;双指针</h3><p>长度为n的数组有n(n+1)&#x2F;2个连续子区间，利用双指针法可将枚举时间复杂度降至O(n)。通常用于区间属性单调变化的情形</p>
+<h4 id="LCR-008-长度大于k的最小子数组"><a href="#LCR-008-长度大于k的最小子数组" class="headerlink" title="LCR 008 长度大于k的最小子数组"></a>LCR 008 长度大于k的最小子数组</h4><ul>
+<li>注意需要循环将区间左端点右移</li>
+</ul>
+<a href="/2024/09/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%20%E6%9E%9A%E4%B8%BE%E3%80%81%E5%89%8D%E7%BC%80%E5%92%8C%E3%80%81%E5%B7%AE%E5%88%86%E3%80%81%E5%8F%8C%E6%8C%87%E9%92%88/Pasted%20image%2020240911110139.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%20%E6%9E%9A%E4%B8%BE%E3%80%81%E5%89%8D%E7%BC%80%E5%92%8C%E3%80%81%E5%B7%AE%E5%88%86%E3%80%81%E5%8F%8C%E6%8C%87%E9%92%88/Pasted%20image%2020240911110139.png" class title="Pasted image 20240911110139.png"></a>
+
+<h4 id="LC-713-成绩小于K的子数组"><a href="#LC-713-成绩小于K的子数组" class="headerlink" title="LC 713 成绩小于K的子数组"></a>LC 713 成绩小于K的子数组</h4><ul>
+<li>尺取法小于k的情形，每次移动左端点需一次考虑整个区间有多少种满足条件的可能</li>
+</ul>
+<a href="/2024/09/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%20%E6%9E%9A%E4%B8%BE%E3%80%81%E5%89%8D%E7%BC%80%E5%92%8C%E3%80%81%E5%B7%AE%E5%88%86%E3%80%81%E5%8F%8C%E6%8C%87%E9%92%88/Pasted%20image%2020240911113625.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%20%E6%9E%9A%E4%B8%BE%E3%80%81%E5%89%8D%E7%BC%80%E5%92%8C%E3%80%81%E5%B7%AE%E5%88%86%E3%80%81%E5%8F%8C%E6%8C%87%E9%92%88/Pasted%20image%2020240911113625.png" class title="Pasted image 20240911113625.png"></a>
+
+<h4 id="LC-2379-得到K个黑块的最少涂色次数"><a href="#LC-2379-得到K个黑块的最少涂色次数" class="headerlink" title="LC 2379 得到K个黑块的最少涂色次数"></a>LC 2379 得到K个黑块的最少涂色次数</h4><ul>
+<li>尺取法等于的情形，需要先初始化为k，需要计数定长区间内的涂色次数</li>
+</ul>
+<a href="/2024/09/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%20%E6%9E%9A%E4%B8%BE%E3%80%81%E5%89%8D%E7%BC%80%E5%92%8C%E3%80%81%E5%B7%AE%E5%88%86%E3%80%81%E5%8F%8C%E6%8C%87%E9%92%88/Pasted%20image%2020240911133418.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%20%E6%9E%9A%E4%B8%BE%E3%80%81%E5%89%8D%E7%BC%80%E5%92%8C%E3%80%81%E5%B7%AE%E5%88%86%E3%80%81%E5%8F%8C%E6%8C%87%E9%92%88/Pasted%20image%2020240911133418.png" class title="Pasted image 20240911133418.png"></a>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-11</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/'>
+                            数据结构与算法
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
