@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="intro, 关系模型, 关系代数" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    intro, 关系模型, 关系代数
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#intro"><span class="post-toc-text">intro</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%AF%BE%E7%A8%8B%E4%BB%8B%E7%BB%8D"><span class="post-toc-text">课程介绍</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A6%82%E8%BF%B0"><span class="post-toc-text">数据库概述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#e-g-%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AD%98%E5%82%A8%E4%BF%A1%E6%81%AF%E7%9A%84%E5%BA%94%E7%94%A8"><span class="post-toc-text">e.g. 构建一个存储信息的应用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%97%AE%E9%A2%98"><span class="post-toc-text">问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#DBMS%E6%A6%82%E8%BF%B0"><span class="post-toc-text">DBMS概述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">关系模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8E%86%E5%8F%B2"><span class="post-toc-text">历史</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0"><span class="post-toc-text">关系模型概述</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="post-toc-text">关系型数据库</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%80%E4%BA%9B%E6%9C%AF%E8%AF%AD"><span class="post-toc-text">一些术语</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#e-g-%E7%94%B5%E5%AD%90%E9%9F%B3%E4%B9%90%E5%95%86%E5%BA%97"><span class="post-toc-text">e.g. 电子音乐商店</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="post-toc-text">查询数据</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0"><span class="post-toc-text">关系代数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0%E4%BC%98%E5%8C%96"><span class="post-toc-text">关系代数优化</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="intro"><a href="#intro" class="headerlink" title="intro"></a>intro</h2><h3 id="课程介绍"><a href="#课程介绍" class="headerlink" title="课程介绍"></a>课程介绍</h3><p>这门课主要的内容是<code>如何去构建和设计数据库管理系统</code>。</p>
+<ul>
+<li>⾯向<code>磁盘</code>的数据库</li>
+</ul>
+<p>大纲大概是这样：</p>
+<ol>
+<li>关系型数据库<ul>
+<li>是什么，如何存储、如何在之上查询</li>
+<li>事务管理，以及恢复</li>
+</ul>
+</li>
+<li>⾼级主题，例如分布式数据库，或者⼀些其他类型的数据库以及关系型数 据库的⼀些扩展</li>
+<li>如何对它们的规模进⾏扩展以及如何在云环境运⾏它们</li>
+</ol>
+<p>lab部分，你需要从头开始构建你⾃⼰的<code>数据库存储管理器</code></p>
+<ul>
+<li>但⽆法运⾏SQL语句，也没有查询解析器，但你能够通过提供给你的⼿写代码来执⾏查询</li>
+<li>因此，这要远⽐简单的键值存储来的复杂得多，但它并不是⼀个功能完善的系统</li>
+<li>完全⽤C++17，这并不意味着我们会去使⽤C++17的所有⾼级特性</li>
+<li>今年所有的项⽬都会在我们所开发的新学术系统BusTub上进⾏实现，所有的源码都在会Github上进⾏开源</li>
+</ul>
+<p>这是⼀个⾯向硬盘的数据管理系统，它⽀持Volcano式⻛格的查询处理。该系统中的部分内容还⽀持插拔式API，这样我们就可以替换系统中已经给出的算法，使⽤不同的索引数据结构或者不同的⽇志格式和控制⽅案</p>
+<h3 id="数据库概述"><a href="#数据库概述" class="headerlink" title="数据库概述"></a>数据库概述</h3><p>数据库无处不在，任何程序内部都有一个数据库。许多问题都能最后简化为数据库层⾯的问题。</p>
+<p>它是以某种⽅式去进⾏关联的数据集合，这意味着可以对现实进行建模</p>
+<p>比如一个电子音乐商店，它背后的数据库用来存储艺术家以及他们的专辑信息</p>
+<h3 id="e-g-构建一个存储信息的应用"><a href="#e-g-构建一个存储信息的应用" class="headerlink" title="e.g. 构建一个存储信息的应用"></a>e.g. 构建一个存储信息的应用</h3><ul>
+<li>每个实体例如Artist和Album会分为存为单独的csv⽂件<a href="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912214753.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912214753.png" class title="Pasted image 20240912214753.png"></a></li>
+<li>假如查询 Ice Cube 单飞的年份，我们打开csv，对每一行用逗号分割，查看第一个元素是不是~，如果是把第二个属性转换为整数返回</li>
+</ul>
+<h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><p>而这种方式会有一些问题：</p>
+<ol>
+<li>？</li>
+<li>如何保证每个属性的值是合法的？</li>
+<li>如果⼀张专辑是由多个艺术家制作的，那我们该如何保存数据？我们只有一个artist字段<ul>
+<li>可以放在同一个引号内，然后用逗号分隔</li>
+</ul>
+</li>
+<li>查询效率如何保证？</li>
+<li>语言变了，但是我们想使用同一个数据库该怎么办？我们不想重复造轮子</li>
+<li>并发写入数据库如何保证一致？</li>
+<li>如何保证数据是安全的、不会因机器、程序故障丢失？如何进行故障恢复？如何进行分布式存储？</li>
+</ol>
+<p>以上都是我们想象要⽤⼀个数据库 管理系统来帮你对此进⾏管理的原因</p>
+<h3 id="DBMS概述"><a href="#DBMS概述" class="headerlink" title="DBMS概述"></a>DBMS概述</h3><p>DBMS允许程序在⽆须关⼼底层实现的情况下，对数据库中的信息进⾏存储和分析；可以复用，不必造轮子</p>
+<blockquote>
+<p>我们这学期要设计⼀个通⽤的DBMS，即设计⽤于可以允许应⽤程序来对数据库进⾏定义，创 建，查询，更新以及管理</p>
+<p>它们不必是内存数据库或者GPU数据库以及其他类型数据库，我们假设我们的数据库是存在硬盘⾥的</p>
+</blockquote>
+<h3 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h3><h4 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h4><p>在计算机早年发展期间，⼈们便很快意识到如果有专⻔的数据库管理系统来帮助我们管理数据， 那会⾮常nice</p>
+<p>早期数据库的逻辑层和数据系统⽤来存储数据的物理层存在了⼀种<code>紧密耦合</code>，如果想要转存数据，就必须改代码</p>
+<p>Ted Codd 在1970年提出了<code>关系模型</code>，即你如何在数据库系统中存储数据。</p>
+<h4 id="关系模型概述"><a href="#关系模型概述" class="headerlink" title="关系模型概述"></a>关系模型概述</h4><p>将数据的关系用<code>元组</code>表示，表与表之间的关系即是数据库。然后通过高级语言去查询，但不告诉它怎么查询，由DBMS决定怎么查询</p>
+<blockquote>
+<p>当时的⼈们表示，没有⼀种软件可以⽣成像⼈⼯那样⾼效的查询计划。这与⼈们在1970年提出的关于编译器的观点相同，“任何编译器都⽆法⽣成和⼿写汇编⼀样⾼效的机器码”</p>
+<p>如今，我们有了⾮常复杂的查询计划，现在的优化器并不完美，但它们所能做的⼯作要⽐⼤部分⽤⼈⼯去做的要来得更好</p>
+</blockquote>
+<p>具体怎么存储由DBMS决定，元组仅仅只是数据的关系模型，我们永远通过元组访问数据，即便背后的存储模式变了，我们也不需要改应用程序的代码。从而，<code>分离了逻辑层和物理层</code></p>
+<p>在某些应⽤程序领域中，其中⼀些数据模型⽐关系数据模型能更好地描述数据。</p>
+<p>关系型数据模型已经采纳了其他数据模型的⼀些概念或者思路</p>
+<ul>
+<li>例如将数组&#x2F;矩阵认为是⼀种数据模型，用于保存数组&#x2F;矩阵</li>
+<li>在MultiValue数据模型中，还有层次数据模型和⽹络数据模 型</li>
+</ul>
+<h4 id="关系型数据库"><a href="#关系型数据库" class="headerlink" title="关系型数据库"></a>关系型数据库</h4><ul>
+<li><code>relation structure</code>，定义我们的数据</li>
+<li><code>integrity constraints</code>：对数据值的约束</li>
+<li><code>manipulation</code>：如何操作数据</li>
+</ul>
+<p>我们的所有数据用关系结构来表示，具体的某条数据被称为实例，用元组表示</p>
+<ul>
+<li>元组每个属性的值都必须保证原子性，不可嵌套<ul>
+<li>但在最近，你可以在关系型数据库⾥存⼊数组，JSON对象，这种约束已经没了</li>
+</ul>
+</li>
+<li>每个属性现在都支持⼀个特殊值NULL<ul>
+<li>实际上你该如何储存它们，这就取决于实现了</li>
+</ul>
+</li>
+</ul>
+<h4 id="一些术语"><a href="#一些术语" class="headerlink" title="一些术语"></a>一些术语</h4><ul>
+<li>我会使⽤<code>relation和table</code>这两个术语，实际上它们是⼀回事。</li>
+<li><code>n-ary</code> 关系其实就是⼀张表上有n列，也即每个元组由n个属性。</li>
+<li>每条记录即是一个<code>tuple</code></li>
+<li>每个记录的<code>主键</code>唯一标识了这条记录，通常是一个整数 <code>id</code>，它还可以自增。我们使用主键跟踪一条记录</li>
+<li><code>外键</code>，指定某个属性的值必须存在另一张表上，从而维护不同表的数据一致性</li>
+</ul>
+<h4 id="e-g-电子音乐商店"><a href="#e-g-电子音乐商店" class="headerlink" title="e.g. 电子音乐商店"></a>e.g. 电子音乐商店</h4><p>对于我们的例子，每个专辑可能有多个作者，由于属性的原子性、主键的唯一性，我们需要额外的一张<code>中间表</code>存储作者和专辑的关系</p>
+<a href="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912224508.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912224508.png" class title="Pasted image 20240912224508.png"></a>
+<p>两个id都作为外键，DBMS会跟踪这些值的合法性</p>
+<h4 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h4><p>我们不写for，而使用DML操作数据，这是一种声明式的语言，具体查询的实现方式由DBMS实现</p>
+<p>关系代数用于过程化语言，而关系演算用于非过程化语言。</p>
+<blockquote>
+<p>对于这⻔课，我们只关注关系代数，高效的查询方案实现可能需要关系演算、微积分等知识</p>
+</blockquote>
+<h4 id="关系代数"><a href="#关系代数" class="headerlink" title="关系代数"></a>关系代数</h4><p>这种代数是基于无序集合的，元素可以重复</p>
+<p>七种基本运算符，每个运算符都实现了关系间的映射。我们将这些代数原语连接起来就可以得到我们想要的结果</p>
+<a href="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912230502.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912230502.png" class title="Pasted image 20240912230502.png"></a>
+
+<blockquote>
+<p>SQL并不依赖于关系代数，即使它使⽤关系代数作为查询执⾏时底层的操作符来使⽤</p>
+</blockquote>
+<p><code>select</code> 根据条件筛选元组，在有多个条件时，他们的顺序并不指定实际的筛选顺序——这一切由DBMS决定</p>
+<p><code>projection</code> 投影掉原关系的某些属性，生成一个新的关系</p>
+<p><code>Union</code> 取两个关系的并集。这要求两个关系<code>兼容</code>，即有相同的属性和类型</p>
+<p><code>Intersection</code> 取两个关系的交集，也要求它们兼容</p>
+<p><code>Difference</code> 取1中有，2中没有的元组，要求兼容</p>
+<ul>
+<li>SQL中的 except</li>
+</ul>
+<p><code>Product</code> 即笛卡尔积，产生两个关系中所有sql可能的组合</p>
+<ul>
+<li>SQL中的Cross Join，这是默认的关系连接形式<a href="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912232723.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912232723.png" class title="Pasted image 20240912232723.png"></a></li>
+</ul>
+<p><code>Join</code> 即自然连接，如果两个关系有相同的属性，它会对这个属性进行匹配，把有相同值的元组连接到一起，然后输出</p>
+<ul>
+<li>它和Difference不同，会有一些额外的属性输出</li>
+<li>允许这些公共属性的名字可以不同</li>
+</ul>
+<p>这些运算符是Ted Codd所提出的七个最核⼼的关系操作符，人们在之后添加了一些额外的东西，比如 aggregations、sorting。论文也没有提出SQL，这些都是人们后来发明的，也并不是唯一一种查询数据的方式</p>
+<h4 id="关系代数优化"><a href="#关系代数优化" class="headerlink" title="关系代数优化"></a>关系代数优化</h4><p>关系代数仍有执行顺序，不同的执行顺序也会带来不同的执行效率，尽管执行结果相同</p>
+<a href="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912233557.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/CMU%2015445%20intro,%20%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B,%20%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0/Pasted%20image%2020240912233557.png" class title="Pasted image 20240912233557.png"></a>
+
+<p>这里第二种方案效率显然更高</p>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-13</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/CMU-15445/'>
+                            CMU 15445
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
