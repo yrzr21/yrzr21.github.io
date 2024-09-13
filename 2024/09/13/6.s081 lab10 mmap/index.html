@@ -177,9 +177,9 @@
                 <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#mmap"><span class="post-toc-text">mmap</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9Bbug"><span class="post-toc-text">遇到的一些bug</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%A1%A5%E9%BD%90%E6%95%B0%E6%8D%AE"><span class="post-toc-text">补齐数据</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%A2%E5%A4%B1%E7%89%A9%E7%90%86%E9%A1%B5"><span class="post-toc-text">丢失物理页</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#mmap%E7%9A%84%E9%83%A8%E5%88%86%E9%A1%B5%E8%A1%A8%E6%9C%AA%E5%A4%8D%E5%88%B6"><span class="post-toc-text">mmap的部分页表未复制</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#mmap-%E7%A0%B4%E7%A2%8E%E7%9A%84%E9%A1%B5%E8%A1%A8"><span class="post-toc-text">mmap 破碎的页表</span></a></li></ol></li></ol></li></ol></li></ol>
             
         
-        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="mmap"><a href="#mmap" class="headerlink" title="mmap"></a>mmap</h2><a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240907082231.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240907082231.png" class title="Pasted image 20240907082231.png"></a>
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="mmap"><a href="#mmap" class="headerlink" title="mmap"></a>mmap</h2><a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240907082231.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240907082231.png" class title="Pasted image 20240907082231.png"></a>
 
-<a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240907082652.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240907082652.png" class title="Pasted image 20240907082652.png"></a>
+<a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240907082652.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240907082652.png" class title="Pasted image 20240907082652.png"></a>
 
 <ol>
 <li>mmap需要将文件映射到某处虚拟内存中，我们需要使用vm提供的接口 <code>mmappages</code> 映射虚拟内存与物理地址，fs提供的接口 <code>readi</code> 读取fd对应的文件</li>
@@ -193,28 +193,28 @@
 </ol>
 <h3 id="遇到的一些bug"><a href="#遇到的一些bug" class="headerlink" title="遇到的一些bug"></a>遇到的一些bug</h3><h4 id="补齐数据"><a href="#补齐数据" class="headerlink" title="补齐数据"></a>补齐数据</h4><p>大于文件大小但小于一页的部分需要用0补齐</p>
 <p>只读方式打开的文件可以以 private writable 的方式进行内存映射，而shared不行</p>
-<a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240910143715.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240910143715.png" class title="Pasted image 20240910143715.png"></a>
+<a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240910143715.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240910143715.png" class title="Pasted image 20240910143715.png"></a>
 
 <h4 id="丢失物理页"><a href="#丢失物理页" class="headerlink" title="丢失物理页"></a>丢失物理页</h4><p>奇怪的bug：明明还有很多物理页，此时却显示没有了：</p>
-<a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911164506.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911164506.png" class title="Pasted image 20240911164506.png"></a>
+<a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911164506.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911164506.png" class title="Pasted image 20240911164506.png"></a>
 
 <p>由于kalloc的逻辑是：</p>
-<a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911164523.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911164523.png" class title="Pasted image 20240911164523.png"></a>
+<a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911164523.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911164523.png" class title="Pasted image 20240911164523.png"></a>
 
-<a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911164715.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911164715.png" class title="Pasted image 20240911164715.png"></a>
+<a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911164715.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911164715.png" class title="Pasted image 20240911164715.png"></a>
 
 <p>它会把下一个物理页的地址直接放在本页的首部区域，这个数据可能被某个跨界的读写操作修改了，且至少修改了8个字节的数据。比如这段代码：</p>
-<a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911164901.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911164901.png" class title="Pasted image 20240911164901.png"></a>
+<a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911164901.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911164901.png" class title="Pasted image 20240911164901.png"></a>
 
 <p>修改后就ok了：</p>
-<a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911165303.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911165303.png" class title="Pasted image 20240911165303.png"></a>
+<a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911165303.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911165303.png" class title="Pasted image 20240911165303.png"></a>
 
 
 <h5 id="mmap的部分页表未复制"><a href="#mmap的部分页表未复制" class="headerlink" title="mmap的部分页表未复制"></a>mmap的部分页表未复制</h5><p>只复制了5页，而原页表有9页。所以mmap时应该需要增加p-&gt;sz，munmap时需要减去一定的大小</p>
-<a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911175615.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911175615.png" class title="Pasted image 20240911175615.png"></a>
+<a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911175615.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911175615.png" class title="Pasted image 20240911175615.png"></a>
 
 <h5 id="mmap-破碎的页表"><a href="#mmap-破碎的页表" class="headerlink" title="mmap 破碎的页表"></a>mmap 破碎的页表</h5><p>mmap映射的文件可能是支零破碎的，因为你可能还有很多munnap，这导致了如今的uvmunmap的逻辑不适用——它假定从va开始一段内存都有效，都是连续的。</p>
-<a href="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911182101.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20lab10%20mmap/Pasted%20image%2020240911182101.png" class title="Pasted image 20240911182101.png"></a>
+<a href="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911182101.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/13/6.s081%20lab10%20mmap/Pasted%20image%2020240911182101.png" class title="Pasted image 20240911182101.png"></a>
 
 <p>需要单独映射mmap页到一个位置，由于实验保证不会在中间打洞，所以可以保持uvmunmap的逻辑不变。于是原先的mmap和munmap改变sz可以作废，另外需在exit中单取消映射这一段内存</p>
 </div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
@@ -237,8 +237,8 @@
                 <span>归为分类:
                     
                     
-                        <a href='/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/'>
-                            数据结构与算法
+                        <a href='/categories/6-s081/'>
+                            6.s081
                         </a>
                     
                 </span>
