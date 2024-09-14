@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="Lec2 高级SQL" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    Lec2 高级SQL
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E9%AB%98%E7%BA%A7-SQL"><span class="post-toc-text">高级 SQL</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SQL%E6%A6%82%E8%BF%B0"><span class="post-toc-text">SQL概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SQL%E7%89%B9%E6%80%A7"><span class="post-toc-text">SQL特性</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SQL%E7%9A%84%E5%86%85%E5%AE%B9"><span class="post-toc-text">SQL的内容</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#bag-algebra"><span class="post-toc-text">bag algebra</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#e-g"><span class="post-toc-text">e.g.</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#aggregations%E3%80%81DISTINCT%E3%80%81GROUP-BY%E3%80%81HAVING"><span class="post-toc-text">aggregations、DISTINCT、GROUP BY、HAVING</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8D%95%E4%B8%AA%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="post-toc-text">单个聚合函数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A4%9A%E4%B8%AA%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="post-toc-text">多个聚合函数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#DISTINCT-%E5%8E%BB%E9%87%8D"><span class="post-toc-text">DISTINCT 去重</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A6%82%E6%9E%9C%E5%8A%A0%E5%85%A5%E5%85%B6%E4%BB%96%E9%9D%9E%E8%81%9A%E5%90%88%E5%AD%97%E6%AE%B5%E2%80%A6"><span class="post-toc-text">如果加入其他非聚合字段…</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GROUP-BY"><span class="post-toc-text">GROUP BY</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#HAVING"><span class="post-toc-text">HAVING</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#strings"><span class="post-toc-text">strings</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#like-%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="post-toc-text">like 与通配符</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="post-toc-text">字符串函数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%8B%BC%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9A-%E3%80%81-%E3%80%81concat"><span class="post-toc-text">拼接字符串：||、+、concat</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%97%A5%E6%9C%9F%E7%B1%BB%E5%9E%8B%EF%BC%9A%E6%97%B6%E9%97%B4%E6%88%B3"><span class="post-toc-text">日期类型：时间戳</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#now"><span class="post-toc-text">now</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%97%A5%E6%9C%9F%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%97%A5%E6%9C%9F"><span class="post-toc-text">日期字符串转换为日期</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%97%A5%E6%9C%9F%E5%87%8F%E6%B3%95%EF%BC%9AMySQL%E3%80%81SQLite%E3%80%81Postgres"><span class="post-toc-text">日期减法：MySQL、SQLite、Postgres</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6"><span class="post-toc-text">输出控制</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91%EF%BC%9AINTO"><span class="post-toc-text">输出重定向：INTO</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6-1"><span class="post-toc-text">输出控制</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ORDER-BY"><span class="post-toc-text">ORDER BY</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%99%90%E5%88%B6%E8%BE%93%E5%87%BA%E6%95%B0%E9%87%8F%E4%BB%A5%E5%8F%8A%E4%BD%8D%E7%BD%AE%EF%BC%9ALIMIT-OFFSET"><span class="post-toc-text">限制输出数量以及位置：LIMIT&amp;OFFSET</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B5%8C%E5%A5%97%E6%9F%A5%E8%AF%A2"><span class="post-toc-text">嵌套查询</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9E%84%E5%BB%BA%E5%B5%8C%E5%A5%97%E6%9F%A5%E8%AF%A2%EF%BC%9A%E5%85%88%E5%A4%96%E5%90%8E%E5%86%85"><span class="post-toc-text">构建嵌套查询：先外后内</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#IN"><span class="post-toc-text">IN</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ALL-ANY-EXIST"><span class="post-toc-text">ALL &amp; ANY &amp; EXIST</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link"><span class="post-toc-text">&#x3D;</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%86%85%E5%B5%8C%E6%9F%A5%E8%AF%A2%E2%BD%86%E9%A1%BB%E5%86%99%E5%9C%A8WHERE%E2%BC%A6%E5%8F%A5%E4%B8%AD"><span class="post-toc-text">内嵌查询⽆须写在WHERE⼦句中</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%8D%E5%BE%97%E4%B8%8D%E4%BD%BF%E7%94%A8%E5%B5%8C%E5%A5%97%E6%9F%A5%E8%AF%A2"><span class="post-toc-text">不得不使用嵌套查询</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%9C%80%E9%AB%98sid%E7%9A%84%E5%AD%A6%E7%94%9F%E5%A7%93%E5%90%8D"><span class="post-toc-text">最高sid的学生姓名</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%B2%A1%E8%A2%AB%E5%AD%A6%E2%BD%A3%E6%B3%A8%E5%86%8C%E7%9A%84%E8%AF%BE"><span class="post-toc-text">没被学⽣注册的课</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#window-%E5%87%BD%E6%95%B0"><span class="post-toc-text">window 函数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OVER"><span class="post-toc-text">OVER</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CTE-common-table-expressions"><span class="post-toc-text">CTE common table expressions</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#WITH%E8%BE%93%E5%87%BA%E7%9A%84%E5%88%AB%E5%90%8D"><span class="post-toc-text">WITH输出的别名</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#e-g-1"><span class="post-toc-text">e.g.</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="高级-SQL"><a href="#高级-SQL" class="headerlink" title="高级 SQL"></a>高级 SQL</h2><blockquote>
+<p>今天的课纲 ，我们要讲 聚合函数 + Group By；处理字符串、⽇期和时间类型；然后还有 Output control。接着是更复杂的Nested Queries、Common Table Expressions(CTE)和window functions。</p>
+</blockquote>
+<h3 id="SQL概述"><a href="#SQL概述" class="headerlink" title="SQL概述"></a>SQL概述</h3><blockquote>
+<p>SQL的全称是Structured English Query Language，是IBM发明的一种声明式语言，实现了关系代数或关系演算。现在简称Structured Query Language</p>
+</blockquote>
+<p>SQL是声明式的语言，就像上节课的关系代数，一切的具体实现由DBMS决定。</p>
+<h4 id="SQL特性"><a href="#SQL特性" class="headerlink" title="SQL特性"></a>SQL特性</h4><blockquote>
+<p>在2016版本中，他们添加了对JSON和多态表的⽀持，2003版本中则添加了对XML的⽀持，在 1999版本中，则⽀持了正则和触发器</p>
+</blockquote>
+<p>它的特性在不断演化，但在标准出来之前，每个公司就已经发明了他们⾃⼰专有的东⻄——所以没人去遵守标准</p>
+<h4 id="SQL的内容"><a href="#SQL的内容" class="headerlink" title="SQL的内容"></a>SQL的内容</h4><p>从技术层⾯⽽⾔，SQL并不是⼀⻔单⼀语⾔，它是DML、DDL、DCL的集合，还包含了一些其他东西比如：如如何定义视图，如何定义完整性以及奇怪的参照约束，以及事务</p>
+<h4 id="bag-algebra"><a href="#bag-algebra" class="headerlink" title="bag algebra"></a>bag algebra</h4><p>SQL基于bag algebra，元素可重复且无序，而不像list和set</p>
+<blockquote>
+<p>如果我们想让我们的元素有顺序，或者你想保证没有重复元素出现，那么本质上来说，数据 库必须为我们做⼀些额外⼯作才能提供这种功能</p>
+</blockquote>
+<p>只有在指明需要排序或去重时，SQL才会提供这些功能</p>
+<h3 id="e-g"><a href="#e-g" class="headerlink" title="e.g."></a>e.g.</h3><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913170801.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913170801.png" class title="Pasted image 20240913170801.png"></a>
+
+
+<h3 id="aggregations、DISTINCT、GROUP-BY、HAVING"><a href="#aggregations、DISTINCT、GROUP-BY、HAVING" class="headerlink" title="aggregations、DISTINCT、GROUP BY、HAVING"></a>aggregations、DISTINCT、GROUP BY、HAVING</h3><p>一个函数，将多个tuple作为输入，经过计算产生单个结果。</p>
+<blockquote>
+<p>在SQL-92标准中定义了<code>AVG()、MIN()、MAX()、SUM() 以及 COUNT()</code>。这只是⼀种基础标准，在之后的标准和其他数据库系统中，它们还提供了例如中位数，取模以及 标准偏差之类的东⻄。某些数据库系统也允许你使⽤你⾃⼰的聚合函数</p>
+</blockquote>
+<h4 id="单个聚合函数"><a href="#单个聚合函数" class="headerlink" title="单个聚合函数"></a>单个聚合函数</h4><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913171532.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913171532.png" class title="Pasted image 20240913171532.png"></a>
+
+<p>aggregation can only appear in the <code>output list</code> of the select statement，不能有其他字段</p>
+<ul>
+<li>这里的 <code>login</code> 没有实际意义，可以用<code>*</code>代替，它代表了该tuple中的所有属性</li>
+<li>实际上更进⼀步，我们可以将这个“*“⽤<code>1</code>替换，即每数⼀个tuple，tuple的数量就加1</li>
+</ul>
+<p>为了得出答案，数据库系统可以去选择这种查询的不同变体，它们中的某些在<code>性能</code>上可能有不同的差异</p>
+<h4 id="多个聚合函数"><a href="#多个聚合函数" class="headerlink" title="多个聚合函数"></a>多个聚合函数</h4><p>我们可以在单个查询中放⼊多个聚合函数</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913171723.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913171723.png" class title="Pasted image 20240913171723.png"></a>
+
+<h4 id="DISTINCT-去重"><a href="#DISTINCT-去重" class="headerlink" title="DISTINCT 去重"></a>DISTINCT 去重</h4><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913171807.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913171807.png" class title="Pasted image 20240913171807.png"></a>
+
+<blockquote>
+<p>某种意义上来说，这可能有点荒谬,因为，想必不存在有两个学⽣的登录账户是相同的情况，不然这就出问题了</p>
+</blockquote>
+<h4 id="如果加入其他非聚合字段…"><a href="#如果加入其他非聚合字段…" class="headerlink" title="如果加入其他非聚合字段…"></a>如果加入其他非聚合字段…</h4><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913172217.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913172217.png" class title="Pasted image 20240913172217.png"></a>
+
+<p>DBMS可能不知道这个cid是哪个，所以这通常是不被允许的</p>
+<p>MySQL原则上允许你⼲不合规的事，这是traditional mode，但也可以设置为更加严格。因此mysql下这种行为是被允许的</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913172139.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913172139.png" class title="Pasted image 20240913172139.png"></a>
+
+<p>这里它随便挑了个cid，其他的DBMS可能不允许你这么做比如PostgreSQL</p>
+<h4 id="GROUP-BY"><a href="#GROUP-BY" class="headerlink" title="GROUP BY"></a>GROUP BY</h4><p>修复这个问题的⼀个⽅法就是使⽤<code>GROUP BY</code>，然后对每个分组使用聚合函数。<code>它使得我们可以在聚合函数中提取信息</code></p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913172919.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913172919.png" class title="Pasted image 20240913172919.png"></a>
+
+
+<h4 id="HAVING"><a href="#HAVING" class="headerlink" title="HAVING"></a>HAVING</h4><p>如果想要过滤的聚合结果该怎么办？<code>where</code>中无法访问聚合的结果，因为where先于聚合函数执行，它把过滤的元组交给聚合函数进行运算。</p>
+<p>解决这个问题的⽅法就是使⽤<code>HAVING</code></p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913174531.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913174531.png" class title="Pasted image 20240913174531.png"></a>
+
+<p>我们可以利用这一系列语句进行查询优化（后文）</p>
+<h3 id="strings"><a href="#strings" class="headerlink" title="strings"></a>strings</h3><p>区分⼤⼩写，并且使⽤单引号来进⾏声明</p>
+<blockquote>
+<p>SQLite 中字符串是⼤⼩写敏感的，但你可以⽤单双引号标记他们。<br>MySQL中是不区分⼤⼩写的，你可以使⽤单双引号</p>
+</blockquote>
+<p>对于‘KaNyE’，在SQL标准下，你不得不使⽤upper函数进⾏⼤写转换，来做这项匹配⼯作。在MySQL中不⽤这么做</p>
+<h4 id="like-与通配符"><a href="#like-与通配符" class="headerlink" title="like 与通配符"></a>like 与通配符</h4><p>他会尝试去匹配通配符所能匹配的字符串。出于某种原因，这⾥（数据库）使⽤⼀个<code>%</code>来代替我们常⽤ <code>*</code> 号所表达的意思，同样 <code>_</code> 的意思是匹配⼀个字符</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913180721.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913180721.png" class title="Pasted image 20240913180721.png"></a>
+
+<h4 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h4><p>你所期望的substring，upperlower，trim之类的函数，它们都是SQL-92标准中的⼀部分</p>
+<p>对于字符串函数，数学函数和⽇期函数来讲，它们<code>可以出现在查询中的任何地⽅</code>。</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913181103.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913181103.png" class title="Pasted image 20240913181103.png"></a>
+
+<h4 id="拼接字符串：-、-、concat"><a href="#拼接字符串：-、-、concat" class="headerlink" title="拼接字符串：||、+、concat"></a>拼接字符串：||、+、concat</h4><blockquote>
+<p>Postgres 和Oracle ⼤概是所有（数据库）系 统中遵循SQL标准最好的。SQL server 、DB2其次，SQLite还⾏，MySQL最差</p>
+</blockquote>
+<p>在MySQL下不能⽤ + 、不能⽤ || ，只能通过<code>concat</code>()函数</p>
+<h3 id="日期类型：时间戳"><a href="#日期类型：时间戳" class="headerlink" title="日期类型：时间戳"></a>日期类型：时间戳</h3><p>可以单纯记录录<code>时间戳</code>⽽不⽤时间格式，它们可以切换时间粒度、可以跟踪：有时是秒、有时是毫秒或者是更细粒度的。</p>
+<p>当你对时间进⾏操作和从它们中提取信息时，结果就会变得不可靠。对于所有不同系统来说，<code>语法可以千差万别</code></p>
+<h4 id="now"><a href="#now" class="headerlink" title="now"></a>now</h4><ul>
+<li>例如mysql用NOW()返回时间戳，也有CURRENT_TIMESTAMP关键字</li>
+<li>而SQLite使用CURRENT_TIMESTAMP()</li>
+<li>Postgres有CURRENT_TIMESTAMP关键字而没有函数</li>
+</ul>
+<h4 id="日期字符串转换为日期"><a href="#日期字符串转换为日期" class="headerlink" title="日期字符串转换为日期"></a>日期字符串转换为日期</h4><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182214.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182214.png" class title="Pasted image 20240913182214.png"></a>
+
+<p><code>EXTRACT</code> 提取出这个⽇期中的天数，<code>DATE</code> 把日期字符串转换为日期。</p>
+<h4 id="日期减法：MySQL、SQLite、Postgres"><a href="#日期减法：MySQL、SQLite、Postgres" class="headerlink" title="日期减法：MySQL、SQLite、Postgres"></a>日期减法：MySQL、SQLite、Postgres</h4><p>用<code>减法</code>时可能会出现问题：</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182413.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182413.png" class title="Pasted image 20240913182413.png"></a>
+
+<blockquote>
+<p>MySQL把字符串转换成数字类型20180829-20180101&#x3D;728</p>
+</blockquote>
+<p>想要修复需要：</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182519.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182519.png" class title="Pasted image 20240913182519.png"></a>
+
+<p>转换为UNIX中的时间戳然后相减，再转换为天。另外还有一种方式 <code>DATEDIFF</code> </p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182656.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182656.png" class title="Pasted image 20240913182656.png"></a>
+
+
+<p>在SQLite中，它们并没有DATEDIFF函数，只能将当前时间戳转换为公历然后相减：</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182935.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913182935.png" class title="Pasted image 20240913182935.png"></a>
+
+
+
+
+<h3 id="输出控制"><a href="#输出控制" class="headerlink" title="输出控制"></a>输出控制</h3><h4 id="输出重定向：INTO"><a href="#输出重定向：INTO" class="headerlink" title="输出重定向：INTO"></a>输出重定向：INTO</h4><p>一个查询产生了大量的结果，它会在终端上打印出来，你可把这些结果直接写入一张表、或者保存到数据库缓存中，即所谓的<code>输出重定向</code>。</p>
+<p>你可以使⽤ <code>INTO</code> 关键字，它在执⾏过程中会将输出重定向到新表，也可以插入已存在的表（要求兼容）</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913183945.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913183945.png" class title="Pasted image 20240913183945.png"></a>
+
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913183951.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240913183951.png" class title="Pasted image 20240913183951.png"></a>
+
+<blockquote>
+<p>事情变得很奇怪的地⽅在于，当你在你的表中设置⼀些约束后，当你再去写⼊数据时，SELECT 语句实际就会违反这些限制。。。课上并没说清什么意思</p>
+</blockquote>
+<h4 id="输出控制-1"><a href="#输出控制-1" class="headerlink" title="输出控制"></a>输出控制</h4><h5 id="ORDER-BY"><a href="#ORDER-BY" class="headerlink" title="ORDER BY"></a>ORDER BY</h5><p>默认升序；可以根据多个属性排序</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914185411.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914185411.png" class title="Pasted image 20240914185411.png"></a>
+
+<h5 id="限制输出数量以及位置：LIMIT-OFFSET"><a href="#限制输出数量以及位置：LIMIT-OFFSET" class="headerlink" title="限制输出数量以及位置：LIMIT&amp;OFFSET"></a>限制输出数量以及位置：LIMIT&amp;OFFSET</h5><p>跳过10个然后输出20个：</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914185606.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914185606.png" class title="Pasted image 20240914185606.png"></a>
+
+<p>多次调用LIMIT的结果可能会不同——因为数据库是<code>无序</code>的</p>
+<h3 id="嵌套查询"><a href="#嵌套查询" class="headerlink" title="嵌套查询"></a>嵌套查询</h3><p>将⼀个查询的输出结果作为另⼀个查询的输⼊，可以看作一个函数</p>
+<ul>
+<li>大部分查询优化器都会对嵌套查询用<code>JOIN尝试重写</code></li>
+<li>很难优化，如果内外查询进行交叉引用</li>
+<li>内查询可以出现的在任何地方</li>
+</ul>
+<blockquote>
+<p>所有的这些操作符（例如，IN，EXISTS，ANY）所试图表达的是在内部查询中的是否存在 有满⾜条件的任何tuple，并不会真的每个都要去遍历⼀遍</p>
+</blockquote>
+<h4 id="构建嵌套查询：先外后内"><a href="#构建嵌套查询：先外后内" class="headerlink" title="构建嵌套查询：先外后内"></a>构建嵌套查询：先外后内</h4><p>⼀个构建嵌套查询的办法是先从外部查询开始构建，这点⼀直很重要</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914220619.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914220619.png" class title="Pasted image 20240914220619.png"></a>
+
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914220646.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914220646.png" class title="Pasted image 20240914220646.png"></a>
+
+<h4 id="IN"><a href="#IN" class="headerlink" title="IN"></a>IN</h4><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914192425.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914192425.png" class title="Pasted image 20240914192425.png"></a>
+
+<blockquote>
+<p>内部查询输出的sid要和WHERE中sid的匹配</p>
+</blockquote>
+<p>IN是最糟糕的操作符，实际上此处是有两个for循环，我们一遍又一遍地在执行内部产生完全相同输出的查询——实际只需要执行一次</p>
+<h4 id="ALL-ANY-EXIST"><a href="#ALL-ANY-EXIST" class="headerlink" title="ALL &amp; ANY &amp; EXIST"></a>ALL &amp; ANY &amp; EXIST</h4><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914220918.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914220918.png" class title="Pasted image 20240914220918.png"></a>
+
+<ul>
+<li>ALL表示的是在内部⼦查询中满⾜我所有条件的每个tuple</li>
+<li>ANY表示的是当满⾜内嵌查询中表达式时，它会返回任意⼀条满⾜条件的数据</li>
+</ul>
+<p>So，本质上来讲，IN和ANY⼲的是⼀样的事情</p>
+<p>EXISTS则表示⾄少返回⼀⾏数据</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914221159.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914221159.png" class title="Pasted image 20240914221159.png"></a>
+<h4 id><a href="#" class="headerlink" title="&#x3D;"></a>&#x3D;</h4><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914221050.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914221050.png" class title="Pasted image 20240914221050.png"></a>
+
+
+<h4 id="内嵌查询⽆须写在WHERE⼦句中"><a href="#内嵌查询⽆须写在WHERE⼦句中" class="headerlink" title="内嵌查询⽆须写在WHERE⼦句中"></a>内嵌查询⽆须写在WHERE⼦句中</h4><p>实际上，它们可以放在任何地⽅</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914204412.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914204412.png" class title="Pasted image 20240914204412.png"></a>
+
+<p>——这实际上是在找两个查询的sname的交集，先查enrolled表再查student表，在SELECT中做了一次JOIN</p>
+<h4 id="不得不使用嵌套查询"><a href="#不得不使用嵌套查询" class="headerlink" title="不得不使用嵌套查询"></a>不得不使用嵌套查询</h4><blockquote>
+<p>单个查询无法完成一些事情</p>
+</blockquote>
+<h5 id="最高sid的学生姓名"><a href="#最高sid的学生姓名" class="headerlink" title="最高sid的学生姓名"></a>最高sid的学生姓名</h5><p>如果我们想得到最高sid的学生姓名，我们看起来会写一个这样的查询：</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205029.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205029.png" class title="Pasted image 20240914205029.png"></a>
+
+<p>但这是不可行的，group by 看起来也不能奏效。So，我们知道我们想将sid和name作为输出</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205127.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205127.png" class title="Pasted image 20240914205127.png"></a>
+
+<p>可以使用大于等于ALL，或者IN+MAX，或者LIMIT+ORDERBY</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205320.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205320.png" class title="Pasted image 20240914205320.png"></a>
+
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205401.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205401.png" class title="Pasted image 20240914205401.png"></a>
+
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205439.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205439.png" class title="Pasted image 20240914205439.png"></a>
+
+<h5 id="没被学⽣注册的课"><a href="#没被学⽣注册的课" class="headerlink" title="没被学⽣注册的课"></a>没被学⽣注册的课</h5><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205608.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205608.png" class title="Pasted image 20240914205608.png"></a>
+
+<p>NOT EXISTS即我们不想匹配内部查询所得结果的任何内容。</p>
+<p>现在，此处我们实际上要做的，就是将内部查询中的课程id和外部查询的课程id绑定起来</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205854.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914205854.png" class title="Pasted image 20240914205854.png"></a>
+
+
+
+<h3 id="window-函数"><a href="#window-函数" class="headerlink" title="window 函数"></a>window 函数</h3><p>window函数会另外加一个列表示计算出的某些属性，这里OVER前的函数也可以是聚合函数</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914210314.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914210314.png" class title="Pasted image 20240914210314.png"></a>
+
+<p>某些特殊的window函数所做的事情就是，⽐如为当前⾏引⼊⼀个⾏号</p>
+<h4 id="OVER"><a href="#OVER" class="headerlink" title="OVER"></a>OVER</h4><p>OVER⼦句的作⽤是⽤来表示我们该如何切分数据，有点像GROUP BY的意思。可以配合PARTITION BY和ORDER BY 使用</p>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914220413.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914220413.png" class title="Pasted image 20240914220413.png"></a>
+
+<h3 id="CTE-common-table-expressions"><a href="#CTE-common-table-expressions" class="headerlink" title="CTE common table expressions"></a>CTE common table expressions</h3><p>CTE引⼊<code>WITH</code>⼦句，WITH⼦句会在你执⾏正常的查询之前先⼀步执 ⾏。</p>
+<ul>
+<li>WITH执行的查询结果<code>仅能在该查询中使用</code></li>
+<li>可以替代嵌套查询和视图，且看起来更加“<code>模块化</code>”</li>
+</ul>
+<a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914215013.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914215013.png" class title="Pasted image 20240914215013.png"></a>
+
+<p>它和嵌套查询⾮常相似，但我们会在稍后看到⼀些情况，某些你可以在CTE中做到的事情，但换成嵌套查询却做不到</p>
+<h4 id="WITH输出的别名"><a href="#WITH输出的别名" class="headerlink" title="WITH输出的别名"></a>WITH输出的别名</h4><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914215247.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914215247.png" class title="Pasted image 20240914215247.png"></a>
+
+
+<h4 id="e-g-1"><a href="#e-g-1" class="headerlink" title="e.g."></a>e.g.</h4><a href="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914215416.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/14/CMU%2015445%20Lec2%20%E9%AB%98%E7%BA%A7SQL/Pasted%20image%2020240914215416.png" class title="Pasted image 20240914215416.png"></a>
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-14</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/CMU-15445/'>
+                            CMU 15445
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
