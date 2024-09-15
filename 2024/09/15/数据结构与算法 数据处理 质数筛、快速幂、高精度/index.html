@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="数据处理 质数筛、快速幂、高精度" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    数据处理 质数筛、快速幂、高精度
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%B4%A8%E6%95%B0%E7%AD%9B"><span class="post-toc-text">质数筛</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9C%B4%E7%B4%A0%E8%B4%A8%E6%95%B0%E7%AD%9B"><span class="post-toc-text">朴素质数筛</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%9F%83%E6%B0%8F%E7%AD%9B%E6%B3%95"><span class="post-toc-text">埃氏筛法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%AC%A7%E6%8B%89%E7%AD%9B%E6%B3%95"><span class="post-toc-text">欧拉筛法</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%BF%AB%E9%80%9F%E5%B9%82"><span class="post-toc-text">快速幂</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%AB%98%E7%B2%BE%E5%BA%A6"><span class="post-toc-text">高精度</span></a></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h3 id="质数筛"><a href="#质数筛" class="headerlink" title="质数筛"></a>质数筛</h3><ul>
+<li>质数：约数只有1和本身，不包含01</li>
+<li>质数筛：筛选出0-n全部的质数</li>
+</ul>
+<h4 id="朴素质数筛"><a href="#朴素质数筛" class="headerlink" title="朴素质数筛"></a>朴素质数筛</h4><ul>
+<li>利用质数特性，一个一个判断</li>
+<li>O(n^2)</li>
+<li>优化1：大于数的一半的数一定不是数的约数<ul>
+<li>只需处理n&#x2F;2及以下的约数。O(n^2)</li>
+</ul>
+</li>
+<li>优化2：假设非质数，则两个因数一个必大于等于根号n，另一个小于等于根号n<ul>
+<li>只需处理根号n及以下的约数。O(n^(3&#x2F;2))</li>
+</ul>
+</li>
+</ul>
+<a href="/2024/09/15/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%20%E8%B4%A8%E6%95%B0%E7%AD%9B%E3%80%81%E5%BF%AB%E9%80%9F%E5%B9%82%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6/Pasted%20image%2020240913110553.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/15/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%20%E8%B4%A8%E6%95%B0%E7%AD%9B%E3%80%81%E5%BF%AB%E9%80%9F%E5%B9%82%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6/Pasted%20image%2020240913110553.png" class title="Pasted image 20240913110553.png"></a>
+<h4 id="埃氏筛法"><a href="#埃氏筛法" class="headerlink" title="埃氏筛法"></a>埃氏筛法</h4><ul>
+<li>合数必可被分解为小于它的质数的乘积</li>
+<li>似乎是O(nloglogn)</li>
+</ul>
+<a href="/2024/09/15/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%20%E8%B4%A8%E6%95%B0%E7%AD%9B%E3%80%81%E5%BF%AB%E9%80%9F%E5%B9%82%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6/Pasted%20image%2020240913110542.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/15/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%20%E8%B4%A8%E6%95%B0%E7%AD%9B%E3%80%81%E5%BF%AB%E9%80%9F%E5%B9%82%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6/Pasted%20image%2020240913110542.png" class title="Pasted image 20240913110542.png"></a>
+
+
+<h4 id="欧拉筛法"><a href="#欧拉筛法" class="headerlink" title="欧拉筛法"></a>欧拉筛法</h4><ul>
+<li>每个合数都可以分解为小于它的唯一的质数组合，那么边遍历边筛即可</li>
+<li>O(n)</li>
+</ul>
+<a href="/2024/09/15/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%20%E8%B4%A8%E6%95%B0%E7%AD%9B%E3%80%81%E5%BF%AB%E9%80%9F%E5%B9%82%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6/Pasted%20image%2020240913115304.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/15/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%20%E8%B4%A8%E6%95%B0%E7%AD%9B%E3%80%81%E5%BF%AB%E9%80%9F%E5%B9%82%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6/Pasted%20image%2020240913115304.png" class title="Pasted image 20240913115304.png"></a>
+
+
+
+
+
+
+<h3 id="快速幂"><a href="#快速幂" class="headerlink" title="快速幂"></a>快速幂</h3><ul>
+<li>利用指数快速增长计算数的幂次</li>
+<li>幂的二进制1可视为是否需要乘当前幂次，例如计算2的3次方，3&#x3D;0b11，即2*4</li>
+</ul>
+<a href="/2024/09/15/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%20%E8%B4%A8%E6%95%B0%E7%AD%9B%E3%80%81%E5%BF%AB%E9%80%9F%E5%B9%82%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6/Pasted%20image%2020240914113605.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/15/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%20%E8%B4%A8%E6%95%B0%E7%AD%9B%E3%80%81%E5%BF%AB%E9%80%9F%E5%B9%82%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6/Pasted%20image%2020240914113605.png" class title="Pasted image 20240914113605.png"></a>
+
+<h3 id="高精度"><a href="#高精度" class="headerlink" title="高精度"></a>高精度</h3><p>大数无法用现有的数据类型精确表示，需要使用数组模拟加减的竖式运算。输入时只能用字符串，结果保存在一个整数数组里</p>
+<ul>
+<li>模拟竖式运算的加减乘除</li>
+<li>设置一个进位变量会方便很多</li>
+</ul>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-15</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/'>
+                            数据结构与算法
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
