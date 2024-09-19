@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="小林系统 CPU程序执行概述、存储器层次结构、线程选择" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+            <!--返回顶部css-->
+            
+<link rel="stylesheet" href="/css/returnToTop.css">
+
+            
+<link rel="stylesheet" href="/css/unicons.css">
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+        
+<link rel="stylesheet" href="/css/returnToLastPage.css">
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    小林系统 CPU程序执行概述、存储器层次结构、线程选择
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CPU-%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E7%9A%84%EF%BC%9F"><span class="post-toc-text">CPU 是如何执行程序的？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%9B%BE%E7%81%B5%E6%9C%BA"><span class="post-toc-text">图灵机</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E6%A8%A1%E5%9E%8B%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="post-toc-text">冯诺依曼模型：计算机基本结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="post-toc-text">程序执行过程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%8C%87%E4%BB%A4"><span class="post-toc-text">指令</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%80%A7%E8%83%BD%E8%A1%A1%E9%87%8F"><span class="post-toc-text">性能衡量</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="post-toc-text">存储器层次结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="post-toc-text">寄存器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CPU%E4%B8%89%E7%BA%A7%E7%BC%93%E5%AD%98%EF%BC%9ASRAM"><span class="post-toc-text">CPU三级缓存：SRAM</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#L1-%E7%BC%93%E5%AD%98"><span class="post-toc-text">L1 缓存</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#L2"><span class="post-toc-text">L2</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#L3"><span class="post-toc-text">L3</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%86%85%E5%AD%98%EF%BC%9ADRAM"><span class="post-toc-text">内存：DRAM</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SSD-HDD"><span class="post-toc-text">SSD&#x2F;HDD</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E4%BD%93%E7%B3%BB"><span class="post-toc-text">存储器层次体系</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CPU-%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9"><span class="post-toc-text">CPU 线程选择</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B1%BB%E4%B8%8E%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="post-toc-text">调度类与调度策略</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CFS-%E5%AE%8C%E5%85%A8%E5%85%AC%E5%B9%B3%E8%B0%83%E5%BA%A6"><span class="post-toc-text">CFS 完全公平调度</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CPU-%E8%BF%90%E8%A1%8C%E9%98%9F%E5%88%97"><span class="post-toc-text">CPU 运行队列</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%B0%83%E6%95%B4%E4%BC%98%E5%85%88%E7%BA%A7"><span class="post-toc-text">调整优先级</span></a></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h3 id="CPU-是如何执行程序的？"><a href="#CPU-是如何执行程序的？" class="headerlink" title="CPU 是如何执行程序的？"></a>CPU 是如何执行程序的？</h3><a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/CPU%E6%8C%87%E4%BB%A4%E6%89%A7%E8%A1%8C.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/CPU%E6%8C%87%E4%BB%A4%E6%89%A7%E8%A1%8C.png" class title="CPU指令执行.png"></a>
+
+<h4 id="图灵机"><a href="#图灵机" class="headerlink" title="图灵机"></a>图灵机</h4><p>图灵机&#x3D;存储器+执行器<br>执行器包含临时存储器即寄存器，控制单元解释并执行指令，算术运算单元</p>
+<h4 id="冯诺依曼模型：计算机基本结构"><a href="#冯诺依曼模型：计算机基本结构" class="headerlink" title="冯诺依曼模型：计算机基本结构"></a>冯诺依曼模型：计算机基本结构</h4><p>程序员眼中的内存：大数组，以字节为单位</p>
+<p>CPU：32&#x2F;64位宽，含寄存器（多种类别）、控制单元、逻辑运算单元</p>
+<p>一次操纵小于32位数的时候，性能与64位CPU差别不大；但二者的寻址空间差异则比较大</p>
+<p>总线：通信线路，分为地址&#x2F;数据&#x2F;控制总线。</p>
+<p>一条总线用高低电平表示01，想要一次获得64位地址则需要64条地址总线，这表示了线路位宽，CPU位宽最好大于线路位宽</p>
+<p>输入输出设备会使用控制总线和CPU交互</p>
+<h4 id="程序执行过程"><a href="#程序执行过程" class="headerlink" title="程序执行过程"></a>程序执行过程</h4><p>程序执行过程：根据pc通过地址总线向内存请求数据，通过数据总线接收数据，存到指令寄存器，pc自增字长；解释指令，存储类指令交给cu，算术类交给alu执行。这一个周期被称为CPU的指令执行周期</p>
+<p>a &#x3D; 1 + 2执行过程：编译程序为机器指令后执行机器指令；加载1到寄存器，加载2到寄存器，两个寄存器相加结果放到寄存器，存储结果到内存。这里的寄存器和地址由编译器指定，cpu是无情的执行机器</p>
+<h4 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h4><p>指令：不同种类的CPU能识别不同的指令，特定CPU指令的集合被称为指令集</p>
+<p>以MIPS指令为例，它有R（register)、I（immediate）、J（jump)三种指令：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918124911.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918124911.png" class title="Pasted image 20240918124911.png"></a>
+
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918125038.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918125038.png" class title="Pasted image 20240918125038.png"></a>
+
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918125159.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918125159.png" class title="Pasted image 20240918125159.png"></a>
+
+<p>现代CPU采用流水线技术加快指令执行，即：取指令、解析指令、执行指令、存储数据，这是一个四级流水线。这一个完整的周期被称为<code>指令周期</code></p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/CPU%E6%8C%87%E4%BB%A4%E5%91%A8%E6%9C%9F.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/CPU%E6%8C%87%E4%BB%A4%E5%91%A8%E6%9C%9F.webp" class title="CPU指令周期.webp"></a>
+
+<ul>
+<li>取指令、解析、无条件跳转指由控制器进行</li>
+<li>其他操作由ALU进行</li>
+</ul>
+<p>从<code>功能</code>的角度分，指令可以分为：数据传输、运算、跳转、信号、闲置五种类型</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918125640.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918125640.png" class title="Pasted image 20240918125640.png"></a>
+
+<h4 id="性能衡量"><a href="#性能衡量" class="headerlink" title="性能衡量"></a>性能衡量</h4><ul>
+<li>CPU 的硬件参数都会有 <code>GHz</code> 这个参数，代表每秒产生的脉冲信号次数，即<code>时钟频率</code>；每一次脉冲信号高低电平的转换代表新周期的开始，称为<code>时钟周期</code>。</li>
+<li>CPU在一个时钟周期内可以进行一些基本的操作</li>
+<li>一条指令可能需要若干个时钟周期才能完成</li>
+</ul>
+<p>时钟频率越高，时钟周期就越短，基本操作的执行速度也就越快。</p>
+<p>对于程序的执行时间，我们用这个公式来衡量：<code>时钟周期数 * 时钟周期时间</code>，它可以进一步细化为：<code>指令数 * 平均指令周期数 CPI * 时钟周期时间</code></p>
+<p>优化程序的执行速度可以从这三个方面下手：</p>
+<ul>
+<li><code>超频</code>可以降低时钟周期时间，提高速度</li>
+<li>现代CPU采用<code>流水线</code>技术，让一条指令需要的 CPU 时钟周期数尽可能的少</li>
+<li>指令数主要依靠<code>编译器</code>优化</li>
+</ul>
+<h3 id="存储器层次结构"><a href="#存储器层次结构" class="headerlink" title="存储器层次结构"></a>存储器层次结构</h3><a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.png" class title="存储器层次结构.png"></a>
+
+<p>存储器分为易失性存储器和非易失性存储器，区别在于断电后数据是否会丢失</p>
+<ul>
+<li>易失：寄存器、CPU三级缓存、内存</li>
+<li>非易失：固态&#x2F;机械硬盘 SSD&#x2F;HDD、（非易失内存）</li>
+</ul>
+<p>速度直观比较：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918133038.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918133038.png" class title="Pasted image 20240918133038.png"></a>
+
+<p>实际：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918133248.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918133248.png" class title="Pasted image 20240918133248.png"></a>
+
+
+
+<h4 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h4><ul>
+<li>32 位 CPU 中大多数寄存器可以存储 <code>4</code> 个字节； 64 位 CPU 中大多数寄存器可以存储 <code>8</code> 个字节。</li>
+<li>延迟通常为<code>半个时钟周期</code>，一般不到1ns。2 GHz 主频的CPU，时钟周期为0.5ns，寄存器访问时间为0.25ns</li>
+</ul>
+<h4 id="CPU三级缓存：SRAM"><a href="#CPU三级缓存：SRAM" class="headerlink" title="CPU三级缓存：SRAM"></a>CPU三级缓存：SRAM</h4><ul>
+<li>使用芯片<code>SRAM</code>：Static Random-Access Memory，支持随机访问 &amp; 有电才有数据，所以叫静态随机存储器</li>
+<li>1 bit 数据一般需要 6 个晶体管，<code>存储密度不高</code>、电路简单，所以访问速度飞快</li>
+<li>每个CPU有自己配套的L1、L2缓存，L1缓存又分为指令缓存和数据缓存；所有CPU共享一个L3缓存</li>
+</ul>
+<h5 id="L1-缓存"><a href="#L1-缓存" class="headerlink" title="L1 缓存"></a>L1 缓存</h5><ul>
+<li>访问时间约为 <code>2~4 个时钟周期</code>，大小在 <code>几十到几百KB</code></li>
+</ul>
+<p>可以通过以下命令查看 linux 数据和指令缓存的大小：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918134213.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918134213.png" class title="Pasted image 20240918134213.png"></a>
+
+<h5 id="L2"><a href="#L2" class="headerlink" title="L2"></a>L2</h5><ul>
+<li>速度在 <code>10~20 个时钟周期</code>，通常大小在<code>几百 KB 到几 MB</code></li>
+</ul>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918134342.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918134342.png" class title="Pasted image 20240918134342.png"></a>
+
+<h5 id="L3"><a href="#L3" class="headerlink" title="L3"></a>L3</h5><ul>
+<li><code>20~60个时钟周期</code>，通常大小在<code>几 MB 到几十 MB</code> 不等</li>
+</ul>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918134406.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240918134406.png" class title="Pasted image 20240918134406.png"></a>
+
+
+<h4 id="内存：DRAM"><a href="#内存：DRAM" class="headerlink" title="内存：DRAM"></a>内存：DRAM</h4><ul>
+<li>DRAM （Dynamic Random Access Memory，动态随机存取存储器） </li>
+<li>密度高功耗低容量大造价便宜，<code>1bit数据用一个晶体管+一个电容</code>存储，电容漏电所以需要定时刷新</li>
+<li>DRAM 的数据访问电路和刷新电路都比 SRAM 更复杂，所以访问的速度会更慢，约在 <code>200~300 个时钟周期</code></li>
+</ul>
+<h4 id="SSD-HDD"><a href="#SSD-HDD" class="headerlink" title="SSD&#x2F;HDD"></a>SSD&#x2F;HDD</h4><ul>
+<li>Solid-state disk：结构和内存类似，但持久，比内存慢 <code>10~1000</code> 倍。</li>
+<li>Hard Disk Drive：物理读写方式访问，比内存慢 <code>10W</code> 倍左右</li>
+</ul>
+<blockquote>
+<p>由于 SSD 的价格快接近机械硬盘了，因此机械硬盘已经逐渐被 SSD 替代了。</p>
+</blockquote>
+<h4 id="存储器层次体系"><a href="#存储器层次体系" class="headerlink" title="存储器层次体系"></a>存储器层次体系</h4><ul>
+<li>存储空间越大的存储器设备，其访问速度越慢，所需成本也相对越少。<ul>
+<li>每 MB 大小的 L1 Cache 相比内存贵了 466 倍，相比机械硬盘那更是贵了 175000 倍。</li>
+</ul>
+</li>
+<li>CPU 只直接和寄存器交互，每一种存储器设备只和它<code>相邻</code>的存储器设备打交道。</li>
+<li>每一级存储设备都充当下一级存储设备的<code>缓存</code>，充分利用了<code>局部性</code></li>
+<li>CPU需要数据时，优先从缓存中找，没有再从下一级存储设备中找<ul>
+<li>寄存器–L123–内存–硬盘</li>
+</ul>
+</li>
+</ul>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB%E5%9B%BE.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E5%85%B3%E7%B3%BB%E5%9B%BE.webp" class title="存储器的层次关系图.webp"></a>
+
+
+<h3 id="CPU-线程选择"><a href="#CPU-线程选择" class="headerlink" title="CPU 线程选择"></a>CPU 线程选择</h3><a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/CPU%20%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/CPU%20%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9.png" class title="CPU 线程选择.png"></a>
+
+<h4 id="调度类与调度策略"><a href="#调度类与调度策略" class="headerlink" title="调度类与调度策略"></a>调度类与调度策略</h4><p>linux 中的进程和线程都用 <code>struct task</code> 表示，区别在于线程<code>共享了进程已创建的资源</code>，使用的资源更少，所以也叫 <code>轻量级进程</code>。task 是<code>调度的单位</code></p>
+<p>任务有三种调度类，每个调度类型都有自己的<code>任务队列</code>：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/%E8%B0%83%E5%BA%A6%E7%B1%BB.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/%E8%B0%83%E5%BA%A6%E7%B1%BB.webp" class title="调度类.webp"></a>
+
+<p>ddl和realtime组合起来有三种策略：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240920002620.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240920002620.png" class title="Pasted image 20240920002620.png"></a>
+
+<p>fair 类任务分为普通任务和后台任务两种调度策略：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240920002652.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/Pasted%20image%2020240920002652.png" class title="Pasted image 20240920002652.png"></a>
+
+<h4 id="CFS-完全公平调度"><a href="#CFS-完全公平调度" class="headerlink" title="CFS 完全公平调度"></a>CFS 完全公平调度</h4><p>CFS 即 Completely Fair Scheduling，在一段时间内，所有的任务<code>运行时间一样</code>。但会优先调度<code>优先级</code>高的任务，相应的，优先级高的任务每次运行的时间 <code>vruntime</code> 较少</p>
+<p>我们根据 <code>权重值</code> 计算 vruntime：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/vruntime.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/vruntime.webp" class title="vruntime.webp"></a>
+
+<p>权重值不等于优先级，内核中有一个 <code>nice</code> 值和权重值的转换表，<code>nice 越低的权重越大，优先级越高，vruntime 越少，越先调度</code></p>
+<h4 id="CPU-运行队列"><a href="#CPU-运行队列" class="headerlink" title="CPU 运行队列"></a>CPU 运行队列</h4><p>每个CPU有自己的运行队列，根据调度类的不同分为三个运行队列，其中CFS调度队列用红黑树表示，其他两个都是普通的队列。</p>
+<p>这几个调度类也分优先级：Deadline &gt; Realtime &gt; Fair，优先执行实时任务</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/CPU%E9%98%9F%E5%88%97.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/CPU%E9%98%9F%E5%88%97.webp" class title="CPU队列.webp"></a>
+
+<h4 id="调整优先级"><a href="#调整优先级" class="headerlink" title="调整优先级"></a>调整优先级</h4><p>可以通过调整nice值的方式实现，毕竟nice越少，vruntime越少，优先级越高</p>
+<p>普通任务优先级可以调整的范围为：<code>-20～19</code>，其中0为默认优先级。优先级会被映射到99<del>139，这是普通任务的优先级范围，实时任务的优先级实际在0</del>98：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/%E4%BC%98%E5%85%88%E7%BA%A7.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/%E4%BC%98%E5%85%88%E7%BA%A7.webp" class title="优先级.webp"></a>
+
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/nice.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/nice.webp" class title="nice.webp"></a>
+
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/renice.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/renice.webp" class title="renice.webp"></a>
+
+<p>若想获得更高的优先级则需要<code>更改调度策略</code>：</p>
+<a href="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/chrt.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/20/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20CPU%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%A6%82%E8%BF%B0%E3%80%81%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E3%80%81%E7%BA%BF%E7%A8%8B%E9%80%89%E6%8B%A9/chrt.webp" class title="chrt.webp"></a>
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-20</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/OS/'>
+                            OS
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+        
+<script src="/js/returnToTop.js"></script>
+
+    
+
+    
+        
+<script src="/js/returnToLastPage.js"></script>
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+                <!-- 回到顶部的按钮-->  
+                <div class="progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+            
+                <!-- 返回的按钮-->  
+                <div class="return-to-last-progress-wrap shadow-drop-2-bottom">
+                    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+                    </svg>
+                </div>
+            
+    </body>
+</html>
