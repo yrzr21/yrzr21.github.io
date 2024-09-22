@@ -4,7 +4,7 @@
     <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
-    <meta name="description" content="" />
+    <meta name="description" content="小林网络 HTTP常见面试题、 HTTP/1.1优化、RSA握手协议、ECDHE握手协议、HTTPS优化" />
     <meta name="hexo-theme-A4" content="v1.9.2" />
     <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
     <title>Toki</title>
@@ -112,97 +112,139 @@
             
             
             
-                <div class="shadow-drop-2-bottom index-main">
-                    <!-- 这个header就是特指index的头部 -->
+                <div class="shadow-drop-2-bottom paper-main">
+                    
 
 
-
-    <div style="text-align: center;"> 
-
-        <a class="index-logo" href="/">Toki</a>
-        <div style="margin-bottom: 12px;"> 
-            
-                
-                    首页
-                
-            
-                
-                    &nbsp / &nbsp<a href="/list/">文章</a>
-                
-            
-                
-                    &nbsp / &nbsp<a href="/categories/">分类</a>
-                
-            
-                
-                    &nbsp / &nbsp<a href="/contact/">联系</a>
-                
-            
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
         </div>
+        
     </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
 
-                    <div class="post-main">
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
     
+        
+            
+                <div class="post-main-title">
+                    小林网络 HTTP常见面试题、 HTTP/1.1优化、RSA握手协议、ECDHE握手协议、HTTPS优化
+                </div>
+            
+        
+      
     
-       
-       
-       
-            <div class="post-md">
-                <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><blockquote>
-<p>本网站基于 Github Pages 部署，访问速度或许受限，请使用合适的网络环境</p>
-</blockquote>
-<p>你好，欢迎来到我的博客。</p>
-<p>本博客的主要内容为我的学习笔记，一些参考资料的链接在此列出：</p>
-<ol>
-<li>同款博客主题：<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/HiNinoJay/hexo-theme-A4">HiNinoJay&#x2F;hexo-theme-A4: A hexo theme that looks like an A4 paper.（一个类A4纸张质感的hexo博客主题。） (github.com)</a></li>
-</ul>
-</li>
-<li>MIT 6.s081：<ul>
-<li><a target="_blank" rel="noopener" href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-s081">简介 | MIT6.S081 (gitbook.io)</a></li>
-<li><a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2023/schedule.html">6.1810 &#x2F; Fall 2023 (mit.edu)</a></li>
-</ul>
-</li>
-<li>CMU 15445：<ul>
-<li><a target="_blank" rel="noopener" href="https://15445.courses.cs.cmu.edu/spring2024/schedule.html">Schedule | CMU 15-445&#x2F;645 :: Intro to Database Systems (Spring 2024)</a></li>
-</ul>
-</li>
-<li>小林coding系列：<ul>
-<li><a target="_blank" rel="noopener" href="https://xiaolincoding.com/">小林coding (xiaolincoding.com)</a></li>
-</ul>
-</li>
-<li>GDB：<ul>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=PorfLSr3DDI">CppCon 2015: Greg Law “ Give me 15 minutes &amp; I’ll change your view of GDB” (youtube.com)</a></li>
-</ul>
-</li>
-<li>RISCV 相关资料：<ul>
-<li><a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2023/reference.html">6.1810 &#x2F; Fall 2023 (mit.edu)</a></li>
-</ul>
-</li>
-<li><a target="_blank" rel="noopener" href="https://wxflogic.gitbook.io/logic/preface">前言 | 逻辑学简短入门（牛津通识读本） (gitbook.io)</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ayWzeSEs2/?spm_id_from=333.1365.list.card_archive.click&vd_source=0817cc367069141e985f03568a7f2ded">【微观经济学原理 14.01 2018】麻省理工—中英字幕_哔哩哔哩_bilibili</a></li>
-</ol>
-</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+
+    <div class="post-md">
+        
+            
+                
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><a href="/2024/09/22/%E8%AE%A1%E7%BD%91%20%E5%B0%8F%E6%9E%97%E7%BD%91%E7%BB%9C%20HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%81%20HTTP/1.1%E4%BC%98%E5%8C%96%E3%80%81RSA%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE%E3%80%81ECDHE%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE%E3%80%81HTTPS%E4%BC%98%E5%8C%96/HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/22/%E8%AE%A1%E7%BD%91%20%E5%B0%8F%E6%9E%97%E7%BD%91%E7%BB%9C%20HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%81%20HTTP/1.1%E4%BC%98%E5%8C%96%E3%80%81RSA%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE%E3%80%81ECDHE%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE%E3%80%81HTTPS%E4%BC%98%E5%8C%96/HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98.png" class title="HTTP常见面试题.png"></a>
+
+<a href="/2024/09/22/%E8%AE%A1%E7%BD%91%20%E5%B0%8F%E6%9E%97%E7%BD%91%E7%BB%9C%20HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%81%20HTTP/1.1%E4%BC%98%E5%8C%96%E3%80%81RSA%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE%E3%80%81ECDHE%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE%E3%80%81HTTPS%E4%BC%98%E5%8C%96/RSA%E3%80%81ECDHE%E3%80%81HTTPS%20%E4%BC%98%E5%8C%96.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/09/22/%E8%AE%A1%E7%BD%91%20%E5%B0%8F%E6%9E%97%E7%BD%91%E7%BB%9C%20HTTP%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%81%20HTTP/1.1%E4%BC%98%E5%8C%96%E3%80%81RSA%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE%E3%80%81ECDHE%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE%E3%80%81HTTPS%E4%BC%98%E5%8C%96/RSA%E3%80%81ECDHE%E3%80%81HTTPS%20%E4%BC%98%E5%8C%96.png" class title="RSA、ECDHE、HTTPS 优化.png"></a></div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
         var options1 = {
             selector: '.gallery-item'
         };
         lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
         }</script>
-            </div>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-09-22</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/%E8%AE%A1%E7%BD%91/'>
+                            计网
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
     
-</div> 
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
                     <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
     
 </div>
 <!--这是指一条线往下的内容-->
 <div class="footer-last">
     
-         
+            <span></span>
             
-                
-                <span class="index-footer-last-span">Email:<a href="mailto:tokidok1@163.com" title="tokidok1@163.com">tokidok1@163.com</a></span>
-            
-        
     
 </div>
 
