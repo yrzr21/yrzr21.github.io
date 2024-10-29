@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="Hash Table" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    Hash Table
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Hash-Table"><span class="post-toc-text">Hash Table</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#STATIC-HASHING-SCHEMES"><span class="post-toc-text">STATIC HASHING SCHEMES</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%EF%BC%88%E4%B8%8D%E5%88%87%E5%AE%9E%E9%99%85%E7%9A%84%EF%BC%89%E5%81%87%E8%AE%BE"><span class="post-toc-text">（不切实际的）假设</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Linear-Probe-hashing"><span class="post-toc-text">Linear Probe hashing</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Robin-hood-hashing"><span class="post-toc-text">Robin hood hashing</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Cuckoo-hashing"><span class="post-toc-text">Cuckoo hashing</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8A%A8%E6%80%81%E5%93%88%E5%B8%8C"><span class="post-toc-text">动态哈希</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#chained-hash-table-bucket-hash-table"><span class="post-toc-text">chained hash table&#x2F;bucket hash table</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#extendible-hashing"><span class="post-toc-text">extendible hashing</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#linear-hashing"><span class="post-toc-text">linear hashing</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%9D%9E%E5%94%AF%E4%B8%80-key"><span class="post-toc-text">非唯一 key</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#BLOOM-FILTERS"><span class="post-toc-text">BLOOM FILTERS</span></a></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h3 id="Hash-Table"><a href="#Hash-Table" class="headerlink" title="Hash Table"></a>Hash Table</h3><a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029015026.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029015026.png" class title="Pasted image 20241029015026.png"></a>
+
+<ul>
+<li>在我们所使⽤的hash函数中，在它的<strong>速度和碰撞率</strong>之间存在了巨⼤的取舍</li>
+<li>当我们遇上碰撞问题时，我们需要通过⼀些额外的指令来解决它们</li>
+</ul>
+<blockquote>
+<p>hash函数有时依然会超级快，但某些hash函数要⽐其他hash函数快2到3倍</p>
+</blockquote>
+<h4 id="STATIC-HASHING-SCHEMES"><a href="#STATIC-HASHING-SCHEMES" class="headerlink" title="STATIC HASHING SCHEMES"></a>STATIC HASHING SCHEMES</h4><p>这意味着，我们需要提前知道我想要保存的key的⼤概数量。这样我就知道该如何进⾏分配，我所分配的hash table⾜够⼤能够容纳下这些key，并且最⼩化 hash碰撞，这样我也不会遇上⽆限循环或者是hash table被完全填满的情况了</p>
+<h5 id="（不切实际的）假设"><a href="#（不切实际的）假设" class="headerlink" title="（不切实际的）假设"></a>（不切实际的）假设</h5><ul>
+<li>key 取值数已知</li>
+<li>每个 key 唯一</li>
+<li>无碰撞</li>
+</ul>
+<h5 id="Linear-Probe-hashing"><a href="#Linear-Probe-hashing" class="headerlink" title="Linear Probe hashing"></a>Linear Probe hashing</h5><ul>
+<li>一个大循环 slot 表，通过在表中<strong>线性寻找</strong>下一个可用的 slot 解决碰撞问题<ul>
+<li>需要大量的 slot</li>
+</ul>
+</li>
+<li><strong>必须在表中存储 key</strong>，遇到下一个空位还没找到匹配的key就停</li>
+</ul>
+<p>也被称为 <strong>open addressing</strong> 开地址法</p>
+<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029100259.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029100259.png" class title="Pasted image 20241029100259.png"></a><a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029100304.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029100304.png" class title="Pasted image 20241029100304.png"></a><a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029100449.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029100449.png" class title="Pasted image 20241029100449.png"></a>
+<p>有一个问题，此时查找D，则会找不到——但他实际是在表中的，有多种方法解决这个问题：</p>
+<ol>
+<li>把所有的数据向上重新hash，直到下一次hash是一个空slot&#x2F;他自己<ul>
+<li>所以不移动B</li>
+<li>非常昂贵的操作<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029100632.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029100632.png" class title="Pasted image 20241029100632.png"></a></li>
+</ul>
+</li>
+<li><strong>tombstone</strong> 墓碑标记<ul>
+<li>浪费空间</li>
+<li>稍后需清理墓碑<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029101158.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029101158.png" class title="Pasted image 20241029101158.png"></a></li>
+</ul>
+</li>
+</ol>
+<h5 id="Robin-hood-hashing"><a href="#Robin-hood-hashing" class="headerlink" title="Robin hood hashing"></a>Robin hood hashing</h5><p>基于线性探测哈希。保存一个所在位置与计算出的位置的<strong>距离差</strong>，counter越大代表越poor。我们会试着对整个hash table进⾏平衡，<strong>劫富济贫</strong>，试着让每个key尽可能靠近它原本所在的位置</p>
+<p>具体实现方法是，再插入时查看当前元素与下一个元素哪个更poor，距离差更大的会直接使用该位置。例如：</p>
+<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029105633.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029105633.png" class title="Pasted image 20241029105633.png"></a>
+<p>于是：</p>
+<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029105703.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029105703.png" class title="Pasted image 20241029105703.png"></a>
+<p>这看起来很nice，但⾄少，现代研究表明，尤其是对内存中的数据结构来说，只要有⼀次条件误判，你就会付出巨⼤的代价。因为在基于 Robin Hood Hashing算法的情况下，我们需要对更多的条件进⾏检查，看看能否将 ⼀个放到另⼀个的位置上，这样，我们就要做更多的写⼊操作，<strong>这导致更多的缓存⽆效</strong>。So，在实战中，linear probing hashing依然碾压⼀切</p>
+<h5 id="Cuckoo-hashing"><a href="#Cuckoo-hashing" class="headerlink" title="Cuckoo hashing"></a>Cuckoo hashing</h5><blockquote>
+<p>布谷鸟喜欢将它⾃⼰的蛋移到别的⻦巢⾥</p>
+</blockquote>
+<p>使用多个不同的哈希函数（一般用两个），或同一个哈希函数但种子不同。</p>
+<p>插入：</p>
+<ul>
+<li>hash，哪个有空插入哪个<ul>
+<li>都有空随便插&#x2F;根据填充因子插</li>
+<li>都没空随机&#x2F;根据填充因子删除一个，插入。被删除的元素需要重新插入</li>
+</ul>
+</li>
+<li>为识别<strong>循环碰撞</strong>，需要记录起始元素。出现时需要重建hash表，元素的位置会被改变</li>
+</ul>
+<p>查找和删除的时间复杂度始终是O(1)，但插⼊操作的代价可能会更加昂贵</p>
+<h4 id="动态哈希"><a href="#动态哈希" class="headerlink" title="动态哈希"></a>动态哈希</h4><p>——我们不想在出现循环碰撞或表满时重建整个表</p>
+<h5 id="chained-hash-table-bucket-hash-table"><a href="#chained-hash-table-bucket-hash-table" class="headerlink" title="chained hash table&#x2F;bucket hash table"></a>chained hash table&#x2F;bucket hash table</h5><p>相同hash值的key放在同一个chain中，chain关联了多个bucket&#x2F;page</p>
+<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029125620.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029125620.png" class title="Pasted image 20241029125620.png"></a>
+<h5 id="extendible-hashing"><a href="#extendible-hashing" class="headerlink" title="extendible hashing"></a>extendible hashing</h5><p>chain可能过长，我们需要对溢出的bucket进行拆分而不是永远增长下去。</p>
+<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029132700.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029132700.png" class title="Pasted image 20241029132700.png"></a>
+<ul>
+<li>全局计数器：查看几位来找到bucket在数组中的的offset</li>
+<li>局部计数器：本bucket使用的位数，这几位都是相同的</li>
+</ul>
+<p>如果像这样溢出：</p>
+<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029132929.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029132929.png" class title="Pasted image 20241029132929.png"></a>
+<p>则增加该桶的局部深度，分裂为两个桶、重排元素、重新映射全局目录中的指针</p>
+<ul>
+<li>若第一个桶溢出，则分裂为00&amp;01两个桶，更新00和01处的指针即可</li>
+</ul>
+<p>如果局部桶的深度超过全局，则增加全局深度并映射新添加的目录项</p>
+<ul>
+<li>本例中，10可分裂为100和101两个桶</li>
+<li>原指针不变，仍是00、01、10、11的指针，只不过后面加了个0；新项结尾是1。和十进制不同！<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029133813.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029133813.png" class title="Pasted image 20241029133813.png"></a></li>
+</ul>
+<h5 id="linear-hashing"><a href="#linear-hashing" class="headerlink" title="linear hashing"></a>linear hashing</h5><p>..?<br>渐进式增加全局目录的大小。在某桶溢出时分裂分裂指针指向的桶：2n取模，然后递增分裂指针</p>
+<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029144455.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029144455.png" class title="Pasted image 20241029144455.png"></a>
+
+<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029144341.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029144341.png" class title="Pasted image 20241029144341.png"></a>
+
+<p>%2n要么分配到原桶，要么分配到新桶</p>
+<h4 id="非唯一-key"><a href="#非唯一-key" class="headerlink" title="非唯一 key"></a>非唯一 key</h4><ul>
+<li>即同一个key有多个对应的值<br>实现方法：</li>
+<li>链表</li>
+<li>多次记录重复的key，大部分人的做法<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029102521.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029102521.png" class title="Pasted image 20241029102521.png"></a></li>
+</ul>
+<blockquote>
+<p>能⽤在我们今天所讲的任何⼀种hashing scheme上</p>
+</blockquote>
+<h4 id="BLOOM-FILTERS"><a href="#BLOOM-FILTERS" class="headerlink" title="BLOOM FILTERS"></a>BLOOM FILTERS</h4><p>快速测试一个元素是否在一个集合内。<strong>存在假阳性但不会有假阴性</strong>。使用位数组和多个hash函数表示集合</p>
+<ul>
+<li>插入：将多个哈希函数计算出的位全设为1</li>
+<li>查询：计算多个哈希函数的位，若这个位图中的对应位全为1则可能在，不全为1一定不在</li>
+</ul>
+<a href="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029135625.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Hash%20Table/Pasted%20image%2020241029135625.png" class title="Pasted image 20241029135625.png"></a>
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-10-29</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/CMU-15445/'>
+                            CMU 15445
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+            
+    </body>
+</html>

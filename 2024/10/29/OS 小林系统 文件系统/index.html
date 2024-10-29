@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="小林系统 文件系统" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    小林系统 文件系统
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="post-toc-text">文件系统</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#fs-%E7%BB%84%E6%88%90"><span class="post-toc-text">fs 组成</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#vfs"><span class="post-toc-text">vfs</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%96%87%E4%BB%B6%E4%BD%BF%E7%94%A8"><span class="post-toc-text">文件使用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8"><span class="post-toc-text">文件存储</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BF%9E%E7%BB%AD%E5%AD%98%E5%82%A8"><span class="post-toc-text">连续存储</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%9D%9E%E8%BF%9E%E7%BB%AD%E5%AD%98%E5%82%A8"><span class="post-toc-text">非连续存储</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Unix-%E6%96%87%E4%BB%B6%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="post-toc-text">Unix 文件实现方式</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%A9%BA%E9%97%B2%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86"><span class="post-toc-text">空闲空间管理</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#FS%E7%BB%93%E6%9E%84"><span class="post-toc-text">FS结构</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%9B%AE%E5%BD%95%E5%AD%98%E5%82%A8"><span class="post-toc-text">目录存储</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%96%87%E4%BB%B6%E5%88%AB%E5%90%8D%EF%BC%9A%E8%BD%AF%E9%93%BE%E6%8E%A5-%E7%A1%AC%E9%93%BE%E6%8E%A5"><span class="post-toc-text">文件别名：软链接&amp;硬链接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%96%87%E4%BB%B6I-O"><span class="post-toc-text">文件I&#x2F;O</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BC%93%E5%86%B2%E4%B8%8E%E9%9D%9E%E7%BC%93%E5%86%B2-I-O"><span class="post-toc-text">缓冲与非缓冲 I&#x2F;O</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%9B%B4%E6%8E%A5%E4%B8%8E%E9%9D%9E%E7%9B%B4%E6%8E%A5I-O"><span class="post-toc-text">直接与非直接I&#x2F;O</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%98%BB%E5%A1%9E%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E-I-O-VS-%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5-I-O"><span class="post-toc-text">阻塞与非阻塞 I&#x2F;O VS 同步与异步 I&#x2F;O</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Page-Cache"><span class="post-toc-text">Page Cache</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#buffer-cache-%E4%B8%8E-page-cache"><span class="post-toc-text">buffer cache 与 page cache</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#page-cache-%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6"><span class="post-toc-text">page cache 中的文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#page-cache-%E4%B8%8E%E9%A2%84%E8%AF%BB"><span class="post-toc-text">page cache 与预读</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#page-cache-%E4%B8%8E%E6%96%87%E4%BB%B6%E4%B8%80%E8%87%B4%E6%80%A7"><span class="post-toc-text">page cache 与文件一致性</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="post-toc-text">优势与劣势</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%BB%9F%E7%9A%84-page-cache"><span class="post-toc-text">查看系统的 page cache</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F.png" class title="文件系统.png"></a>
+
+<h3 id="fs-组成"><a href="#fs-组成" class="headerlink" title="fs 组成"></a>fs 组成</h3><p>linux fs 会为每个文件分配两个元数据结构：<strong>index inode</strong> &amp; <strong>directory entry</strong></p>
+<ul>
+<li>inode 指向数据所在块，并记录文件元信息，例如大小权限访问创建修改时间等等</li>
+<li>目录项记录目录结构，并指向inode所在的块，<strong>会被缓存在内存</strong></li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%9B%AE%E5%BD%95%E9%A1%B9%E5%92%8C%E7%B4%A2%E5%BC%95%E5%85%B3%E7%B3%BB%E5%9B%BE.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%9B%AE%E5%BD%95%E9%A1%B9%E5%92%8C%E7%B4%A2%E5%BC%95%E5%85%B3%E7%B3%BB%E5%9B%BE.webp" class title="目录项和索引关系图.webp"></a>
+
+<blockquote>
+<p>文件的块可能会被缓存在内存，例如目录结构块、inode块、数据块等。目录是一个特殊的文件，有自己的inode。<strong>超级块始终会被缓存到内存中</strong>。</p>
+</blockquote>
+<p><strong>目录不等于目录项</strong>，前者是一种fs组织结构，后者是目录中的一个具体条目，包含文件的与其他目录项的关联信息</p>
+<p>磁盘的最小读写单位为<strong>扇区</strong>，保证它写入的原子性；<strong>fs</strong> 将一个或多个扇区封装为<strong>块</strong>，由fs实现额外的逻辑保证块写入的原子性</p>
+<blockquote>
+<p>假设一个扇区512B，一个块4KB，则一次可写入8个扇区</p>
+</blockquote>
+<p>磁盘的每个<strong>分区</strong>一般被fs<strong>划分</strong>为三个部分：</p>
+<ul>
+<li><strong>superblock</strong>：记录fs元数据，例如大小状态空闲块、inode数量</li>
+<li><strong>inode区</strong>：存inode</li>
+<li><strong>数据块区</strong></li>
+</ul>
+<h3 id="vfs"><a href="#vfs" class="headerlink" title="vfs"></a>vfs</h3><p>fs需要把自己的根目录<strong>挂载</strong>到某个现有目录上才可以正常使用，例如把根目录挂载到 <code>/mnt/usb</code></p>
+<p>fs可分为三类：</p>
+<ul>
+<li>磁盘fs</li>
+<li>内存fs</li>
+<li>网络fs</li>
+</ul>
+<p>我们希望为用户提供一个统一的fs接口，这被称为<strong>vfs</strong></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E8%99%9A%E6%8B%9F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E8%99%9A%E6%8B%9F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F.webp" class title="虚拟文件系统.webp"></a>
+
+<h3 id="文件使用"><a href="#文件使用" class="headerlink" title="文件使用"></a>文件使用</h3><ul>
+<li>syscall-&gt;vfs-&gt;fs-&gt;存储器<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%86%99%E5%88%B0%E7%A3%81%E7%9B%98%E8%BF%87%E7%A8%8B.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%86%99%E5%88%B0%E7%A3%81%E7%9B%98%E8%BF%87%E7%A8%8B.webp" class title="写到磁盘过程.webp"></a></li>
+</ul>
+<p>linux 中，<strong>打开的文件</strong>被抽象为一个描述符，即 <strong>fd</strong>。<strong>每个进程</strong>都有自己的文件描述符表，即打开的文件的表。每个<strong>表项</strong>包含以下信息：</p>
+<ul>
+<li>文件描述符：标识该文件</li>
+<li>文件指针：当前读写位置</li>
+<li>文件状态：文件打开模式和属性</li>
+<li>引用计数：表示有多少个文件描述符引用这个文件，为0时即可关闭文件</li>
+<li>fs相关：指向文件的inode或其他元数据</li>
+</ul>
+<p>用户以字节为单位读写数据，内核以块为单位读写。fs提供了二者之间的桥梁：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241006152318.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241006152318.png" class title="Pasted image 20241006152318.png"></a>
+
+<h3 id="文件存储"><a href="#文件存储" class="headerlink" title="文件存储"></a>文件存储</h3><p>连续存储&#x2F;非连续存储</p>
+<h4 id="连续存储"><a href="#连续存储" class="headerlink" title="连续存储"></a>连续存储</h4><ul>
+<li>顺序摆放，<strong>高效读写</strong></li>
+<li>存在<strong>磁盘碎片</strong>以及文件<strong>不易扩展</strong>问题</li>
+</ul>
+<p>inode&#x2F;文件头需要记录其<strong>起始块以及长度</strong>，以找到整个文件</p>
+<h4 id="非连续存储"><a href="#非连续存储" class="headerlink" title="非连续存储"></a>非连续存储</h4><ul>
+<li><strong>无磁盘碎片，文件大小可动态扩展</strong></li>
+<li>通过<strong>链表或索引</strong>记录数据块的块号</li>
+</ul>
+<p>链表方式又分为<strong>隐式链表和显示链表</strong></p>
+<ul>
+<li><p>对于<strong>隐式链表</strong>，inode指向<strong>起始块和末尾块</strong>，每一个数据块留出一部分空间指向下一个数据块</p>
+<ul>
+<li><strong>无法直接访问</strong>数据块，且指针消耗了一定的磁盘空间</li>
+<li><strong>稳定性较差</strong>，若磁盘损坏导致指针丢失&#x2F;破坏，则后续文件数据难以寻回</li>
+</ul>
+</li>
+<li><p>对于<strong>显示链表</strong>，它将链接各个数据块的指针都存到一个表里，以-1标记结束，解决了隐式链表的两个问题</p>
+<ul>
+<li>这也被称为 <strong>FAT</strong> 文件分配表，FAT会被加载到内存中，减少了磁盘访问次数</li>
+<li><strong>不适用于大磁盘</strong>，200GB的磁盘和1KB大小的块、4B的表项，需要800MB存储FAT<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E5%88%86%E9%85%8D%E8%A1%A8.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E5%88%86%E9%85%8D%E8%A1%A8.webp" class title="文件分配表.webp"></a></li>
+</ul>
+</li>
+</ul>
+<p>对于索引，它为每个文件创建一个<strong>指向文件数据块的索引块</strong>，可以通过索引块找到数据块</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E9%9D%9E%E8%BF%9E%E7%BB%AD%E7%A9%BA%E9%97%B4%E5%AD%98%E6%94%BE%E6%96%B9%E5%BC%8F-%E7%B4%A2%E5%BC%95%E6%96%B9%E5%BC%8F.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E9%9D%9E%E8%BF%9E%E7%BB%AD%E7%A9%BA%E9%97%B4%E5%AD%98%E6%94%BE%E6%96%B9%E5%BC%8F-%E7%B4%A2%E5%BC%95%E6%96%B9%E5%BC%8F.webp" class title="非连续空间存放方式-索引方式.webp"></a>
+
+<ul>
+<li>优点在于：易于扩展、无碎片、支持顺序和随机读写</li>
+<li>缺点在于索引块有很多空白未使用，浪费空间</li>
+</ul>
+<p>对于更大的文件，可以采用<strong>链式索引块</strong>，即在每个索引块的末尾指向下一个索引块</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E9%93%BE%E5%BC%8F%E7%B4%A2%E5%BC%95%E5%9D%97.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E9%93%BE%E5%BC%8F%E7%B4%A2%E5%BC%95%E5%9D%97.webp" class title="链式索引块.webp"></a>
+
+<p>或者<strong>多级索引块</strong>，索引块里面可以指向索引块，类似于多级页表：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%A7%E7%B4%A2%E5%BC%95%E5%9D%97.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E7%BA%A7%E7%B4%A2%E5%BC%95%E5%9D%97.webp" class title="多级索引块.webp"></a>
+
+
+<h4 id="Unix-文件实现方式"><a href="#Unix-文件实现方式" class="headerlink" title="Unix 文件实现方式"></a>Unix 文件实现方式</h4><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F%E6%AF%94%E8%BE%83.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F%E6%AF%94%E8%BE%83.webp" class title="文件存储方式比较.webp"></a>
+
+<p>早期Unix FS使用了多级索引：0~n级索引，文件头&#x2F;inode中存放 <strong>13 个指针</strong>：</p>
+<ul>
+<li>10个直接块、1个一级块、1个二级块、1个三级块</li>
+<li>若一个块可以放n个指针，则这种方式可以表示 $10+n+n^2+n^3$ 个数据块</li>
+<li>这是 <strong>Linux Ext 2&#x2F;3 FS</strong> 的方案，大块的访问仍需很多查询，Ext4做了一定的优化，暂不讨论</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Unix%20%E5%A4%9A%E7%BA%A7%E7%B4%A2%E5%BC%95.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Unix%20%E5%A4%9A%E7%BA%A7%E7%B4%A2%E5%BC%95.webp" class title="Unix 多级索引.webp"></a>
+
+
+<h3 id="空闲空间管理"><a href="#空闲空间管理" class="headerlink" title="空闲空间管理"></a>空闲空间管理</h3><p>有三种常见的方式：<strong>空闲表、空闲链表、位图</strong></p>
+<p><strong>空闲表</strong>：每个表项&#x3D;首块块号+个数，连续分配</p>
+<ul>
+<li>删除一个文件时，需要顺序扫描表，较耗时</li>
+<li>适用于连续分配，以及有少量空闲区的磁盘</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%A9%BA%E9%97%B2%E8%A1%A8%E6%B3%95.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%A9%BA%E9%97%B2%E8%A1%A8%E6%B3%95.webp" class title="空闲表法.webp"></a>
+
+
+<p><strong>空闲链表</strong>：每个空闲块指向下一个空闲块，主存中只需保存指向首个空闲块的指针</p>
+<ul>
+<li>易于增删，但不支持随机访问，需要大量的磁盘I&#x2F;O，且消耗空间存储指针<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%A9%BA%E9%97%B2%E5%9D%97%E9%93%BE%E8%A1%A8.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%A9%BA%E9%97%B2%E5%9D%97%E9%93%BE%E8%A1%A8.webp" class title="空闲块链表.webp"></a></li>
+</ul>
+<p>以上二者都不适用于大型的文件系统，因为建立的空闲表和空闲链表都可能<strong>太大</strong>。</p>
+<p>通常使用<strong>位图</strong>表示大型文件系统的块使用情况：0空闲1已分配</p>
+<ul>
+<li>1个块4KB，一位表示一个数据块，那么一个位图块可以表示 $2^{15}$ 个数据块，即<strong>128MB</strong></li>
+<li>通常使用多个的位图块表示磁盘使用情况</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241006160658.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241006160658.png" class title="Pasted image 20241006160658.png"></a>
+
+<h3 id="FS结构"><a href="#FS结构" class="headerlink" title="FS结构"></a>FS结构</h3><p>上述的位图表示使用 <strong>1个位图块+一些列数据块</strong> 可表示128MB的空间，这远远不够。</p>
+<p>linux 把磁盘划分为多个相等的部分，每个部分被称为一个<strong>块组</strong>，它由以下内容构成：</p>
+<ul>
+<li>1超级块+1数据位图+1inode位图+多块inode+多块数据</li>
+<li>另还有多块<strong>块组描述符</strong>，它描述了每个块组的元数据，表示例如块组中空闲块和inode的数目</li>
+<li>超级块和块组描述符表都是全局信息，被所有块组持有<ul>
+<li>增强了系统的稳定性，提供多个副本，<strong>易于在崩溃时恢复</strong></li>
+<li>使文件和管理数据更可能的接近，减少磁头寻道和旋转，<strong>提高性能</strong></li>
+<li>Ext2的后续版本使用了 <strong>稀疏技术</strong>，超级块和块组描述符只被保存在块组0、1和id为3&#x2F;5&#x2F;7的幂的块组中<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%9D%97%E7%BB%84.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%9D%97%E7%BB%84.webp" class title="块组.webp"></a></li>
+</ul>
+</li>
+</ul>
+<h3 id="目录存储"><a href="#目录存储" class="headerlink" title="目录存储"></a>目录存储</h3><p>目录也是文件，也有自己inode，其<strong>数据块中存储的是目录项</strong></p>
+<p>原始的目录项由<strong>inode号+文件类型+文件名</strong>构成，但在这个目录下查找文件则效率不高。我们可以把他们改成一个<strong>哈希表</strong></p>
+<ul>
+<li>其key由文件名计算得出，value为原阿里的目录项</li>
+<li>我们只需要处理一下哈希冲突就可以得到一个查找插入删除非常迅速的数据结构</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%9B%AE%E5%BD%95%E5%93%88%E5%B8%8C%E8%A1%A8.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%9B%AE%E5%BD%95%E5%93%88%E5%B8%8C%E8%A1%A8.webp" class title="目录哈希表.webp"></a>
+<p>通常，文件查找需要反复与磁盘交互，效率极慢，所以一般会<strong>缓存当前目录</strong>到内存中以加速查找</p>
+<h3 id="文件别名：软链接-硬链接"><a href="#文件别名：软链接-硬链接" class="headerlink" title="文件别名：软链接&amp;硬链接"></a>文件别名：软链接&amp;硬链接</h3><blockquote>
+<p>又名 Hard Link &amp; Symbolic Link</p>
+</blockquote>
+<p>硬链接通过让<strong>目录项指向同一个inode</strong>实现，这意味着它<strong>不能跨文件系统</strong>。同时系统会维护一个inode的硬链接引用计数，<strong>只有删除所有硬链接才会删除该文件</strong>。所有硬链接是平等的</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%A1%AC%E9%93%BE%E6%8E%A5-2.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E7%A1%AC%E9%93%BE%E6%8E%A5-2.webp" class title="硬链接-2.webp"></a>
+
+<p>软链接重新创建了一个文件，它的<strong>内容是另一个文件的文件名</strong>，<strong>因此可以跨文件系统</strong>。<strong>若删除原文件，则软链接文件仍存在但找不到指向的文件</strong></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E8%BD%AF%E9%93%BE%E6%8E%A5.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E8%BD%AF%E9%93%BE%E6%8E%A5.webp" class title="软链接.webp"></a>
+
+
+<h3 id="文件I-O"><a href="#文件I-O" class="headerlink" title="文件I&#x2F;O"></a>文件I&#x2F;O</h3><p>常见的I&#x2F;O方式的特性有：是否<strong>缓冲</strong>、是否<strong>直接</strong>、是否<strong>阻塞&amp;同步</strong></p>
+<h4 id="缓冲与非缓冲-I-O"><a href="#缓冲与非缓冲-I-O" class="headerlink" title="缓冲与非缓冲 I&#x2F;O"></a>缓冲与非缓冲 I&#x2F;O</h4><ul>
+<li>很多<strong>库</strong>会使用<strong>缓冲区</strong>加速文件的访问，如果使用这些库，<strong>库再通过系统调用访问文件</strong>，则称为<strong>缓冲IO</strong></li>
+<li>否则即直接通过系统调用访问文件，为<strong>非缓冲IO</strong></li>
+</ul>
+<p>缓冲可以加速文件访问，但会有<strong>数据不一致</strong>的风险，对于重要文件建议<strong>手动刷新缓冲区</strong>，以维护数据一致性</p>
+<blockquote>
+<p>其他利用缓冲的例子，例如endl才输出，刷新缓冲区，这可以减少<strong>系统调用的次数</strong></p>
+</blockquote>
+<h4 id="直接与非直接I-O"><a href="#直接与非直接I-O" class="headerlink" title="直接与非直接I&#x2F;O"></a>直接与非直接I&#x2F;O</h4><p>OS有<strong>页缓存</strong>，利用页缓存的文件 I&#x2F;O 被称为<strong>非直接 I&#x2F;O</strong>，否则为<strong>直接I&#x2F;O</strong></p>
+<ul>
+<li>非直接I&#x2F;O会发生页缓存与用户空间内存之间的<strong>拷贝</strong>，而直接I&#x2F;O不会，但它更慢</li>
+<li>使用fs接口时，指明<code>O_DIRECT</code>则使用直接I&#x2F;O，<strong>默认使用非直接I&#x2F;O</strong></li>
+</ul>
+<p>页缓存被<strong>刷新到磁盘上</strong>的时机有：</p>
+<ul>
+<li>用户主动调用 <code>sync</code> 刷新</li>
+<li>内存不够了，或者缓存的文件页太多了</li>
+<li>脏页缓存存在了一定的时间后</li>
+</ul>
+<h4 id="阻塞与非阻塞-I-O-VS-同步与异步-I-O"><a href="#阻塞与非阻塞-I-O-VS-同步与异步-I-O" class="headerlink" title="阻塞与非阻塞 I&#x2F;O VS 同步与异步 I&#x2F;O"></a>阻塞与非阻塞 I&#x2F;O VS 同步与异步 I&#x2F;O</h4><ul>
+<li><strong>阻塞I&#x2F;O</strong>：例如用户调用read，CPU被阻塞在内核中，内核读取到数据后，把数据拷贝到用户空间，<strong>然后才返回</strong></li>
+<li><strong>非阻塞I&#x2F;O</strong>：用户直接返回，不阻塞</li>
+</ul>
+<p>对于非阻塞I&#x2F;O，可能需要不断<strong>轮询</strong>以等待数据准备好，这显然是一种浪费时间的做法。</p>
+<ul>
+<li>从内核拷贝数据到用户仍是一个<strong>同步过程</strong></li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E9%9D%9E%E9%98%BB%E5%A1%9E%20I_O%20.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E9%9D%9E%E9%98%BB%E5%A1%9E%20I_O%20.webp" class title="非阻塞 I_O .webp"></a>
+
+<p>于是我们有了 <strong>事件驱动的I&#x2F;O 多路复用</strong>技术，例如 select、poll、epoll，等数据准备好了再<strong>通知</strong>应用程序进行操作。当没有事件发生时，当前进程会被阻塞，有事件时，会<strong>唤醒</strong>这个进程</p>
+<ul>
+<li>可以在一个进程内注册多个socket，<strong>同时处理多个socket的I&#x2F;O请求</strong>。</li>
+<li>仍是同步</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%9F%BA%E4%BA%8E%E9%9D%9E%E9%98%BB%E5%A1%9E%20I_O%20%E7%9A%84%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%9F%BA%E4%BA%8E%E9%9D%9E%E9%98%BB%E5%A1%9E%20I_O%20%E7%9A%84%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.webp" class title="基于非阻塞 I_O 的多路复用.webp"></a>
+
+<p>以上都是<strong>同步I&#x2F;O</strong>，<strong>异步I&#x2F;O</strong>无需等待数据准备、也无需等待数据拷贝，例如：<code>aio_read</code></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%BC%82%E6%AD%A5%20I_O.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/%E5%BC%82%E6%AD%A5%20I_O.webp" class title="异步 I_O.webp"></a>
+
+<h3 id="Page-Cache"><a href="#Page-Cache" class="headerlink" title="Page Cache"></a>Page Cache</h3><ul>
+<li>页缓存，也可被称为文件缓存，它将文件的数据缓存到内存中，<strong>加速文件读写</strong></li>
+<li>其大小为<strong>页的整数倍</strong>，文件不足大小的部分会用0填充</li>
+<li>这是vfs对各种存储介质的缓存的<strong>抽象</strong>，统一称为页缓存，缓存到内存中</li>
+</ul>
+<p>通过 mmap 以及 buffered I&#x2F;O 将文件读取到内存空间实际上都是读取到 Page Cache 中。</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/72568a29816fa9b505f15edac68adee2.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/72568a29816fa9b505f15edac68adee2.webp" class title="72568a29816fa9b505f15edac68adee2.webp"></a>
+
+<h4 id="buffer-cache-与-page-cache"><a href="#buffer-cache-与-page-cache" class="headerlink" title="buffer cache 与 page cache"></a>buffer cache 与 page cache</h4><ul>
+<li>buffer cache 用于缓存<strong>块设备</strong>（例如磁盘）数据的一种机制，可以加速<strong>低层次I&#x2F;O</strong></li>
+<li>而 page cache 是对文件数据的缓存，是一种<strong>高层次I&#x2F;O</strong></li>
+</ul>
+<p>块缓存会通过<strong>拷贝</strong>的方式把数据交给页缓存，这会带来一定的性能开销；且相同的数据在内存中会存在两份，<strong>浪费内存</strong>。通过<strong>直接 I&#x2F;O</strong> 可以直接与块设备交互，避免这种开销，但很慢。</p>
+<p>在 linux 2.4 版本后，块缓存和页缓存被近似<strong>融合</strong>到了一起：</p>
+<ul>
+<li>文件的块只会被缓存一次，位于页缓存中，块缓存维护指向页缓存的指针</li>
+<li>没有文件表示的块、以及绕过文件系统操作的块则才会放到块缓存中</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/c81ffa0b7d11506ffad3c33001385444.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/c81ffa0b7d11506ffad3c33001385444.webp" class title="c81ffa0b7d11506ffad3c33001385444.webp"></a>
+
+<h4 id="page-cache-中的文件"><a href="#page-cache-中的文件" class="headerlink" title="page cache 中的文件"></a>page cache 中的文件</h4><p>前缀树&#x2F;字典树可以快速剪枝，但树如果非常稀疏则会导致树高非常高，效率降低。<strong>基数树</strong>解决了这个问题，它也可以被称为<strong>压缩前缀树</strong></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241009095816.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241009095816.png" class title="Pasted image 20241009095816.png"></a>
+
+<p>基数树可以用于路由，即一个大的正则表达式：</p>
+<ul>
+<li>黄色节点是一个通配符<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241009102908.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241009102908.png" class title="Pasted image 20241009102908.png"></a></li>
+</ul>
+<p>使用在 page cache 中，每一个文件我们都用一个基数树来保存。我们可以根据偏移量在基数树上找到对应的页</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/cfda154558181c4af27a34c1d4a97552.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/cfda154558181c4af27a34c1d4a97552.webp" class title="cfda154558181c4af27a34c1d4a97552.webp"></a>
+
+
+
+<h4 id="page-cache-与预读"><a href="#page-cache-与预读" class="headerlink" title="page cache 与预读"></a>page cache 与预读</h4><ul>
+<li>PAGE_READAHEAD</li>
+</ul>
+<p>用户请求读3KB的数据，则会把整个块（4KB）以及其周围的一些数据都读出来，额外申请几个page</p>
+<h4 id="page-cache-与文件一致性"><a href="#page-cache-与文件一致性" class="headerlink" title="page cache 与文件一致性"></a>page cache 与文件一致性</h4><ul>
+<li>trade off：<strong>吞吐量和数据一致性</strong>间存在矛盾</li>
+<li>文件一致性 &#x3D; 元数据一致 + 数据一致</li>
+</ul>
+<p><strong>两种写策略</strong>：</p>
+<ul>
+<li>write through：直接同步脏数据。数据一致性强，吞吐量低</li>
+<li>write back：定期同步脏数据。数据一致性低，吞吐量高</li>
+</ul>
+<p>这两种写策略基于以下 <strong>syscall</strong>，要么由用户发起，要么由内核发起：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241009105529.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241009105529.png" class title="Pasted image 20241009105529.png"></a>
+<ul>
+<li>write back策略下，由特定持久存储设备的<strong>专门刷新线程</strong>调用</li>
+<li>对于多线程架构，linux 内核使用了<strong>管理线程+多个刷新线程</strong>的方案<ul>
+<li>管理线程监控脏页，若一段时间无脏页则销毁对应刷新线程；若有脏页且无刷新线程，则创建刷新线程</li>
+<li>刷新线程仅负责刷新脏页</li>
+<li>设备保存脏文件链表，其中存储脏文件inode节点，回写时写入对应的文件。</li>
+<li>在主动调用刷新接口&#x2F;内核周期性刷新调用&#x2F;内存不足时刷新</li>
+</ul>
+</li>
+</ul>
+<h4 id="优势与劣势"><a href="#优势与劣势" class="headerlink" title="优势与劣势"></a>优势与劣势</h4><p>优势：</p>
+<ul>
+<li><strong>加速</strong>数据访问</li>
+<li><strong>减少设备I&#x2F;O次数</strong>，提高吞吐量</li>
+</ul>
+<p>劣势：</p>
+<ul>
+<li><strong>额外占用物理空间</strong>，空间换时间。可能导致内存不足，频繁swap，系统负载上升</li>
+<li><strong>难以优化使用策略，无应用API</strong>。因此很多应用选择自己实现</li>
+<li>在例如网卡的应用场景中，<strong>比直接I&#x2F;O多一次设备读写</strong><ul>
+<li>直接IO直接与设备交互，一旦成功则代表数据一致，真的成功</li>
+</ul>
+</li>
+</ul>
+<h4 id="查看系统的-page-cache"><a href="#查看系统的-page-cache" class="headerlink" title="查看系统的 page cache"></a>查看系统的 page cache</h4><p>可以看到内存中的页由：块缓存+页缓存+swap区缓存组成</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241008094441.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241008094441.png" class title="Pasted image 20241008094441.png"></a>
+
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-10-29</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/OS/'>
+                            OS
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+            
+    </body>
+</html>

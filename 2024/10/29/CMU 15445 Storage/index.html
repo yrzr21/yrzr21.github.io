@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="Storage" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    Storage
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Storage-%E5%AD%98%E5%82%A8"><span class="post-toc-text">Storage 存储</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%88%91%E4%BB%AC%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="post-toc-text">我们的目标</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8os-mmap%EF%BC%9F"><span class="post-toc-text">为什么不用os&amp;mmap？</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%A3%81%E7%9B%98-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E7%A4%BA"><span class="post-toc-text">磁盘-数据库表示</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%8E%E7%A3%81%E7%9B%98%E4%BA%A4%E4%BA%92%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="post-toc-text">与磁盘交互的方式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#DB-Pages"><span class="post-toc-text">DB Pages</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#indirection-layer%EF%BC%9A%E7%9B%B8%E5%AF%B9%E4%BD%8D%E7%BD%AE"><span class="post-toc-text">indirection layer：相对位置</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%A4%A7%E5%B0%8F%E4%B8%8E%E7%A1%AC%E4%BB%B6%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="post-toc-text">大小与硬件原子性</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#page-%E5%AD%98%E5%82%A8%E6%9E%B6%E6%9E%84%EF%BC%9AHeap-File-Organization"><span class="post-toc-text">page 存储架构：Heap File Organization</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#heap-file%EF%BC%9A%E9%93%BE%E8%A1%A8"><span class="post-toc-text">heap file：链表</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#heap-file%EF%BC%9A%E9%A1%B5%E7%9B%AE%E5%BD%95"><span class="post-toc-text">heap file：页目录</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Page-Layout"><span class="post-toc-text">Page Layout</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#header"><span class="post-toc-text">header</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#tuple-oriented%EF%BC%9A%E9%97%AE%E9%A2%98%E5%BE%88%E5%A4%9A"><span class="post-toc-text">tuple oriented：问题很多</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#slotted-page%EF%BC%9A%E6%9C%80%E5%B8%B8%E7%94%A8"><span class="post-toc-text">slotted page：最常用</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#e-g-Postgres-SQL-server-Oracle-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">e.g. Postgres &amp; SQL server &amp; Oracle 的实现</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#log-structured%EF%BC%9A%E6%9C%80%E5%A4%A7%E5%8C%96%E9%A1%BA%E5%BA%8F%E8%AE%BF%E9%97%AE"><span class="post-toc-text">log-structured：最大化顺序访问</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Tuple-Layout"><span class="post-toc-text">Tuple Layout</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#header%EF%BC%9A%E4%B8%8D%E5%AD%98schema"><span class="post-toc-text">header：不存schema</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%AD%97%E6%AE%B5%E6%8E%92%E5%88%97%E4%B8%8E%E5%AD%97%E5%AF%B9%E9%BD%90"><span class="post-toc-text">字段排列与字对齐</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E4%B8%8D%E5%90%8C%E8%A1%A8%E7%9A%84-tuple-%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%90%8C%E2%BC%80%E4%B8%AApage%E4%B8%AD%EF%BC%9F"><span class="post-toc-text">不同表的 tuple 保存在同⼀个page中？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83-normalization-%E4%B8%8E-denormalization"><span class="post-toc-text">数据库设计规范 normalization 与 denormalization</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AD%97%E6%AE%B5%E8%A1%A8%E7%A4%BA"><span class="post-toc-text">字段表示</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%AE%9A%E7%82%B9%E6%95%B0"><span class="post-toc-text">定点数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#PostgreSQL%EF%BC%9A%E5%AE%9A%E7%82%B9%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">PostgreSQL：定点数的实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%A4%A7%E5%9E%8B%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AF%B9%E8%B1%A1-BLOB-%E5%AD%98%E5%82%A8"><span class="post-toc-text">大型二进制对象 BLOB 存储</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#system-catalog%EF%BC%9A%E8%A1%A8%E7%9A%84%E5%85%83%E6%95%B0%E6%8D%AE"><span class="post-toc-text">system catalog：表的元数据</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">存储模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#OLTP-OLAP"><span class="post-toc-text">OLTP &amp; OLAP</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%81%94%E6%9C%BA%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86-OLTP"><span class="post-toc-text">联机事务处理 OLTP</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%81%94%E6%9C%BA%E5%88%86%E6%9E%90%E5%A4%84%E7%90%86-OLAP"><span class="post-toc-text">联机分析处理 OLAP</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%A1%8C%E5%AD%98%E5%82%A8-%E5%88%97%E5%AD%98%E5%82%A8"><span class="post-toc-text">行存储 &#x2F; 列存储</span></a></li></ol></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="Storage-存储"><a href="#Storage-存储" class="headerlink" title="Storage 存储"></a>Storage 存储</h2><a href="/2024/10/29/CMU%2015445%20Storage/Storage.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Storage.png" class title="Storage.png"></a>
+
+
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916004740.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916004740.png" class title="Pasted image 20240916004740.png"></a>
+
+<ul>
+<li>这两节课的内容是disk manager</li>
+<li>我们需要了解哪些API需要暴露给上层系统</li>
+</ul>
+<p>这就意味着，每次我们执⾏查询时，所要访问的<code>数据都不在内存中</code></p>
+<h3 id="我们的目标"><a href="#我们的目标" class="headerlink" title="我们的目标"></a>我们的目标</h3><a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916111842.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916111842.png" class title="Pasted image 20240916111842.png"></a>
+
+<p>我们所要试着在我们的数据库系统中达成的⽬标是给应⽤程序提供⼀种错觉，即我们能提供⾜够的内存将整个数据库存⼊内存中，就像一个虚拟内存</p>
+<p>我们如何谨慎的最⼩化每次从磁盘读取内容或运行查询时所带来的影响。我们通过⼀系列不同的技巧来减轻这种问题带来的影响</p>
+<h4 id="为什么不用os-mmap？"><a href="#为什么不用os-mmap？" class="headerlink" title="为什么不用os&amp;mmap？"></a>为什么不用os&amp;mmap？</h4><p>本质上来讲，使用mmap意味着放弃了数据在上内存以及硬盘上来回移动的<code>控制权</code></p>
+<ul>
+<li>OS还会停止我们的进程去读取数据，我们的DBMS会变得非常慢</li>
+<li>另外，操作系统并不知道某些pages必须要在其他pages执⾏之前先从内存刷到磁盘中</li>
+</ul>
+<p>——这是我们不想要的，操作系统并不知道我们要做什么</p>
+<p>如果要使用mmap，需要做一些额外的事情来防⽌操作系统做⼀些错误的事情</p>
+<blockquote>
+<p>MongoDB</p>
+<p>这是⼀个⾮常著名的JSON数据库系统，最初使用<code>mmap</code>。为了让这个引擎能够正常⼯作，他们做了很多⽆⽤功来解决这个瓶颈，例如使用各种syscall：</p>
+<ul>
+<li>madvise</li>
+<li>mlock</li>
+<li>msync</li>
+</ul>
+<p>最后没办法还是买了⼀个叫做WiredTiger的⾮mmap存储引擎</p>
+</blockquote>
+<p>总之，数据库总是很确定地知道查询<code>要做什么</code>，它也知道<code>⼯作负载</code>是怎么样的，由自己主导读写是最佳选择…而不是把读写交给操作系统</p>
+<h3 id="磁盘-数据库表示"><a href="#磁盘-数据库表示" class="headerlink" title="磁盘-数据库表示"></a>磁盘-数据库表示</h3><a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916112141.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916112141.png" class title="Pasted image 20240916112141.png"></a>
+
+<p>So，到头来，数据库其实就是磁盘上的⼀堆⽂件，某些系统将数据库存储为⼀个⽂件，例如SQLite；其他⼤部分系统会将这些东⻄分为多个⽂件来保存</p>
+<h4 id="与磁盘交互的方式"><a href="#与磁盘交互的方式" class="headerlink" title="与磁盘交互的方式"></a>与磁盘交互的方式</h4><p>我们基于<code>os的fs所提供的API</code>来对⽂件进⾏读写</p>
+<blockquote>
+<p>某些DBMS有<code>自己的fs</code>，不使用os接口，它们直接管理一个裸存储设备。例如Oracle，DB2和SQL server。</p>
+<p>但现在你知道，你要⾃⼰去管理你⾃⼰的⽂件系统，这真的是个很⼤的坑，因为它⼤⼤降低了你东⻄的<code>可移植性</code></p>
+<p>某些⾼端数据库系统实际上在⽂件系统之上会有⼀个shim层，它允许数据库去做⼀些<code>磁盘调度</code>，尽量使得写入以顺序的方式进行、以及合并一些块写入，做统一的一次写入请求</p>
+</blockquote>
+<p>现在我们所要构建的东⻄，本质上来讲，它被称为<code>存储管理器/存储引擎</code>，它是我们的数据库系统中的⼀个组件，它负责维护我们在磁盘上的数据库⽂件</p>
+<h4 id="DB-Pages"><a href="#DB-Pages" class="headerlink" title="DB Pages"></a>DB Pages</h4><p>⼀个page就是⼀个<code>固定⼤⼩</code>的数据块，能够保存任何东⻄，但大部分系统不会在一个page上混合存储不同的数据</p>
+<blockquote>
+<p>有些数据库系统会要求你的page是<code>self-contained</code>的，所有本页的信息你都需要知道该如何去解释以及理解。但从系统的更⾼层⾯来讲，这并不是完全self-contained，我们依然需要页目录</p>
+<p>这种情况下，如果你丢失了其他任何page，也不会影响什么，容灾能力很强</p>
+</blockquote>
+<p>每个page都会被赋予⼀个唯⼀的内部<code>标识符</code>，DBMS会为我们⽣成这些page ID</p>
+<h5 id="indirection-layer：相对位置"><a href="#indirection-layer：相对位置" class="headerlink" title="indirection layer：相对位置"></a>indirection layer：相对位置</h5><p>tuple相对于页的位置，页相对于文件的位置等等；这些indirection层避免了这些位置更新信息传播到系统的其他上层部分，上层只需要知道page id 和slot number等等</p>
+<h5 id="大小与硬件原子性"><a href="#大小与硬件原子性" class="headerlink" title="大小与硬件原子性"></a>大小与硬件原子性</h5><p>SSD或者机械硬盘会提供API读写，通常一个硬件页是4kb⼤⼩，这意味着存储设备只能保证每次写⼊4kb时是<code>原⼦</code>的</p>
+<ul>
+<li>在这之上会有OS页</li>
+<li>数据库系统都有不同的权衡，他们会选择<code>不同的页大小</code></li>
+</ul>
+<blockquote>
+<p>例如调整index page更大，数据page更小，这样可以减少索引的cache miss；但这样会增加维护写入操作原子性的成本</p>
+</blockquote>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916113315.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916113315.png" class title="Pasted image 20240916113315.png"></a>
+
+<h4 id="page-存储架构：Heap-File-Organization"><a href="#page-存储架构：Heap-File-Organization" class="headerlink" title="page 存储架构：Heap File Organization"></a>page 存储架构：Heap File Organization</h4><blockquote>
+<p>有件事情要理解的是，在存储管理器最底层的级别中，我们不⽤关⼼我们的page中到底有什 么，我们就可以对这个page进⾏read或delete操作</p>
+</blockquote>
+<p>heap⽂件是⼀个<code>⽆序</code>的page集合，尽管⼀个接⼀个地插⼊tuple，我并不能保证它们是按照我插⼊的顺序保存在磁盘上的</p>
+<p>但我们需要读写page的API，以及遍历文件的API，为此我们需要一些额外的<code>元数据</code>跟踪我们有哪些page，哪些page中是空余空间</p>
+<p>我们可以⽤不同的数据结构来表示它们：<code>链表/页目录</code></p>
+<h5 id="heap-file：链表"><a href="#heap-file：链表" class="headerlink" title="heap file：链表"></a>heap file：链表</h5><ul>
+<li>header page：p2 free &amp; p2 data</li>
+</ul>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916114838.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916114838.png" class title="Pasted image 20240916114838.png"></a>
+
+<p>这是一个糟糕的想法，我可以进⾏循序扫描来查看每个page，直到我找到有空余空间的page为⽌</p>
+<p>——我们可能需要进行大量的遍历链表的无用操作</p>
+<h5 id="heap-file：页目录"><a href="#heap-file：页目录" class="headerlink" title="heap file：页目录"></a>heap file：页目录</h5><ul>
+<li>文件header：维护了page id和它们所处位置的映射关系，可以有其其他额外的元数据例如该页剩余空间</li>
+</ul>
+<blockquote>
+<p><code>原子性</code>问题：删除一个满的page后，我们想更新header但系统崩溃了——这时候就会出现问题，硬件无法保证对两个硬件page操作的原子性。</p>
+<p>我们需要保证容灾能力与操作的原子性。这是我们之后要讨论的内容</p>
+</blockquote>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916120333.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916120333.png" class title="Pasted image 20240916120333.png"></a>
+
+<h4 id="Page-Layout"><a href="#Page-Layout" class="headerlink" title="Page Layout"></a>Page Layout</h4><p>两种数据表示策略：<code>tuple oriented/log structured</code></p>
+<h5 id="header"><a href="#header" class="headerlink" title="header"></a>header</h5><p>header中可能存储一堆信息，例如：</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916120441.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916120441.png" class title="Pasted image 20240916120441.png"></a>
+
+<h5 id="tuple-oriented：问题很多"><a href="#tuple-oriented：问题很多" class="headerlink" title="tuple oriented：问题很多"></a>tuple oriented：问题很多</h5><p>idea：固定大小的page根据偏移量插入就行——但会产生碎片，可以在这个空余位置插入，但需要<code>扫描</code></p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916120909.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916120909.png" class title="Pasted image 20240916120909.png"></a>
+
+<p>且如果不是固定长度的，这个空余可能<code>没有足够的空间</code>保存下一个tuple；所以每次删除可能需要<code>移动其他tuple</code></p>
+<h5 id="slotted-page：最常用"><a href="#slotted-page：最常用" class="headerlink" title="slotted page：最常用"></a>slotted page：最常用</h5><a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916123518.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916123518.png" class title="Pasted image 20240916123518.png"></a>
+
+<ul>
+<li>除了其他元数据，header中存放一个<code>Slot Array</code>，将⼀个特定的slot映射到page上的某个偏移量上，从而找到某个tuple</li>
+</ul>
+<blockquote>
+<p>我们现在就可以将这个page内的tuple移动到我们想要的任何地⽅</p>
+</blockquote>
+<ul>
+<li>⼀条记录的位置是由<code>page id</code>+<code>slot number/offset</code>来⼀起确定的</li>
+<li>在插入tuple时，我们只需要<code>复制tuple并更新slot array</code></li>
+</ul>
+<h5 id="e-g-Postgres-SQL-server-Oracle-的实现"><a href="#e-g-Postgres-SQL-server-Oracle-的实现" class="headerlink" title="e.g. Postgres &amp; SQL server &amp; Oracle 的实现"></a>e.g. Postgres &amp; SQL server &amp; Oracle 的实现</h5><blockquote>
+<p>通过将系统内部这些东⻄暴露出来，使得管理员能够理解正在发⽣什么</p>
+</blockquote>
+<p>不同的DBMS用不同的方式定位一个tuple，但思路都是一样的，例如<code>Postgres</code>的CTID：</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916122523.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916122523.png" class title="Pasted image 20240916122523.png"></a>
+
+<p>这里101 tuple存放在page 0，offset 1处</p>
+<p>关系模型对于我们插⼊tuple的顺序并不在意，Postgres会将我们插⼊的数据放到最后，而不是空缺处</p>
+<p><code>SQL server</code>中并没有ctid，而是一个内置函数：</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916122819.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916122819.png" class title="Pasted image 20240916122819.png"></a>
+
+<p>将slot1处的tuple删除再插入一条数据，它显示这个：</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916122941.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916122941.png" class title="Pasted image 20240916122941.png"></a>
+
+<p>它会自动让page变得紧凑，进行<code>page压缩</code></p>
+<p><code>Oracle</code>中有个叫rowid的东⻄</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916123140.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916123140.png" class title="Pasted image 20240916123140.png"></a>
+
+<p>你可以破译他：</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916123225.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916123225.png" class title="Pasted image 20240916123225.png"></a>
+
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916123243.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916123243.png" class title="Pasted image 20240916123243.png"></a>
+
+<p>删除再插入显示slot插入到3，与Postgres相同</p>
+<h5 id="log-structured：最大化顺序访问"><a href="#log-structured：最大化顺序访问" class="headerlink" title="log-structured：最大化顺序访问"></a>log-structured：最大化顺序访问</h5><p>存储这些如何创建tuple以及修改tuple的相关信息，而非tuple本身。我们只需要不断在文件后面追加log就行</p>
+<p>这样<code>最大化了顺序访问</code>，提高了访问页的速度</p>
+<blockquote>
+<p>假设我要去更新10个tuple，但它们在不同的page上，那我就必须在这个10个page上来写⼊并更新这些tuple；但如果我使⽤的是这种log-structured组织，那我将这10条更新语句写在单个page上，我⼀次就能搞定全部了</p>
+</blockquote>
+<p>最大的<code>缺陷：读取</code>，你需要读取上游日记找到某条tuple是在哪里插入的</p>
+<p>有⼏种⽅式可以提⾼这种⽅式的速度：</p>
+<ul>
+<li>索引<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916143112.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916143112.png" class title="Pasted image 20240916143112.png"></a></li>
+<li>压缩日志：遍历日志，只留一条需要的</li>
+</ul>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916143246.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916143246.png" class title="Pasted image 20240916143246.png"></a>
+
+
+
+<h4 id="Tuple-Layout"><a href="#Tuple-Layout" class="headerlink" title="Tuple Layout"></a>Tuple Layout</h4><p>从⾼级层⾯来讲，⼀个tuple就是⼀个字节序列，就是⼀个字节数组——这就取决于DBMS如何去解释它的意思，以及弄清楚它的类型</p>
+<h5 id="header：不存schema"><a href="#header：不存schema" class="headerlink" title="header：不存schema"></a>header：不存schema</h5><p>我们通过⼀个header来跟踪⼀些不同的东⻄，例如 NULL；但不跟踪数据类型之类的东西——不同的tuple天差地别</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916130501.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916130501.png" class title="Pasted image 20240916130501.png"></a>
+
+
+<h5 id="字段排列与字对齐"><a href="#字段排列与字对齐" class="headerlink" title="字段排列与字对齐"></a>字段排列与字对齐</h5><p>大部分DBMS将不同字段<code>按建表顺序排列</code>，而内存型DBMS例如Redis会尝试<code>重排字段</code>，提高缓存命中率</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916171336.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916171336.png" class title="Pasted image 20240916171336.png"></a>
+
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916171348.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916171348.png" class title="Pasted image 20240916171348.png"></a>
+
+<h5 id="不同表的-tuple-保存在同⼀个page中？"><a href="#不同表的-tuple-保存在同⼀个page中？" class="headerlink" title="不同表的 tuple 保存在同⼀个page中？"></a>不同表的 tuple 保存在同⼀个page中？</h5><p>⼤部分的系统都不会这么做，因为这样会需要大量的元数据，产生<code>数据 冗余</code>，且更新时需要更新多张表，及其耗费时间</p>
+<h6 id="数据库设计规范-normalization-与-denormalization"><a href="#数据库设计规范-normalization-与-denormalization" class="headerlink" title="数据库设计规范 normalization 与 denormalization"></a>数据库设计规范 normalization 与 denormalization</h6><p>数据库规范基本上来讲就是，关于我们如何将数据库拆分到不同的表中；而denormalization基本上是唯一一种在一个page内存储来自不同表的tuple的情形</p>
+<p>一个有外键的表经常需要它引用的表Join，我们可以在物理上进行 <code>pre-join</code></p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916133621.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916133621.png" class title="Pasted image 20240916133621.png"></a>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916134056.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916134056.png" class title="Pasted image 20240916134056.png"></a>
+
+
+
+
+
+
+
+
+
+
+<h4 id="字段表示"><a href="#字段表示" class="headerlink" title="字段表示"></a>字段表示</h4><p>例如INTEGER，BIGINT，SMALLINT，TINYINT，FLOAT&#x2F;REAL这些固定⻓度的东⻄，和C&#x2F;C++一样使用 <code>IEEE 754 standard</code></p>
+<p>可变长度类型，例如varchar，varbinary，text以及blob</p>
+<ul>
+<li>header保存长度，后面跟着数据，但没有一个NULL终止符</li>
+</ul>
+<p>Dates and Timestamps，在不同的数据库中，它们的实现可以千差万别</p>
+<ul>
+<li>大多数系统会保存1970年1⽉1⽇起的秒&#x2F;毫秒&#x2F;微妙，进而处理时间；本质上来讲，这些数据库系统保存的依然是<code>完整的时间戳</code></li>
+<li>某些系统会直接将它们以Date的形式进⾏保存，这样我们所保存的就是⼀个很<code>⼩</code>的值</li>
+</ul>
+<h5 id="定点数"><a href="#定点数" class="headerlink" title="定点数"></a>定点数</h5><p>定点数：numeric&#x2F;decimal</p>
+<p>可变精度的数字操作很高效，CPU通常只需要一条指令就可以加减；而涉及到定点数时，则需要更多的指令，会变得更<code>慢</code></p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916152734.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916152734.png" class title="Pasted image 20240916152734.png"></a><a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916152748.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916152748.png" class title="Pasted image 20240916152748.png"></a>
+
+<p>我们倾向于使用可变精度的数字，但这里会有<code>舍入误差</code>，硬件没法精确表示浮点数</p>
+<p>对于定点数，处理的基本思路是，将它<code>作为varchar存储</code>，然后带一堆元数据，表示例如精度范围、四舍五入信息、小数点等等</p>
+<h6 id="PostgreSQL：定点数的实现"><a href="#PostgreSQL：定点数的实现" class="headerlink" title="PostgreSQL：定点数的实现"></a>PostgreSQL：定点数的实现</h6><a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916153248.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916153248.png" class title="Pasted image 20240916153248.png"></a>
+
+<p>它需要通过⼀系列switch条件才能完成，⽐如说，要判断它的正负，是不是0，或者两个数字是否相等——所以会慢很多</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916153412.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916153412.png" class title="Pasted image 20240916153412.png"></a>
+
+<p>我们并没有SQL server和Oracle的源码，但其实实现也差不多</p>
+<h5 id="大型二进制对象-BLOB-存储"><a href="#大型二进制对象-BLOB-存储" class="headerlink" title="大型二进制对象 BLOB 存储"></a>大型二进制对象 BLOB 存储</h5><p>如果我们所要保存的东⻄没办法保存在⼀个单个page下的话…</p>
+<p>策略1：<code>overflow page/TOAST</code>，末尾放一个类似于CTID一样的指针定位到数据的后半部分</p>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916153927.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916153927.png" class title="Pasted image 20240916153927.png"></a>
+
+<blockquote>
+<p>不同DBMS使用该策略的时机不同。在PostgreSQL中，如果我们要试着保存的值的⼤⼩⼤于2kb，他就会使用这个策略</p>
+</blockquote>
+<p>这种策略需要额外的手段以进行容灾恢复</p>
+<blockquote>
+<p>例如，在PostgreSQL中，⼤部分时候，这些overflow page是只读或者⼏乎都⽤来读，很少往 上⾯写东⻄</p>
+</blockquote>
+<p>策略2：<code>外部存储</code>，将数据存储到外部存储中，DB中只存一个指向数据位置的指针&#x2F;路径</p>
+<blockquote>
+<p>实际上你⽆法修改该⽂件中的内容，你可以读取数据，但你⽆法操作数据</p>
+</blockquote>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916154826.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916154826.png" class title="Pasted image 20240916154826.png"></a>
+
+<p>如果有⼈现在在数据库系统之外对该⽂件进⾏修改，那么当我们任何时候从我们的数据库中读取 该⽂件的时候，我们就能看到其中的变化</p>
+<blockquote>
+<p>很多策略只在DB中存储缩略图，这样更快。将⼀⼤堆视频⽂件保存在⾼端的企业磁盘上，这种做法可能就是在浪费你们的钱。So，你们可以将这些⽂件chuck（块），保存在HDFS或者使⽤更便宜的⽹络存储服务AWS的s3 上⾯</p>
+</blockquote>
+<h4 id="system-catalog：表的元数据"><a href="#system-catalog：表的元数据" class="headerlink" title="system catalog：表的元数据"></a>system catalog：表的元数据</h4><a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916155549.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916155549.png" class title="Pasted image 20240916155549.png"></a>
+
+<p>它是关于数据库相关信息的元数据，它⾥⾯存放了表名，索引等等；当然也有其他⼀些东⻄，例如，⽤户权限，安全相关</p>
+<p>很多数据库系统都会将它们的所有数据库的Catalog⽤另⼀张表来保存</p>
+<blockquote>
+<p>⼤部分数据库系统会通过STANDARD INFORMATION_SCHEMA API把catalog暴露出来</p>
+</blockquote>
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916155948.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916155948.png" class title="Pasted image 20240916155948.png"></a>
+
+<a href="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916155953.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Storage/Pasted%20image%2020240916155953.png" class title="Pasted image 20240916155953.png"></a>
+
+<p>对于MySQL，这个元数据的表也存放在一个目录下，它无法阻止其他人修改这个目录，这可能对我们的正确性造成一定的威胁</p>
+<h4 id="存储模型"><a href="#存储模型" class="headerlink" title="存储模型"></a>存储模型</h4><p>在我们的数据库系统中，我们所关⼼的workload有两类：</p>
+<blockquote>
+<p>对于机器学习和流式处理来说，它们所要关⼼的可能不⽌这两种，但对于我们来说，⽬前关⼼ 这两种就⾜够了</p>
+</blockquote>
+<h5 id="OLTP-OLAP"><a href="#OLTP-OLAP" class="headerlink" title="OLTP &amp; OLAP"></a>OLTP &amp; OLAP</h5><h5 id="联机事务处理-OLTP"><a href="#联机事务处理-OLTP" class="headerlink" title="联机事务处理 OLTP"></a>联机事务处理 OLTP</h5><p>构建⼀个新应⽤程序时就会遇到它。我们从外⾯的世界拿到新数据后，将它们放⼊我们的数据库系统</p>
+<ul>
+<li>它的特点是你只会<code>反复地去读写⼀⼩部分数据</code></li>
+</ul>
+<h5 id="联机分析处理-OLAP"><a href="#联机分析处理-OLAP" class="headerlink" title="联机分析处理 OLAP"></a>联机分析处理 OLAP</h5><p>当你们已经从OLTP应⽤程序中收集到⼀⼤堆数据时，现在，你们想去分析它，并从中推断出新的信息</p>
+<p>它们会去<code>读取⼤量的数据</code>，进行大量的Join</p>
+<blockquote>
+<p>还有⼀种新的workload，它被称为混合事务分析处理HTAP，即在拿到数据时就尝试分析</p>
+</blockquote>
+<h5 id="行存储-列存储"><a href="#行存储-列存储" class="headerlink" title="行存储 &#x2F; 列存储"></a>行存储 &#x2F; 列存储</h5><ul>
+<li>why 行存储？</li>
+</ul>
+<p>N-ary storage model 也被称为行存储模型.</p>
+<p>我们的目的是访问单个实体，例如某个<code>tuple</code>，对这种情形来说行存储非常快速</p>
+<p>常见于OLTP</p>
+<ul>
+<li>why 列存储？</li>
+</ul>
+<p>而如果我们想访问所有tuple中的某个<code>字段</code>，如果使用行存储，一整个页中只有一小部分是有效的数据，这会耗费大量的时间。更好的方式是把某列的值连续地保存在一起</p>
+<ul>
+<li>同时我们需要一些手段把值和tuple对应</li>
+<li>列存储使我们可以更加方便地进行<code>空间压缩</code>，因为对于列存储，同一个page中的值都是类似的，有大量重复的值存在</li>
+<li>缺点也很明显，读取一个tuple很困难</li>
+<li>常见于OLAP。</li>
+</ul>
+<blockquote>
+<p>他的问题是，有没有很好的理由来将两者混合在⼀起。实际上在构建我们的数据库系统时（知秋注：这个课上cmu所开发的这个数据库），确实将它们 两个混合在了⼀起</p>
+<p>后⾯，我们将这种想法抛弃，并从头开始，因为它是个糟糕的想法。它在⼯程上消耗太多时间了</p>
+</blockquote>
+<blockquote>
+<p>有些系统会向我们提供这两种。例如，在MySQL中，我们在创建表时可以告诉它⽤⾏存储，创 建另⼀张表时告诉它使⽤列存储。本质上来讲，它们有两种独⽴的存储管理器，以及两种独⽴的执⾏引擎来对它们进⾏处理。So，这种系统被称为<code>混合存储系统</code>，或者说混合数据库系统</p>
+</blockquote>
+<blockquote>
+<p>对于内存型数据库，我认为我们在列存储上能够⾜够快的执⾏事务处理</p>
+</blockquote>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-10-29</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/CMU-15445/'>
+                            CMU 15445
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+            
+    </body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="小林系统 调度算法" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    小林系统 调度算法
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="post-toc-text">调度算法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="post-toc-text">进程调度算法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%86%85%E5%AD%98%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="post-toc-text">内存页面置换算法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BC%BA%E9%A1%B5%E5%BC%82%E5%B8%B8"><span class="post-toc-text">缺页异常</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#OPT-%E6%9C%80%E4%BD%B3%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="post-toc-text">OPT 最佳页面置换算法</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#FIFO-%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA"><span class="post-toc-text">FIFO 先进先出</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LRU-%E6%9C%80%E4%B9%85%E6%9C%AA%E4%BD%BF%E7%94%A8"><span class="post-toc-text">LRU 最久未使用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%97%B6%E9%92%9F%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="post-toc-text">时钟页面置换算法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LFU-%E6%9C%80%E4%B8%8D%E5%B8%B8%E7%94%A8"><span class="post-toc-text">LFU 最不常用</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="post-toc-text">磁盘调度算法</span></a></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="调度算法"><a href="#调度算法" class="headerlink" title="调度算法"></a>调度算法</h2><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95.png" class title="调度算法.png"></a>
+<h3 id="进程调度算法"><a href="#进程调度算法" class="headerlink" title="进程调度算法"></a>进程调度算法</h3><p>见进程管理小节</p>
+<h3 id="内存页面置换算法"><a href="#内存页面置换算法" class="headerlink" title="内存页面置换算法"></a>内存页面置换算法</h3><h4 id="缺页异常"><a href="#缺页异常" class="headerlink" title="缺页异常"></a>缺页异常</h4><p><strong>缺页中断</strong>和一般的中断有些区别，它会在指令执行<strong>期间</strong>产生和处理中断信号，而非指令执行完成后；且在缺页中断返回后，<strong>重新执行原指令</strong>，而一般指令返回到下一条指令</p>
+<p>其具体流程是：</p>
+<ol>
+<li>CPU读写某个物理地址，MMU查找页表，若有效则加载，否则产生缺页异常中断</li>
+<li>OS收到中断，执行handler，在磁盘中找该页，然后把它换入到内存中的某个空闲页，标记PTE为有效</li>
+<li>重新执行原指令</li>
+</ol>
+<p>若无空闲页，则需根据 <strong>内存页置换算法</strong> 换出一个页到磁盘中，常见的算法有这几种：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/Pasted%20image%2020241005192408.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/Pasted%20image%2020241005192408.png" class title="Pasted image 20241005192408.png"></a>
+<h5 id="OPT-最佳页面置换算法"><a href="#OPT-最佳页面置换算法" class="headerlink" title="OPT 最佳页面置换算法"></a>OPT 最佳页面置换算法</h5><p>选择内存中未来<strong>最长时间不被访问</strong>的页进行替换，但页何时被访问是<strong>无法预知</strong>的，所以不可行</p>
+<p>它一般用于衡量置换算法的效率，越接近OPT越好</p>
+<h4 id="FIFO-先进先出"><a href="#FIFO-先进先出" class="headerlink" title="FIFO 先进先出"></a>FIFO 先进先出</h4><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/FIFO%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/FIFO%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95.webp" class title="FIFO置换算法.webp"></a>
+
+<h4 id="LRU-最久未使用"><a href="#LRU-最久未使用" class="headerlink" title="LRU 最久未使用"></a>LRU 最久未使用</h4><p>理论可以实现，但是在链表中找到它，然后移动到表头比较费时，很少用</p>
+<h4 id="时钟页面置换算法"><a href="#时钟页面置换算法" class="headerlink" title="时钟页面置换算法"></a>时钟页面置换算法</h4><p>维护一个环形链表，表针指向最老的页，需要置换页时：</p>
+<ul>
+<li>检查当前访问位，为1则递增表针指向下一个页，直到为0，置换这个页</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E6%97%B6%E9%92%9F%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E6%97%B6%E9%92%9F%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95.webp" class title="时钟置换算法.webp"></a>
+
+<h4 id="LFU-最不常用"><a href="#LFU-最不常用" class="headerlink" title="LFU 最不常用"></a>LFU 最不常用</h4><p>将访问次数最少的页淘汰，为每个页维护一个访问计数，每次被访问+1，需要置换时淘汰掉计数最小的</p>
+<p>LFU <strong>只考虑了频率没考虑总时间</strong>，<strong>且增加一个计数器以及找最不常访问的页都是非常耗时的</strong></p>
+<p>前者的一个解决方法是，定时折半访问次数</p>
+<h3 id="磁盘调度算法"><a href="#磁盘调度算法" class="headerlink" title="磁盘调度算法"></a>磁盘调度算法</h3><p>对于机械硬盘，一般通过优化磁盘的<strong>访问顺序</strong>提高性能。寻道和转盘是最耗费时间的操作</p>
+<p><strong>FCFS</strong>：耗费大量时间寻址</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6-%E5%85%88%E6%9D%A5%E5%85%88%E6%9C%8D%E5%8A%A1.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6-%E5%85%88%E6%9D%A5%E5%85%88%E6%9C%8D%E5%8A%A1.webp" class title="磁盘调度-先来先服务.webp"></a>
+
+<p><strong>SSF</strong>：最短寻道时间，贪心。但可能造成<strong>饥饿</strong></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6-%E6%9C%80%E7%9F%AD%E5%AF%BB%E9%81%93%E6%97%B6%E9%97%B4%E4%BC%98%E5%85%88.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6-%E6%9C%80%E7%9F%AD%E5%AF%BB%E9%81%93%E6%97%B6%E9%97%B4%E4%BC%98%E5%85%88.webp" class title="磁盘调度-最短寻道时间优先.webp"></a>
+
+<p><strong>扫描</strong>：按请求序列中的一个方向移动到边缘，过程中响应请求，然后反向扫描。中间的磁道响应较快，存在频率差异</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6-%E6%89%AB%E6%8F%8F%E7%AE%97%E6%B3%95.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6-%E6%89%AB%E6%8F%8F%E7%AE%97%E6%B3%95.webp" class title="磁盘调度-扫描算法.webp"></a>
+
+<p><strong>循环扫描</strong>：扫描一个方向到边缘后，直接回到起始位置，中间不处理任何请求。速度比较平均</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6-C-SCAN%E7%AE%97%E6%B3%95.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95/%E7%A3%81%E7%9B%98%E8%B0%83%E5%BA%A6-C-SCAN%E7%AE%97%E6%B3%95.webp" class title="磁盘调度-C-SCAN算法.webp"></a>
+
+<p><strong>LOOK</strong>：扫描一个方向到最远请求，反向移动过程中会响应请求<br><strong>C-LOOK</strong>：LOOK+反向移动过程中不会响应请求，公平的LOOK</p>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-10-29</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/OS/'>
+                            OS
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+            
+    </body>
+</html>

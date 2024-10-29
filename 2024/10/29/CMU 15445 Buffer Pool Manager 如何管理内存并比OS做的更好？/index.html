@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="Buffer Pool Manager 如何管理内存并比OS做的更好？" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    Buffer Pool Manager 如何管理内存并比OS做的更好？
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#buffer-pool-Manager%EF%BC%9A%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F"><span class="post-toc-text">buffer pool Manager：如何管理内存并比OS做的更好？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="post-toc-text">概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#buffer-pool-%E7%BB%84%E6%88%90"><span class="post-toc-text">buffer pool 组成</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%90%91-buffer-pool-%E8%AF%B7%E6%B1%82-page"><span class="post-toc-text">向 buffer pool 请求 page</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#lock-%E5%92%8C-latch-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="post-toc-text">lock 和 latch 的区别</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#page-directory-page-table-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="post-toc-text">page directory &amp; page table 的区别</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%9E%84%E5%BB%BA-buffer-pool%EF%BC%9A%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="post-toc-text">构建 buffer pool：分配内存</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BC%98%E5%8C%961%EF%BC%9A%E5%A4%9A-buffer-pool"><span class="post-toc-text">优化1：多 buffer pool</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%AE%9A%E4%BD%8D-page"><span class="post-toc-text">定位 page</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BC%98%E5%8C%962%EF%BC%9APre-fetching"><span class="post-toc-text">优化2：Pre-fetching</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%8E%A7%E5%88%B6%E9%A2%84%E5%8F%96%E7%9A%84%E6%97%B6%E6%9C%BA"><span class="post-toc-text">控制预取的时机</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BC%98%E5%8C%963%EF%BC%9A%E6%89%AB%E6%8F%8F-%E6%9F%A5%E8%AF%A2%E5%85%B1%E4%BA%AB"><span class="post-toc-text">优化3：扫描&#x2F;查询共享</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BC%98%E5%8C%964%EF%BC%9ABuffer-Pool-bypass-light-scan"><span class="post-toc-text">优化4：Buffer Pool bypass&#x2F;light scan</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9B%BF%E6%8D%A2%E7%AD%96%E7%95%A5"><span class="post-toc-text">替换策略</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#LRU"><span class="post-toc-text">LRU</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Clock"><span class="post-toc-text">Clock</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9Asequential-flooding"><span class="post-toc-text">问题：sequential flooding</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#dirty-page"><span class="post-toc-text">dirty page</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="buffer-pool-Manager：如何管理内存并比OS做的更好？"><a href="#buffer-pool-Manager：如何管理内存并比OS做的更好？" class="headerlink" title="buffer pool Manager：如何管理内存并比OS做的更好？"></a>buffer pool Manager：如何管理内存并比OS做的更好？</h2><blockquote>
+<p>HTAP：既做OLTP，⼜做OLAP的数据库系统。你们会有前端OLTP数据库，以及后端⼤型数据仓库。这些有时候被称为Data silo(数据孤岛，即相互独⽴的数据存储区)，因为你们可以对其中⼀个数据库实例进⾏⼀系列更新操作，不管它是不是单个节点都没关系，因为它是⼀个单个逻辑数据库。然后你就可以进⾏某种被称为ETL的操作（ETL是将业务系统的数据经过抽取、清洗转换之 后加载到数据仓库的过程），将处理后的数据 传⼊后端数据仓库</p>
+</blockquote>
+<blockquote>
+<p>今天我们想去讲的内容就是，我们该如何将磁盘中的数据库⽂件或page放到内存中，以便我们 以对它们进⾏操作。</p>
+<p>我们没办法在不将它们先放⼊内存的情况下对这些数据进⾏读写，这是冯诺依曼架构。现在也推出了⼀些新的硬件，我们可以将这些处理逻辑推送到磁盘上，但现在，我们可以将它抛之脑后</p>
+</blockquote>
+<blockquote>
+<p>今天我们要讨论的东⻄就是如何去构建⼀个Buffer池管理器。然后，我们会去讨论，当我们需要释放内存空间时，我们该如何使⽤不同的策略来决定我们想让 哪些pages写出到磁盘上。然后会讨论我们可以通过哪些额外的优化来最⼩化这种影响。然后，我们会结束讨论数据库系统中其他两个需要⽤到内存的部分，Ok</p>
+</blockquote>
+<a href="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020240918030449.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020240918030449.png" class title="Pasted image 20240918030449.png"></a>
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>So，现在我们想试着弄清楚如何将这些page放回磁盘中，从而：</p>
+<ul>
+<li>⽀持大小超出内存容量的数据库</li>
+<li>最⼩化磁盘速度缓慢的影响</li>
+</ul>
+<p>基本策略是缓存，做一个 <strong>由 DBMS 管理</strong>，而非OS，我们想绕过OS的FS缓存。这被称为我们的 <strong>buffer pool</strong></p>
+<h5 id="buffer-pool-组成"><a href="#buffer-pool-组成" class="headerlink" title="buffer pool 组成"></a>buffer pool 组成</h5><ol>
+<li><strong>frame</strong>：缓冲池被划分为一个个固定大小的块</li>
+<li><strong>间接层映射</strong>：<strong>PT</strong>，缓冲池中的页顺序和磁盘中的并不一致<ul>
+<li>一个哈希表，每一项都需要一个 <strong>latch</strong> 锁保护</li>
+</ul>
+</li>
+<li><strong>元数据</strong>：跟踪缓冲池的状态，例如：<ul>
+<li><code>Dirty Flag</code></li>
+<li><code>Pin count</code>：使用该页的线程数量&#x2F;查询该页的数量</li>
+<li>Access Tracking Information（日志）：写完日志后，再修改磁盘页</li>
+</ul>
+</li>
+</ol>
+<h5 id="向-buffer-pool-请求-page"><a href="#向-buffer-pool-请求-page" class="headerlink" title="向 buffer pool 请求 page"></a>向 buffer pool 请求 page</h5><p>DBMS发出page请求时，先看看buffer pool中有没有，没有就从磁盘中拷贝一份到pool中，然后返回指针</p>
+<ul>
+<li>在使用某个PTE时，需要获取锁</li>
+</ul>
+<a href="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020240918023543.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020240918023543.png" class title="Pasted image 20240918023543.png"></a>
+
+<h5 id="lock-和-latch-的区别"><a href="#lock-和-latch-的区别" class="headerlink" title="lock 和 latch 的区别"></a>lock 和 latch 的区别</h5><ul>
+<li><strong>lock</strong>：保护逻辑内容，比如说：tuple，表以及数据库。事务会在运⾏的时候去持有这个lock</li>
+<li><strong>latch</strong>：保护数据库系统的底层内容，比如说我们映射表每一项的锁</li>
+</ul>
+<blockquote>
+<p>在操作系统中，此处的Latch就像是它⾥⾯的 <strong>Mutex</strong>。实际上，我们会在我们的数据库系统中使⽤mutex来保护其中的关键内容</p>
+</blockquote>
+<h5 id="page-directory-page-table-的区别"><a href="#page-directory-page-table-的区别" class="headerlink" title="page directory &amp; page table 的区别"></a>page directory &amp; page table 的区别</h5><ul>
+<li>页目录：找磁盘上的page，必须持久化<ul>
+<li>崩溃恢复、支持庞大的数据库系统</li>
+</ul>
+</li>
+<li>页表：内部映射，映射页号和物理地址。临时的，无需持久化</li>
+</ul>
+<h5 id="构建-buffer-pool：分配内存"><a href="#构建-buffer-pool：分配内存" class="headerlink" title="构建 buffer pool：分配内存"></a>构建 buffer pool：分配内存</h5><p>基本策略分为全局策略和局部策略，全局策略可能对于某个查询来讲很糟糕，局部策略可能会拖慢整个系统的效率。大多数系统尝试着结合二者</p>
+<p>DBMS 知道接下来要接触什么，这是它比OS做的更好的根本原因</p>
+<h4 id="优化1：多-buffer-pool"><a href="#优化1：多-buffer-pool" class="headerlink" title="优化1：多 buffer pool"></a>优化1：多 buffer pool</h4><p>每个池子都有自己的映射表，<strong>不同的池子中使用不同的局部策略</strong></p>
+<ul>
+<li>为每个池子中的查询带来更好的性能：不同的缓存策略、page 大小</li>
+<li>减少锁竞争：更细粒度的锁</li>
+</ul>
+<h5 id="定位-page"><a href="#定位-page" class="headerlink" title="定位 page"></a>定位 page</h5><ol>
+<li><p>在需要定位page时，可以添加额外的元数据：<strong>Object Id</strong>，然后把这个id映射到特定的buffer pool</p>
+<a href="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241024194656.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241024194656.png" class title="Pasted image 20241024194656.png"></a>
+</li>
+<li><p><strong>hash</strong> slot number&#x2F;record id</p>
+<a href="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241024194945.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241024194945.png" class title="Pasted image 20241024194945.png"></a></li>
+</ol>
+<h4 id="优化2：Pre-fetching"><a href="#优化2：Pre-fetching" class="headerlink" title="优化2：Pre-fetching"></a>优化2：Pre-fetching</h4><p>我们想去<strong>最⼩化系统中的停顿</strong>：</p>
+<ul>
+<li><strong>线程切换</strong>：没有page时不得不使得线程停顿、读取磁盘并切换到其他线程，有数据时再切换回来</li>
+<li><strong>最大化磁盘顺序I&#x2F;O</strong>，减小多次随机I&#x2F;O带来的影响</li>
+</ul>
+<h5 id="控制预取的时机"><a href="#控制预取的时机" class="headerlink" title="控制预取的时机"></a>控制预取的时机</h5><a href="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241024195900.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241024195900.png" class title="Pasted image 20241024195900.png"></a>
+
+<p>有时候会预取到错误的page，而这在一些情形下是完全可以避免的——我们知道这些页的结构</p>
+<p>只需要一些额外的元数据即可（但做起来也不是非常容易）</p>
+<h4 id="优化3：扫描-查询共享"><a href="#优化3：扫描-查询共享" class="headerlink" title="优化3：扫描&#x2F;查询共享"></a>优化3：扫描&#x2F;查询共享</h4><p>也被称为<strong>同步扫描 synchronized scans</strong>，可以复用某个查询从磁盘上读取到的数据。</p>
+<ul>
+<li>这是 buffer manager 的工作，非常底层的<strong>存储层</strong></li>
+<li>这些查询可以<strong>不同</strong>，而<strong>结果共享</strong>的查询必须相同，二者是不同的</li>
+</ul>
+<p><strong>实现方式</strong>：将多个查询附加到一个查询结果的游标上。第二个查询只需要知道自己是否和第一个查询有共同的数据，然后将游标附加到上面即可。同时需要跟踪第二个查询的游标，在扫描第一个查询的结果后，仍需查看还有那些数据是自己尚未扫描过的。</p>
+<ul>
+<li>要正确⽀持它是件⾮常难的事，它让查询做的事情变得很复杂</li>
+</ul>
+<a href="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241027014439.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241027014439.png" class title="Pasted image 20241027014439.png"></a>
+
+<p>由于关系模型是<strong>无序</strong>的，可以从任意地方开始执行，所以可以将下一个查询的<strong>游标附加</strong>到第一个查询的游标上，然后再回过头来查看还有什么数据是自己还没有读取的。</p>
+<h4 id="优化4：Buffer-Pool-bypass-light-scan"><a href="#优化4：Buffer-Pool-bypass-light-scan" class="headerlink" title="优化4：Buffer Pool bypass&#x2F;light scan"></a>优化4：Buffer Pool bypass&#x2F;light scan</h4><p>查询 buffer pool 的页表是有<strong>代价</strong>的，我们需要获取锁。我们想绕过这个代价，同时想避免<strong>污染缓存</strong>。</p>
+<p>具体的<strong>实现方式</strong>是，为这个查询线程分配一小块内存，如果查询的页不再内存中则读取到本地内存，然后在查询结束后丢弃掉这些本地内存。</p>
+<ul>
+<li>对于<strong>大块连续存储</strong>在磁盘的数据效果很好；可被用于<strong>计算临时数据</strong></li>
+<li>在informix中，这被称为<strong>light scan</strong></li>
+</ul>
+<h4 id="替换策略"><a href="#替换策略" class="headerlink" title="替换策略"></a>替换策略</h4><p>所有的磁盘操作都是通过最底层的OS API来做的，而FS会维护一个文件缓存，我们不想二次缓存，也不信任OS的管理能力，于是我们使用的都是这些API的 <strong>direct I&#x2F;O</strong> 模式</p>
+<blockquote>
+<p>PostgreSQL是主流数据库系统中唯⼀⼀个依赖OS page cache 的</p>
+</blockquote>
+<p>替换时我们关心：</p>
+<ul>
+<li><strong>正确性</strong>：如果说某个数据我们并没有真正地使⽤完，那么我们不想将它写出或移除</li>
+<li><strong>准确度</strong>：为我们要去确保我们所移除的page是在未来不太会被⽤到的那些page</li>
+<li><strong>磁盘寻道</strong>的数量减⾄最少</li>
+</ul>
+<p>我们的策略需要尽可能地：</p>
+<ul>
+<li>更少的<strong>元数据</strong>：跟踪页的使用，以决定替换哪个页</li>
+<li><strong>更快的策略</strong>：我们不想花费大量时间在策略执行上</li>
+</ul>
+<blockquote>
+<p>⾼端数据库拥有⾮常复杂的替换策略</p>
+</blockquote>
+<h5 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h5><p>一种简单的替换策略：<strong>LRU</strong>。</p>
+<ul>
+<li>实现1：跟踪⼀个page最后⼀次被访问时的时间戳<ul>
+<li>需要扫描，效率低</li>
+</ul>
+</li>
+<li>实现2：维护一个<strong>队列</strong>，淘汰队头<ul>
+<li>在被使用时查找到他再插入队尾，查找需要扫描，效率低</li>
+</ul>
+</li>
+</ul>
+<h5 id="Clock"><a href="#Clock" class="headerlink" title="Clock"></a>Clock</h5><p>另一个策略叫：<strong>Clock</strong>，一种近似LRU的算法，它不会精确移除最久未被访问的page，而是近似</p>
+<ul>
+<li>每个page有一个reference bit，它标记自从上一次访问这个page，它是否被访问过</li>
+<li>有⼀个能够旋转的指针，它能够去检查这个标志位是被设置为1还是0<ul>
+<li>若为0即未被访问过，移除</li>
+<li>否则继续递增指针<ul>
+<li>如果所有的page都已经被修改了，那么我们就选择frame_id最⼩的那个page进⾏移除</li>
+<li>如果所有page的状态都是pinned（加了锁），那么你就没法释放任何page，那么你就得移除page id最⼩的那个page</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<a href="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241027023049.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/CMU%2015445%20Buffer%20Pool%20Manager%20%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86%E5%86%85%E5%AD%98%E5%B9%B6%E6%AF%94OS%E5%81%9A%E7%9A%84%E6%9B%B4%E5%A5%BD%EF%BC%9F/Pasted%20image%2020241027023049.png" class title="Pasted image 20241027023049.png"></a>
+
+<h5 id="问题：sequential-flooding"><a href="#问题：sequential-flooding" class="headerlink" title="问题：sequential flooding"></a>问题：sequential flooding</h5><p>也即我们的缓存会被污染，同时这些扫描的page都是最新的</p>
+<p>三种解决策略：</p>
+<ol>
+<li><strong>LRU-K</strong>：记录每个缓存项最近被访问的K次时间戳，根据<strong>访问历史</strong>选择那些最近K次中访问频率最低或最近最久未被访问的项进行替换<ul>
+<li>适应性强，更好的预测能力</li>
+</ul>
+</li>
+<li><strong>多个 buffer pool</strong></li>
+<li><strong>priority hints</strong>（优先级提示）：确保某些高优先级的页被固定在内存中<ul>
+<li>比如说 index page 中的非叶节点</li>
+</ul>
+</li>
+</ol>
+<h4 id="dirty-page"><a href="#dirty-page" class="headerlink" title="dirty page"></a>dirty page</h4><p>在page上有⼀个dirty bit</p>
+<p>替换时可以先把<strong>脏页写回</strong>进行替换，并<strong>复⽤</strong>它的空间。但这需要<strong>两次磁盘I&#x2F;O</strong>来读取一个页：</p>
+<ul>
+<li>⼀次I&#x2F;O是⽤来写出dirty page，另⼀个I&#x2F;O则是读取我想要的那个page<br>所以在替换脏页，与淘汰其他页之间的<strong>权衡</strong>非常难做</li>
+</ul>
+<p>必须⽴即将page写出，在数据库系统中有⼀条执⾏定时写出任务的<strong>线程</strong>。另外，在写出 dirty pages 之前，请确保<strong>先将操作⽇志写出到磁盘</strong></p>
+<blockquote>
+<p>我必须做些额外的保护措施，以确保我以正确的顺序写⼊数据。这是mmap所⽆法做到的事</p>
+</blockquote>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-10-29</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/CMU-15445/'>
+                            CMU 15445
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+            
+    </body>
+</html>

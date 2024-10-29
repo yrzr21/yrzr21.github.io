@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="小林系统 Linux 虚拟内存管理" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    小林系统 Linux 虚拟内存管理
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-Linux-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="post-toc-text">深入理解 Linux 虚拟内存管理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%94%A8%E6%88%B7-%E5%86%85%E6%A0%B8-%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="post-toc-text">用户 &amp; 内核 虚拟地址空间</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="post-toc-text">查看进程的虚拟内存布局</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E7%9A%84%E7%AE%A1%E7%90%86%EF%BC%9Amm-vma"><span class="post-toc-text">进程虚拟内存空间的管理：mm &amp; vma</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#mm-struct-%E5%88%9B%E5%BB%BA"><span class="post-toc-text">mm_struct 创建</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#task-size%EF%BC%9A%E5%A4%A7%E5%B0%8F-%E5%88%86%E7%95%8C%E7%BA%BF"><span class="post-toc-text">task_size：大小 &amp; 分界线</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%B8%83%E5%B1%80"><span class="post-toc-text">地址空间布局</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#VMA%EF%BC%9Avm-area-struct"><span class="post-toc-text">VMA：vm_area_struct</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#vma-%E5%88%9B%E5%BB%BA%E4%B8%8E%E7%A8%8B%E5%BA%8F%E5%8A%A0%E8%BD%BD"><span class="post-toc-text">vma 创建与程序加载</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%86%85%E6%A0%B8%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="post-toc-text">内核虚拟内存空间</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#32%E4%BD%8D%E4%BD%93%E7%B3%BB"><span class="post-toc-text">32位体系</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#64%E4%BD%8D%E4%BD%93%E7%B3%BB"><span class="post-toc-text">64位体系</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#DRAM"><span class="post-toc-text">DRAM</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%89%E7%A7%8D%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B-%E7%83%AD%E6%8F%92%E6%8B%94"><span class="post-toc-text">三种物理内存模型 &amp; 热插拔</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#FLATMEM-%E5%B9%B3%E5%9D%A6%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%9A%E9%BB%98%E8%AE%A4%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">FLATMEM 平坦内存模型：默认模型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#DISCONTIGMEM-%E9%9D%9E%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">DISCONTIGMEM 非连续内存模型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SPARSEMEM-%E7%A8%80%E7%96%8F%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">SPARSEMEM 稀疏内存模型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%83%AD%E6%8F%92%E6%8B%94"><span class="post-toc-text">物理内存热插拔</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#NUMA-%E6%A8%A1%E5%9E%8B%E8%8A%82%E7%82%B9"><span class="post-toc-text">NUMA 模型节点</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%9D%9E%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">非连续内存模型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#zone%EF%BC%9A%E8%8A%82%E7%82%B9%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%88%92%E5%88%86"><span class="post-toc-text">zone：节点物理内存划分</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#NUMA-%E8%8A%82%E7%82%B9%EF%BC%9Apglist-data"><span class="post-toc-text">NUMA 节点：pglist_data</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E5%86%85%E5%AD%98%E8%A7%84%E6%95%B4%E4%B8%8E%E5%9B%9E%E6%94%B6"><span class="post-toc-text">内存规整与回收</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81"><span class="post-toc-text">节点状态</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#NUMA-%E8%8A%82%E7%82%B9%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98"><span class="post-toc-text">NUMA 节点物理内存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#struct-zone%EF%BC%9A%E7%BC%93%E5%AD%98%E8%A1%8C%E5%AF%B9%E9%BD%90-%E5%9F%BA%E6%9C%AC%E5%AD%97%E6%AE%B5"><span class="post-toc-text">struct zone：缓存行对齐 &amp; 基本字段</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E9%A2%84%E7%95%99%E5%86%85%E5%AD%98%EF%BC%9A%E9%98%B2%E9%AB%98%E5%BA%A6%E4%BE%B5%E5%8D%A0"><span class="post-toc-text">预留内存：防高度侵占</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%B0%B4%E4%BD%8D%E7%BA%BF"><span class="post-toc-text">水位线</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%86%B7%E7%83%AD%E9%A1%B5%EF%BC%9Aper-cpu-pageset"><span class="post-toc-text">冷热页：per_cpu_pageset</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#page%EF%BC%9A%E7%89%A9%E7%90%86%E9%A1%B5%E6%8F%8F%E8%BF%B0"><span class="post-toc-text">page：物理页描述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#page%EF%BC%9A%E6%96%87%E4%BB%B6%E9%A1%B5-%E5%8C%BF%E5%90%8D%E9%A1%B5"><span class="post-toc-text">page：文件页&#x2F;匿名页</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%8C%BF%E5%90%8D%E7%89%A9%E7%90%86%E9%A1%B5%EF%BC%9A%E5%8F%8D%E5%90%91%E6%98%A0%E5%B0%84"><span class="post-toc-text">匿名物理页：反向映射</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7"><span class="post-toc-text">内存回收相关属性</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#flag"><span class="post-toc-text">flag</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#compound-page"><span class="post-toc-text">compound page</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#slab-%E5%AF%B9%E8%B1%A1%E6%B1%A0"><span class="post-toc-text">slab 对象池</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h3 id="深入理解-Linux-虚拟内存管理"><a href="#深入理解-Linux-虚拟内存管理" class="headerlink" title="深入理解 Linux 虚拟内存管理"></a>深入理解 Linux 虚拟内存管理</h3><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86.png" class title="Linux 虚拟内存管理.png"></a>
+
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>为什么使用虚拟内存？</p>
+<ol>
+<li>提供<code>强隔离性</code>，隔离并保护了各个进程以及OS。这需要硬件的支持</li>
+<li>使得OS能支持比实际物理内存大得多的<code>地址空间</code>。多的部分可以先写到地盘里，当然这势必会减慢整个系统的速度</li>
+<li>提供一些特别的<code>功能</code>，比如 共享内存、cow机制、内存映射文件等等</li>
+<li>对于每个进程，<code>虚拟化</code>物理内存排布为完全相同虚拟地址空间</li>
+</ol>
+<p>虚拟内存通常通过<code>分页</code>机制实现，Intel Core i7 使用<code>四级页表</code>索引地址</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/7be417ea2a4c46466ff35f2bfeb741a1.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/7be417ea2a4c46466ff35f2bfeb741a1.webp" class title="7be417ea2a4c46466ff35f2bfeb741a1.webp"></a>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/769ed056eefb1e3d6419472bff87d036.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/769ed056eefb1e3d6419472bff87d036.webp" class title="769ed056eefb1e3d6419472bff87d036.webp"></a>
+
+<h4 id="用户-内核-虚拟地址空间"><a href="#用户-内核-虚拟地址空间" class="headerlink" title="用户 &amp; 内核 虚拟地址空间"></a>用户 &amp; 内核 虚拟地址空间</h4><p>排布不是绝对的，但大多数采用这种排布</p>
+<ul>
+<li>32位机器上的虚拟地址空间为<code>3GB+1GB</code></li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/ffb6e1727e2289f142f6a2a6291cd68c.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/ffb6e1727e2289f142f6a2a6291cd68c.webp" class title="ffb6e1727e2289f142f6a2a6291cd68c.webp"></a>
+<ul>
+<li><code>start_brk</code> 标记了堆的起始位置，<code>brk</code> 标记了结束位置，向高处增长</li>
+<li>文件映射&amp;匿名映射区、栈向低地址增长</li>
+<li>start_stack 标记了栈的起始位置，RSP存储了当前栈顶指针，RBP存储了栈基指针</li>
+<li>上面的内核空间被映射到进程虚拟地址空间，但进程无权访问</li>
+</ul>
+<p>64位机器能表示16EB的内存空间，根本用不完。正常情况下只使用了 <code>48bit</code> 描述虚拟地址空间。其中<code>高16bit全1</code>表示内核空间，低16bit全0表示用户空间。大体排布为：<code>128TB+内存空洞+128TB</code>。</p>
+<p>我们可以通过这种方式<code>判断进程在访问</code>用户空间还是内核空间亦或者内存空洞，即地址最高16位全1还是全0还是二者都不是</p>
+<p>可以利用内存空洞<code>扩展</code>用户的虚拟地址范围</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/532e6cdf4899588f8b873b6435cba2d8.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/532e6cdf4899588f8b873b6435cba2d8.webp" class title="532e6cdf4899588f8b873b6435cba2d8.webp"></a>
+
+<ul>
+<li>数据段和代码段之间还有一个guard page，防止数据读写越界</li>
+</ul>
+<h5 id="查看进程的虚拟内存布局"><a href="#查看进程的虚拟内存布局" class="headerlink" title="查看进程的虚拟内存布局"></a>查看进程的虚拟内存布局</h5><p>可以通过 <code>cat /proc/pid/maps</code> 或者 <code>pmap pid</code> 查看某个进程的虚拟内存布局</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924145518.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924145518.png" class title="Pasted image 20240924145518.png"></a>
+
+
+
+
+
+<h4 id="进程虚拟内存空间的管理：mm-vma"><a href="#进程虚拟内存空间的管理：mm-vma" class="headerlink" title="进程虚拟内存空间的管理：mm &amp; vma"></a>进程虚拟内存空间的管理：mm &amp; vma</h4><h5 id="mm-struct-创建"><a href="#mm-struct-创建" class="headerlink" title="mm_struct 创建"></a>mm_struct 创建</h5><p>linux 使用 <code>task_struct</code> 描述进程和线程，这个task结构体包含了进程的一些信息，例如<code>pid、tgid、files、mm</code></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924153342.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924153342.png" class title="Pasted image 20240924153342.png"></a>
+
+<p><code>mm_struct</code> 用于管理的进程的虚拟内存，每个进程都有唯一的mm结构体。</p>
+<p>在 <code>fork</code> 时，会为子进程创建task、mm等结构体，并<code>拷贝</code>父进程的大部分资源。例如：文件、信号、虚拟内存</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924160625.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924160625.png" class title="Pasted image 20240924160625.png"></a>
+
+<p>子进程的<code>虚拟地址空间与父进程完全一样</code>，在此过程中，会：</p>
+<ul>
+<li>拷贝mm结构体，拷贝页表</li>
+<li>物理内存拷贝可以以cow的方式实现，共享物理内存，在写时触发handler进行拷贝<br>它的地址空间是父进程的一份<code>拷贝</code></li>
+</ul>
+<p>通过vfork&#x2F;clone创建出的子进程可以直接<code>共享</code>父进程的mm结构体和页表，而无需拷贝，也即所谓的 <code>线程</code></p>
+<ul>
+<li>共享地址空间几乎是进程和线程的本质区别</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924161610.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924161610.png" class title="Pasted image 20240924161610.png"></a>
+
+<p>对于内核线程，所有内核线程共享自己的地址空间，且内核空间被映射到了每个进程的地址空间中，所以在切换内核线程时只需要将mm赋值为上一个进程的mm_struct即可，避免<code>内核线程切换的地址空间开销</code></p>
+<h5 id="task-size：大小-分界线"><a href="#task-size：大小-分界线" class="headerlink" title="task_size：大小 &amp; 分界线"></a>task_size：大小 &amp; 分界线</h5><p>mm 中的 <code>task_size</code> 定义了用户虚拟地址空间的<code>大小</code>，也是用户和内核虚拟地址空间的<code>分界线</code></p>
+<blockquote>
+<p>32 位系统中用户地址空间和内核地址空间的分界线在 0xC000 000 地址处，那么自然进程的 mm_struct 结构中的 task_size 为 0xC000 000。</p>
+<p>64位系统中，task_size_max &#x3D; 1 &lt;&lt; 47 - PGSIZE，即 0x00007FFFFFFFF000</p>
+</blockquote>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924163135.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924163135.png" class title="Pasted image 20240924163135.png"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924163141.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924163141.png" class title="Pasted image 20240924163141.png"></a>
+<h5 id="地址空间布局"><a href="#地址空间布局" class="headerlink" title="地址空间布局"></a>地址空间布局</h5><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/2b2dbb2b6ea19871152a3bf6566df205.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/2b2dbb2b6ea19871152a3bf6566df205.webp" class title="2b2dbb2b6ea19871152a3bf6566df205.webp"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924163440.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924163440.png" class title="Pasted image 20240924163440.png"></a>
+
+<ul>
+<li>结构体中的…定义了…段在地址空间中的位置</li>
+<li><code>BSS</code> 紧挨着 data 段，大小固定，用<code>0</code>填充</li>
+<li><code>mmap_base</code> 定义了内存文件映射和匿名映射区域的起始位置。这个区域还包含了动态链接库</li>
+<li>arg_xxx 和 env_xxx 是main的参数列表和环境变量，位于栈的最高地址处</li>
+<li><code>total_vm</code> 是虚拟映射的总页数，但非所有虚拟页都映射了物理页</li>
+<li>locked_vm：禁止 swap out</li>
+<li>pinned_vm：禁止移动也禁止换出</li>
+<li>data_vm：数据段页数</li>
+<li>exec_vm（？</li>
+</ul>
+<h5 id="VMA：vm-area-struct"><a href="#VMA：vm-area-struct" class="headerlink" title="VMA：vm_area_struct"></a>VMA：vm_area_struct</h5><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/600ef23c454d9f3653ece44debaaf3a7.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/600ef23c454d9f3653ece44debaaf3a7.webp" class title="600ef23c454d9f3653ece44debaaf3a7.webp"></a>
+
+<p>每个段又被分为一个个连续的区域，被称为虚拟内存区域 <code>VMA</code> ，用 <code>vm_area_struct</code> 表示，它描述了 <code>[vm_start，vm_end)</code> 这样一段左闭右开的虚拟内存区域。</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924224425.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924224425.png" class title="Pasted image 20240924224425.png"></a>
+
+<ul>
+<li><code>vm_page_prot</code> 是这个区域所有页的访问权限</li>
+<li><code>vm_flags</code> 定义了整个vma的访问模式</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924231052.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240924231052.png" class title="Pasted image 20240924231052.png"></a>
+
+<p>可以用 vm_flags 获取 prot：vma-&gt;vm_page_prot &#x3D; vm_get_page_prot(vma-&gt;vm_flags)</p>
+<ul>
+<li>VM_IO：这块区域可以被映射到设备 IO 空间。通常在驱动程序调用mmap时使用</li>
+<li>VM_RESERVED：内存紧张时不能被换出到磁盘</li>
+<li>VM_SEQ_READ：暗示内核，应用程序会以顺序读的方式读取这个区域的内存，内核可以采用预读进行优化</li>
+<li>VM_RAND_READ：暗示随机读，内核可能会减少预读</li>
+</ul>
+<blockquote>
+<p>madvise 可以向内核提供如何处理特定区域的建议</p>
+</blockquote>
+<p><code>anon_vma</code> 表示这个区域映射的是物理内存，即匿名映射，它包含了匿名映射的一些信息；<code>vm_file</code> 用来关联被映射的文件，<code>vm_pgoff</code>是文件内容在实际文件中的偏移量。</p>
+<ul>
+<li>当前者被设置，则vm_file和vm_pgoff没有了意义；反之同理</li>
+</ul>
+<p>vm_private_data 则用于存储 VMA 中的私有数据。具体的存储内容和内存映射的类型有关，我们暂不展开论述。</p>
+<p>vma 还有一些 <code>函数指针</code> 用于定制化区域操作：open、close、fault、page_mkwrite，他们被 vm_area_struct 的成员 <code>vm_ops</code> 指向</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240925164542.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240925164542.png" class title="Pasted image 20240925164542.png"></a>
+
+<ul>
+<li>open 和 close 在vma被加入&#x2F;删除到地址空间时调用</li>
+<li>fault 是本vma所有页的的 page fault handler，page_mkwrite 是页面从只读变为可写时被调用的函数</li>
+</ul>
+<p>类似的用法还有很多：file_operations、address_space_operations、</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/962e5cee8366009b565796896f22ad77.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/962e5cee8366009b565796896f22ad77.webp" class title="962e5cee8366009b565796896f22ad77.webp"></a>
+
+<p>这些 vma 被同时以<code>双向链表+红黑树</code>两种形式组织，前者为了实现快速遍历，后者为了实现快速查找（key为va）。同时每个节点还包含了一个指向所属vma的指针</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240925170106.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240925170106.png" class title="Pasted image 20240925170106.png"></a>
+
+<p>双向链表的头指针被存储在 mm 的 <code>mmap</code> 中：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240925170243.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240925170243.png" class title="Pasted image 20240925170243.png"></a>
+
+<p>红黑树的根节点存储在 mm 的 <code>mm_rb</code> 中：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240925170522.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240925170522.png" class title="Pasted image 20240925170522.png"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/d945d22667c4ea56dbd2f19677306a91.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/d945d22667c4ea56dbd2f19677306a91.webp" class title="d945d22667c4ea56dbd2f19677306a91.webp"></a>
+
+<p>可以通过  <code>cat /proc/pid/maps</code> 或者 <code>pmap pid</code> 查看进程的虚拟内存空间布局。他们的实现原理即基于vma的双向链表布局</p>
+<h5 id="vma-创建与程序加载"><a href="#vma-创建与程序加载" class="headerlink" title="vma 创建与程序加载"></a>vma 创建与程序加载</h5><blockquote>
+<p>磁盘中的段叫section，内存中的段叫segment</p>
+</blockquote>
+<p>可执行程序以ELF格式在磁盘中保存，不同的section被映射到不同权限的segment中</p>
+<ul>
+<li>.text 映射到可读可执行的段，.data 映射到可读可写的段</li>
+</ul>
+<p>加载程序的过程通过函数 <code>load_elf_binary</code> 完成</p>
+<ul>
+<li>设置 mmap_base、start_stack、arg_start、brk &amp; start_brk</li>
+<li>加载 .text、.data、.bss 段数据到内存中、链接动态库</li>
+<li>初始化 mm_struct</li>
+</ul>
+<blockquote>
+<p>load_elf_binary 在加载内核、启动第一个用户进程init、exec运行二进制程序的过程中都起了重要的作用。</p>
+<p>exec 除了加载程序还会进行一些内存映射工作</p>
+</blockquote>
+<h4 id="内核虚拟内存空间"><a href="#内核虚拟内存空间" class="headerlink" title="内核虚拟内存空间"></a>内核虚拟内存空间</h4><p>进入内核态后使用的仍然是<code>va</code></p>
+<blockquote>
+<p>我们可以通过 <code>cat /proc/iomem</code> 命令查看具体物理内存布局情况</p>
+</blockquote>
+<blockquote>
+<p><strong>低内存</strong>：可以直接被映射（或线性映射）到内核的物理内存</p>
+<p><strong>高内存</strong>：虚拟空间不够了，剩下的物理内存不能直接被映射到内核空间</p>
+</blockquote>
+<h5 id="32位体系"><a href="#32位体系" class="headerlink" title="32位体系"></a>32位体系</h5><p><code>直接映射区</code>：TASK_SIZE ~ TASK_SIZE + 896M</p>
+<ul>
+<li>前 1M 存放引导程序，之后的部分存放内核的代码、数据、bss等</li>
+<li>然后就是<code>进程描述符</code>，例如task_struct、mm_struct、vm_area_struct</li>
+<li>每个进程都会被分配一个容量固定且小的<code>内核栈</code>，通常被guard page分隔以防止溢出</li>
+</ul>
+<blockquote>
+<p>实际的计算机体系结构受到硬件的约束，这限制了页的使用方式。例如x86体系下，ISA总线的DMA控制器只能对内存的前16M寻址，于是直接映射区会把前16M专门留给DMA，称为 <code>ZONE_DMA</code> 区域。<br>剩下的部分被称为 <code>ZONE_NORMAL</code> 区域，896M以上的区域被划分为 <code>ZONE_HIGHMEM</code> 区域</p>
+<p>这些区域划分针对物理内存</p>
+</blockquote>
+<p>接着是 <code>vmalloc</code> 动态映射区：VMALLOC_START~VMALLOC_END</p>
+<ul>
+<li>1G空间太小了，只好动态映射着用</li>
+<li>与 normal 区隔了一个8M <code>空洞</code> 用于保护，防止越界</li>
+<li>分配的物理页不连续，较慢</li>
+</ul>
+<p><code>永久映射区</code>：PKMAP_BASE~FIXADDR_START，即persistent kmap area。确保访问的<code>稳定</code>性和速度，保持长期映射关系，可动态分配但只要在使用就不会被释放</p>
+<blockquote>
+<p>相较于直接映射区，vmalloc 区和 pkmap 区都是算“临时”映射区。前者可以同时被用于映射多个页面，然后在使用时unmap原来的，map现在的；而pkmap区只能同时存在一个映射，这使得访问相较于 vmalloc 区更加稳定和快速。（注意，每对映射都有自己的物理内存对应）</p>
+</blockquote>
+<p><code>固定映射区</code>：每个va都有<code>固定</code>用途的区域，硬件可以直接访问特定地址</p>
+<p><code>临时映射区</code>：使用kmap_atomic，用于临时映射，用完后需要kunmap_atomic</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/0d19dc439390c46612e31ee973f83145.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/0d19dc439390c46612e31ee973f83145.webp" class title="0d19dc439390c46612e31ee973f83145.webp"></a>
+
+
+
+
+
+
+
+
+<h5 id="64位体系"><a href="#64位体系" class="headerlink" title="64位体系"></a>64位体系</h5><blockquote>
+<p>32位体系的内核空间太小了，所以需要精细化管理，按功能分了很多区域</p>
+<p>64位体系下，使用的物理内存可以<code>直接映射</code>，不需要进行动态映射</p>
+</blockquote>
+<p>内核空间的地址范围为：0xFFFF 8000 0000 0000 - 0xFFFF FFFF FFFF FFFF。</p>
+<p>其前8TB+512GB空洞，然后是64T的直接映射区。直接映射区中的va-PAGE_OFFSET就可以得到物理地址</p>
+<blockquote>
+<p>下图有误，PAGE_OFFSET 为 0xFFFF 88<code>8</code>0 0000 0000，多了一个512GB</p>
+<p>用户内核空间大小也有误，应为0~除前16位后面全1</p>
+</blockquote>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/e1f2e689c2754b2af540c6d0b6ab327f.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/e1f2e689c2754b2af540c6d0b6ab327f.webp" class title="e1f2e689c2754b2af540c6d0b6ab327f.webp"></a>
+
+<p>1T空洞+32T的vmalloc映射区，类似于内核的堆</p>
+<p>1T空洞+1T的虚拟内存映射区，用于存放 <code>struct page</code> 表示物理页</p>
+<p>从 start_kernel 开始是内核的代码、数据、bss等，这里也是直接映射，减去~就可以得到物理地址（和前面的直接映射区不冲突。为什么？）</p>
+<h5 id="DRAM"><a href="#DRAM" class="headerlink" title="DRAM"></a>DRAM</h5><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/647cd97d53cb7d2a67067c90996fa4e8.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/647cd97d53cb7d2a67067c90996fa4e8.webp" class title="647cd97d53cb7d2a67067c90996fa4e8.webp"></a>
+
+<p>黑色的部分为<code>存储器模块</code>，多个存储器模块连接到存储控制器上构成了主存。一个存储器模块中有<code>8</code>个DRAM芯片，编号为0~7。</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/a2112f84eed5dc53dd760cf6a5fdb538.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/a2112f84eed5dc53dd760cf6a5fdb538.webp" class title="a2112f84eed5dc53dd760cf6a5fdb538.webp"></a>
+
+<p>每一个DRAM芯片的结构是一个二维矩阵，每一个元素称为<code>超单元 supercell</code>，大小为一个字节。其行坐标被称为 <code>RAS</code>（row access strobe），列坐标为 <code>CAS</code>。例如下图 supercell 的 RAS &#x3D; 2，CAS &#x3D; 2：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/fefc8d348414d2cd0ec09fdfa20daf9c.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/fefc8d348414d2cd0ec09fdfa20daf9c.webp" class title="fefc8d348414d2cd0ec09fdfa20daf9c.webp"></a>
+
+<p>数据通过<code>引脚</code>流入流出RAM，每个引脚一次可以传输 <code>1 bit</code> 数据。为了一次获取某个 supercell 的数据，DARM芯片包含了<code>2个地址引脚</code> 和 <code>8个数据引脚</code>.</p>
+<blockquote>
+<p>注意这里只是为了解释地址引脚和数据引脚的概念，实际硬件中的引脚数量是不一定的。</p>
+</blockquote>
+<p>传输数据时，控制器先发送 RAS，DRAM芯片把该行拷贝到 <code>行缓冲区</code>，然后控制器发送 CAS，芯片再把缓冲区中的对应 <code>supercell</code> 中的数据通过数据引脚发送给控制器</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/b4c3dc16dbfab2682d46772b787ae962.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/b4c3dc16dbfab2682d46772b787ae962.webp" class title="b4c3dc16dbfab2682d46772b787ae962.webp"></a>
+
+<p>CPU 和内存之间由总线相连，数据在总线上的传输由一系列操作完成，这一些列操作被称为 总线事务。数据从内存传送到 CPU 称之为<code>读事务</code>，数据从 CPU 传送到内存称之为<code>写事务</code></p>
+<p>总线上传输的信号包括：地址信号，数据信号，控制信号。控制总线上的控制线好可以同步事务，并标识出当前正在被执行的事务信息：</p>
+<ul>
+<li>事务目的地、读&#x2F;写事务、传输地址&#x2F;数据信号</li>
+</ul>
+<blockquote>
+<p>总线上的地址全都是物理地址</p>
+</blockquote>
+<p><code>IO bridge</code> 负责将转换不同总线上的电子信号。</p>
+<p>CPU为了读取地址A处的内存到寄存器中，会首先通过 <code>总线接口</code> 发起读事务：</p>
+<ul>
+<li>地址信号流过系统总线、IO桥、存储总线到达存储控制器，控制器把信号读出来，取出对应地址的数据，放到总线上</li>
+<li>数据经由各个总线流到CPU总线接口，CPU将数据拷贝到寄存器中</li>
+</ul>
+<p><code>存储控制器</code>如何通过物理内存地址 A 从主存中读取出对应的数据 X 的？</p>
+<ul>
+<li>在控制器把物理地址转换为DRAM芯片 的 supercell 地址，发给对应的存储器模块，该模块会把 supercell 地址广播给自己所有的芯片，8个芯片<code>每个芯片返回一个 字节</code>，合计 <code>8B</code>，即一个字</li>
+<li><code>DRAM 0</code> 存储字的第一个低位字节…DRAM 7 存储字的最后一个字节</li>
+</ul>
+<blockquote>
+<p>CPU 每次会向内存读写一个 cache line 大小的数据（ 64 个字节），但是内存一次只能吞吐 8 个字节。</p>
+</blockquote>
+<p>写事务也是差不多的过程</p>
+<h4 id="三种物理内存模型-热插拔"><a href="#三种物理内存模型-热插拔" class="headerlink" title="三种物理内存模型 &amp; 热插拔"></a>三种物理内存模型 &amp; 热插拔</h4><p>以4KB大小的页为单位管理内存，每个物理页用 <code>struct page</code> 表示，其中封装了每个页的状态信息。为了快速索引到某个物理页，每个 page 有一个一一对应的索引编号：<code>PFN</code>（Page Frame Number），通过宏 <code>page_to_pfn</code> 和 <code>pfn_to_page</code> 进行转换。不同<code>场景</code>的两个宏的计算逻辑是不一样的。</p>
+<h5 id="FLATMEM-平坦内存模型：默认模型"><a href="#FLATMEM-平坦内存模型：默认模型" class="headerlink" title="FLATMEM 平坦内存模型：默认模型"></a>FLATMEM 平坦内存模型：默认模型</h5><p>也即一个<code>大数组</code>，以页为单位。使用 <code>mem_map</code> 全局数组索引物理页，它的下标即物理页的页号 PFN</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/89fe28d0feb1cd31cbaad5352e1f43d9.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/89fe28d0feb1cd31cbaad5352e1f43d9.webp" class title="89fe28d0feb1cd31cbaad5352e1f43d9.webp"></a>
+
+<p>在这个模型下，两个宏的计算逻辑为：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926023201.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926023201.png" class title="Pasted image 20240926023201.png"></a>
+
+<blockquote>
+<p>ARCH_PFN_OFFSET 为 PFN 的起始偏移量</p>
+</blockquote>
+<h5 id="DISCONTIGMEM-非连续内存模型"><a href="#DISCONTIGMEM-非连续内存模型" class="headerlink" title="DISCONTIGMEM 非连续内存模型"></a>DISCONTIGMEM 非连续内存模型</h5><p>实际的物理内存可能存在空洞，为这些物理内存分配对应的 struct page 有些浪费空间。于是可以用 <code>node</code> 管理每段连续的物理内存，这在 linux 中用<br><code>struct pglist_data</code> 表示</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/ae106d5d780328aae34d40560dc0442f.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/ae106d5d780328aae34d40560dc0442f.webp" class title="ae106d5d780328aae34d40560dc0442f.webp"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926032453.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926032453.png" class title="Pasted image 20240926032453.png"></a>
+
+<p>此时的计算逻辑需要多一步：<code>计算 page 所在的节点</code>，这通过调用函数 arch_pfn_to_nid 实现：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926032900.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926032900.png" class title="Pasted image 20240926032900.png"></a>
+
+<h5 id="SPARSEMEM-稀疏内存模型"><a href="#SPARSEMEM-稀疏内存模型" class="headerlink" title="SPARSEMEM 稀疏内存模型"></a>SPARSEMEM 稀疏内存模型</h5><p>现在，内核可以支持物理内存的热插拔了</p>
+<p>如果空洞的粒度更小，DISCONTIGMEM 的管理开销则会非常大，此时我们引入 SPARSEMEM 稀疏内存模型。</p>
+<p>在此模型中，通过更<code>细粒度</code>的连续的内存块单元被称为 <code>section</code>。它通过  <code>section_mem_map</code> 数组管理物理页，同时被 <code>mem_section</code> 数组管理。</p>
+<blockquote>
+<p>物理页大小为 4k 的情况下， section 的大小为 128M ，物理页大小为 16k 的情况下， section 的大小为 512M。</p>
+</blockquote>
+<p>每个 section 都可<code>热插拔</code>，在系统运行时改变状态为：offline &#x2F; online</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/e3956ea9e4dab708d57c7c183c6b91d6.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/e3956ea9e4dab708d57c7c183c6b91d6.webp" class title="e3956ea9e4dab708d57c7c183c6b91d6.webp"></a>
+
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926033432.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926033432.png" class title="Pasted image 20240926033432.png"></a>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926033712.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926033712.png" class title="Pasted image 20240926033712.png"></a>
+
+<p>此时宏的计算逻辑发生了变化：</p>
+<ul>
+<li>page2pfn：struct page 的字段 <code>flags</code> 的高位bit 中存储着page所在的 mem_section 的索引，从而定位到 section，然后定位到 pfn</li>
+<li>pfn2page：定位section（PFN的高位bit）–定位page（PFN低位bit）</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926034803.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926034803.png" class title="Pasted image 20240926034803.png"></a>
+
+
+
+<h5 id="物理内存热插拔"><a href="#物理内存热插拔" class="headerlink" title="物理内存热插拔"></a>物理内存热插拔</h5><p>可以通过物理内存热插拔的功能实现<code>集群机器物理内存容量的动态增减</code>。</p>
+<p>总体上来看分为两个阶段：</p>
+<ul>
+<li>物理热插拔：插入&#x2F;拔出，即 hot-add&#x2F;hot-remove</li>
+<li>逻辑热插拔：mm子系统动态启用&#x2F;下线内存，即 online&#x2F;offline</li>
+</ul>
+<p>插入好说，拔出涉及到迁移被拔出内存的数据。这些数据的虚拟地址不用变化，物理地址需要变化，<code>更改页表的映射关系</code>即可。</p>
+<p>对于直接映射区，虚拟地址会随着物理内存地址变动而变动，是不可迁移的。所以我们需要对内存进行分类：<code>不可迁移页，可回收页，可迁移页</code>。可被拔出的内存中只分配可迁移页即可</p>
+<h4 id="NUMA-模型节点"><a href="#NUMA-模型节点" class="headerlink" title="NUMA 模型节点"></a>NUMA 模型节点</h4><h5 id="非连续内存模型"><a href="#非连续内存模型" class="headerlink" title="非连续内存模型"></a>非连续内存模型</h5><blockquote>
+<p>在 NUMA 架构下，只有 DISCONTIGMEM 非连续内存模型和 SPARSEMEM 稀疏内存模型是可用的</p>
+</blockquote>
+<p>在这非连续&#x2F;稀疏内存模型下，UMA 架构可以被当作只有一个node&#x2F;section的体系即可。于是可以把NUMA和UMA的内存模型<strong>统一</strong>起来。</p>
+<p>内核2.4版本之前，使用<code>单链表</code>将各个 NUMA 节点串联起来；2.4之后，使用一个<code>全局数组</code> node_zones 管理NUMA节点，每个节点 &#x3D; 元数据 + 物理页数组</p>
+<ul>
+<li>元数据例如节点id、本节点起始页号、总共页数、除空洞页页数、锁</li>
+<li>PFN <code>全局唯一</code></li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/4d9142121fb3308b4f9c79675ff536a9.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/4d9142121fb3308b4f9c79675ff536a9.webp" class title="4d9142121fb3308b4f9c79675ff536a9.webp"></a>
+
+
+<h5 id="zone：节点物理内存划分"><a href="#zone：节点物理内存划分" class="headerlink" title="zone：节点物理内存划分"></a>zone：节点物理内存划分</h5><p>事实上由于各种各样的限制，内核还会将 NUMA 节点中的本地内存做近一步的划分为不同的 <strong>zone</strong>，使用 <strong>struct zone</strong> 进行描述</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/0c7c49a5019cc2d2ab4ee54256ce8cf7.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/0c7c49a5019cc2d2ab4ee54256ce8cf7.webp" class title="0c7c49a5019cc2d2ab4ee54256ce8cf7.webp"></a>
+
+<p>即：<strong>DMA、NORMAL、HIGHMEM、MOVABLE、DEVICE</strong></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926041403.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240926041403.png" class title="Pasted image 20240926041403.png"></a>
+
+<ul>
+<li>ZONE_DMA：ISA设备只能对pa的前 <strong>16M</strong> 寻址，于是专门预留给他们</li>
+<li>ZONE_DMA32：提供给32位设备进行DMA。只在<strong>64</strong>位系统中存在</li>
+<li>ZONE_NORMAL：线性映射</li>
+<li>ZONE_HIGHMEM：高端内存，需要被动态映射。只在<strong>32</strong>位系统中存在</li>
+<li><strong>ZONE_DEVICE</strong>：非易失性内存，可用于支持热插拔内存以及内核崩溃时的调试信息</li>
+<li><strong>ZONE_MOVABLE</strong>：其中的物理页可被迁移，从而防止内存碎片和支持热插拔。其中的物理页来自其他类型的区域</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/4075ce5ce90abb12abcbe8ef72852884.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/4075ce5ce90abb12abcbe8ef72852884.webp" class title="4075ce5ce90abb12abcbe8ef72852884.webp"></a>
+
+<p>事实上只有第一个NUMA节点可以有<strong>全部的区域</strong>——硬件对<strong>DMA</strong>的限制</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/d69d03bbccd05ad1eef0ac25f6e92ac5-20230310000145255.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/d69d03bbccd05ad1eef0ac25f6e92ac5-20230310000145255.webp" class title="d69d03bbccd05ad1eef0ac25f6e92ac5-20230310000145255.webp"></a>
+
+
+<p>这些区域被一个结构体<strong>数组</strong> node_zones[MAX_NR_ZONES] 描述；同时还有一些按照远近放置的备用节点数组 node_zonelists[MAX_ZONELISTS]，从而在内存不足时借用内存</p>
+<p>查看节点 <strong>zone 分布</strong>情况：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927015647.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927015647.png" class title="Pasted image 20240927015647.png"></a>
+
+<p>查看 zone 内存使用情况：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927015739.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927015739.png" class title="Pasted image 20240927015739.png"></a>
+
+
+<h5 id="NUMA-节点：pglist-data"><a href="#NUMA-节点：pglist-data" class="headerlink" title="NUMA 节点：pglist_data"></a>NUMA 节点：pglist_data</h5><h6 id="内存规整与回收"><a href="#内存规整与回收" class="headerlink" title="内存规整与回收"></a>内存规整与回收</h6><p>NUMA 节点的<strong>内存规整与回收</strong> 分别通过两个 <strong>守护进程</strong>：kcompactd &amp; kswapd 实现，每个节点都持有自己的两个<strong>任务的描述符</strong>：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927013203.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927013203.png" class title="Pasted image 20240927013203.png"></a>
+
+<h6 id="节点状态"><a href="#节点状态" class="headerlink" title="节点状态"></a>节点状态</h6><p>如果系统有多个 NUMA节点，则它们的<strong>状态</strong>信息会被内核用一个<strong>位图</strong> node_states 描述</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927013437.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927013437.png" class title="Pasted image 20240927013437.png"></a>
+
+<ul>
+<li>N_POSSIBLE：节点有上线的可能</li>
+<li>N_ONLINE：节点已上线</li>
+<li>N_HIGH_MEMORY：节点有 ZONE_NORMAL &amp; ZONE_HIGHMEM 区域（需要动态映射）</li>
+<li>N_NORMAL_MEMORY：节点没高端内存，正常使用，不需要动态映射（最重要的区别，是否线性映射看你怎么使用）</li>
+<li>N_MEMORY：不能当作常规意义的内存使用，它一般用来作虚拟的可迁移、热插拔部分的内存</li>
+<li>N_CPU：节点含CPU</li>
+</ul>
+<p>一些节点状态相关的函数和宏：</p>
+<ul>
+<li>可以通过函数<strong>设置和清除节点状态</strong>：node_set_state &amp; node_clear_state</li>
+<li>通过宏<strong>迭代某状态的节点</strong>：for_each_node_state(__node, __state)</li>
+</ul>
+<h4 id="NUMA-节点物理内存"><a href="#NUMA-节点物理内存" class="headerlink" title="NUMA 节点物理内存"></a>NUMA 节点物理内存</h4><h5 id="struct-zone：缓存行对齐-基本字段"><a href="#struct-zone：缓存行对齐-基本字段" class="headerlink" title="struct zone：缓存行对齐 &amp; 基本字段"></a>struct zone：缓存行对齐 &amp; 基本字段</h5><p><strong>struct zone</strong> 是一个会被高频访问的结构体，为了避免出现<strong>跨缓存行</strong>的现象、提升速度，我们用 <strong>ZONE_PADDING</strong> 分隔不同的字段，并通过一个编译器关键字实现最优的<strong>缓存行对齐</strong>方案</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927020033.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927020033.png" class title="Pasted image 20240927020033.png"></a>
+
+<p>其中包含的字段例如：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927020104.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927020104.png" class title="Pasted image 20240927020104.png"></a>
+
+<ul>
+<li>name：根据 zone 类型赋值</li>
+<li>zone_pgdat：所属节点的指针，节点通过数组描述其中的区域</li>
+<li>[起始PFN, 末尾PFN)，物理页数 spanned_pages &#x3D; zone_end_pfn - zone_start_pfn，有效物理页数，被伙伴系统管理的物理页数</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927020705.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927020705.png" class title="Pasted image 20240927020705.png"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/bba0c0b540cbfcbbb709077d2a22ee3d-20230310000055320.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/bba0c0b540cbfcbbb709077d2a22ee3d-20230310000055320.webp" class title="bba0c0b540cbfcbbb709077d2a22ee3d-20230310000055320.webp"></a>
+
+<p>每个区域都有一个<strong>伙伴系统</strong>用于 zone 中内存的分配和释放，managed_pages描述它管理的物理页数，<strong>free_area</strong>[MAX_ORDER] 为伙伴系统的核心数据结构，<strong>vm_stat</strong> 数组维护了区域的状态信息</p>
+<h5 id="预留内存：防高度侵占"><a href="#预留内存：防高度侵占" class="headerlink" title="预留内存：防高度侵占"></a>预留内存：防高度侵占</h5><p>高位内存区域可能会侵占低位区域的物理内存，必须为本区域留出一部分内存以支持核心功能</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927023446.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927023446.png" class title="Pasted image 20240927023446.png"></a>
+
+<ul>
+<li>nr_reserved_highatomic：zone 预留的内存大小，取值128~65536 (KB)</li>
+<li>lowmem_reserve：zone 预留的物理页数</li>
+</ul>
+<p>我们按照比例为每个区域预留内存：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927023949.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927023949.png" class title="Pasted image 20240927023949.png"></a>
+
+<p>我们可以通过 <strong>调整预留比例</strong> 来控制预留内存大小：通过 <code>sysctl</code>对内核参数 <code>lowmem_reserve_ratio</code> 进行动态调整</p>
+<ul>
+<li><strong>managed_pages</strong> &#x3D; present_pages - reserved_pages</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927023920.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927023920.png" class title="Pasted image 20240927023920.png"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927024021.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927024021.png" class title="Pasted image 20240927024021.png"></a>
+
+<h5 id="水位线"><a href="#水位线" class="headerlink" title="水位线"></a>水位线</h5><ul>
+<li>脏文件页回收：<strong>fsync</strong>()，它通过 <strong>pflush</strong> 内核线程进行</li>
+<li>我们为匿名页回收专门划出了一片磁盘分区：<strong>swap分区</strong>，其中的文件叫做 <strong>swap文件</strong>，这一过程通过 <strong>kswapd</strong> 内核线程进行</li>
+</ul>
+<p>NUMA 机制中，<strong>每个 zone 都有自己的水位线</strong>，它有三个<strong>阈值</strong>：WMARK_MIN、WMARK_LOW、WMARK_HIGH</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927024724.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927024724.png" class title="Pasted image 20240927024724.png"></a>
+
+<p>这被存储在这些字段中：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927024851.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927024851.png" class title="Pasted image 20240927024851.png"></a>
+
+<p>注意，这里的内存容量需要刨去预留内存：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/c0fccb4d8e1c8beb6887b521216c4b84-20230310000000767.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/c0fccb4d8e1c8beb6887b521216c4b84-20230310000000767.webp" class title="c0fccb4d8e1c8beb6887b521216c4b84-20230310000000767.webp"></a>
+
+<p>查看水位线：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927025519.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927025519.png" class title="Pasted image 20240927025519.png"></a>
+<blockquote>
+<p>nr：number，后面的几个参数都表示xxx页数</p>
+</blockquote>
+<p>这三个水位线根据 <strong>min_free_kbytes</strong> 动态计算（单位KB），用户也可以通过 <code>sysctl</code> 来动态设置这个内核参数。</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927030218.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927030218.png" class title="Pasted image 20240927030218.png"></a>
+
+<p>min_free_kbytes 根据以下计算公式得出，它的范围在 128 到 65536 KB 之间：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/7f2ffff8410d8da7a838ca117b457a11.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/7f2ffff8410d8da7a838ca117b457a11.webp" class title="7f2ffff8410d8da7a838ca117b457a11.webp"></a>
+
+<p>根据本节点各种 zone 的比例计算 WMARK_MIN：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927030950.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927030950.png" class title="Pasted image 20240927030950.png"></a>
+
+<p>WMARK_LOW 的值是 WMARK_MIN 的 1.25 倍，WMARK_HIGH 的值是 WMARK_LOW 的 1.5 倍。</p>
+<p>我们可以通过 <strong>watermark_scale_factor</strong> 调整最低水位线 WMARK_MIN，从而调整各个水位线的<strong>间距</strong>，解决low到min之间的<strong>性能抖动</strong>问题。从而可以更早&#x2F;更晚开启后台内存回收，</p>
+<h5 id="冷热页：per-cpu-pageset"><a href="#冷热页：per-cpu-pageset" class="headerlink" title="冷热页：per_cpu_pageset"></a>冷热页：per_cpu_pageset</h5><p>物理页可能会被加载到 CPU 的<strong>高速缓存</strong>中，被加载的物理页由 <strong>per_cpu_pageset</strong> 描述，每个CPU都有一个这样的结构体。</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927031434.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927031434.png" class title="Pasted image 20240927031434.png"></a>
+
+<p>zone中 <strong>pageset</strong> 数组包含了系统中所有CPU的缓存页，它的容量 <strong>NR_CPUS</strong> 是一个可以在编译期间配置的宏常数，表示最大支持的CPU个数</p>
+<p>过去，per_cpu_pageset 中含两个 <strong>per_cpu_pages</strong>，分别表示 <strong>冷&amp;热</strong> 页的集合</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927032023.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927032023.png" class title="Pasted image 20240927032023.png"></a>
+
+<p>per_cpu_pages 有几个字段：</p>
+<ul>
+<li>count：页计数，list：页列表指针</li>
+<li>batch：一次批量加载&#x2F;释放到缓存的物理页个数</li>
+<li>high：count上限，超过会一次释放batch个物理页到物理内存区域中的伙伴系统中</li>
+</ul>
+<p>而两个per_cpu_pages管理冷热页和一个per_cpu_pages管理没有本质区别，于是把他们放在了一个列表中：热页放在头部，冷页放在尾部。于是在 kernel 5.0 后，<strong>zone 中直接使用了 per_cpu_pages</strong>：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927032518.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927032518.png" class title="Pasted image 20240927032518.png"></a>
+
+<p>并在 per_cpu_pages 中管理高速缓存冷热页：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927032557.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927032557.png" class title="Pasted image 20240927032557.png"></a>
+
+<blockquote>
+<p>前面我们提到，内核为了最大程度的防止内存碎片，将物理内存页面按照是否可迁移的特性分为了多种迁移类型：可迁移，可回收，不可迁移。在 struct per_cpu_pages 结构中，每一种迁移类型都会对应一个冷热页链表</p>
+</blockquote>
+<h4 id="page：物理页描述"><a href="#page：物理页描述" class="headerlink" title="page：物理页描述"></a>page：物理页描述</h4><blockquote>
+<p>Linux 默认支持的物理内存页大小为 4KB，在 64 位体系结构中还可以支持 8KB，有的处理器还可以支持 4MB，支持物理地址扩展 PAE 机制的处理器上还可以支持 2MB。</p>
+</blockquote>
+<p>采用2的整数次幂是为了方便数学运算的移位操作，另外4kB 和 4MB 都是磁盘块大小的整数倍，而在磁盘和内存间传输小块数据更高效，所以一般采用 <strong>4KB</strong> 为物理页大小。</p>
+<p>每个物理页用 <strong>struct page</strong> 描述，一个结构体大小为 40B。4G内存有 1M 个物理页，需要 <strong>40MB</strong> 空间存放 page 结构体。</p>
+<blockquote>
+<p>对于 struct page 结构的任何微小改动，都可能导致用于管理物理内存页的 struct page 实例所需要的内存暴涨。结构体中的某些字段在某些场景下有用，而<strong>在另外的场景下却没有用</strong>，为此我们使用了大量的 <strong>union</strong>，从而尽最大可能使 struct page 的内存占用保持在一个较低的水平</p>
+</blockquote>
+<h5 id="page：文件页-匿名页"><a href="#page：文件页-匿名页" class="headerlink" title="page：文件页&#x2F;匿名页"></a>page：文件页&#x2F;匿名页</h5><p>其中文件页需要关联某个文件。二者都需要映射一个地址空间 <strong>address_space</strong></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927061716.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927061716.png" class title="Pasted image 20240927061716.png"></a>
+
+<ul>
+<li>对于文件，mapping 的最低位为0。</li>
+<li>每个文件页都有自己的 <strong>page cache</strong>，它被一个 address_space 结构体表示，被文件的 <strong>inode</strong> 结构体持有</li>
+<li>此时，index 也表示本页文件内部的偏移量</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/b3cdb64391f7ae4bbb33dec71a777ad1.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/b3cdb64391f7ae4bbb33dec71a777ad1.webp" class title="b3cdb64391f7ae4bbb33dec71a777ad1.webp"></a>
+
+<p>对于匿名页，mapping 最低位为1，指向 <strong>struct anon_vma</strong> 结构体，用于物理内存到虚拟内存的<strong>反向映射</strong></p>
+<h5 id="匿名物理页：反向映射"><a href="#匿名物理页：反向映射" class="headerlink" title="匿名物理页：反向映射"></a>匿名物理页：反向映射</h5><p>反向映射即从<strong>物理内存到虚拟内存的映射</strong>，这对物理页的<strong>回收和迁移</strong>时的 unmap 有很大帮助。</p>
+<blockquote>
+<p>在没有反向映射的机制前，需要去遍历所有进程的虚拟地址空间中的映射页表，这个效率显然是很低下的。</p>
+</blockquote>
+<p>前文中提到的 vma 也有匿名页反向映射字段：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927062549.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240927062549.png" class title="Pasted image 20240927062549.png"></a>
+
+<p>fork 产生的子进程未映射物理页，在使用时会触发 page fault handler，调用相关函数分配物理页，并完成 <strong>page 到 vma</strong> 的反向映射：</p>
+<ul>
+<li><strong>page</strong> 作为匿名页和中间页的中转节点，指向 ana_vma</li>
+<li>每个 <strong>ana_vma</strong> 表示一个匿名映射的物理页，<strong>anon_vma_chain</strong> 表示一个匿名页到虚拟页的映射。每个匿名物理页可能有多个虚拟页映射，ana_vma 使用<strong>红黑树</strong>管理这些映射</li>
+<li>每个映射属于一个地址空间的某个<strong>区域</strong>，即一个 vma，每个vm_area_struct用一个列表管理本区域中的所有映射</li>
+</ul>
+<blockquote>
+<p>anon_vma_chain -&gt; anon_vma 为正向映射，anon_vma-&gt;anon_vma_chain为反向映射。</p>
+<p>每一个映射都指向自己映射的匿名物理页、所属的红黑树中的节点，以及它所属的vma、以及vma的列表。物理页用红黑树管理他们，vma用列表管理他们</p>
+</blockquote>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/d9c755dbf8b1bb329a43b83a5d0678ad.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/d9c755dbf8b1bb329a43b83a5d0678ad.webp" class title="d9c755dbf8b1bb329a43b83a5d0678ad.webp"></a>
+
+<p>page 结构中的 <strong>_mapcount</strong> 表示有多少个虚拟页映射到本页</p>
+<h5 id="内存回收相关属性"><a href="#内存回收相关属性" class="headerlink" title="内存回收相关属性"></a>内存回收相关属性</h5><p>进一步划分四种 LRU 链表：匿名&#x2F;文件+活跃&#x2F;非活跃</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928175615.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928175615.png" class title="Pasted image 20240928175615.png"></a>
+
+<p>每个 page 处于某个 lru 链表中，以及记录本页被引用的次数：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928175721.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928175721.png" class title="Pasted image 20240928175721.png"></a>
+
+<h5 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h5><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928175755.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928175755.png" class title="Pasted image 20240928175755.png"></a>
+
+<p>判定本 page 属于哪个 node、哪个 zone：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/a13de2f9a59d461f2b4eed6338388d0d.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/a13de2f9a59d461f2b4eed6338388d0d.webp" class title="a13de2f9a59d461f2b4eed6338388d0d.webp"></a>
+
+<blockquote>
+<p>充分利用每个 bit</p>
+</blockquote>
+<p>其他标志为：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928180548.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928180548.png" class title="Pasted image 20240928180548.png"></a>
+
+<ul>
+<li>locked：正在操作该 page，不允许其他CPU访问</li>
+<li>mlocked：被进程锁定，不会被 swap out</li>
+<li>refer：刚被访问过</li>
+<li>active：处于 active 链表中，和refer共同表示了物理页的活跃程度</li>
+<li>uptodate：数据已经从块设备中读取到内存中，并且期间没有出错。</li>
+<li>readahead：正在被预读的页</li>
+<li>dirty：脏页</li>
+<li>lru：被放置于哪种lru链表上</li>
+<li>highmem：位于高端内存</li>
+<li>writeback：正在被 pdflush 线程回写到磁盘中</li>
+<li>slab：被 slab 分配器管理</li>
+<li>swapcache：物理页位于 swap cache，private 指针此时指向swap_entry_t</li>
+<li>reclaim：即将回收</li>
+<li>buddy：空闲，处于伙伴系统管理下</li>
+<li>compound：复合页一部分</li>
+<li>private：private 指针指向了具体的对象</li>
+</ul>
+<p>除此之外内核还定义了一些<strong>标准宏</strong>，用来检查某个物理内存页 page 是否设置了特定的标志位，以及对这些标志位的操作，这些宏在内核中的实现都是<strong>原子</strong>的，命名格式如下：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928233055.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928233055.png" class title="Pasted image 20240928233055.png"></a>
+
+<p>另外有一些 <strong>wait &amp; sleep</strong> 函数：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928234239.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240928234239.png" class title="Pasted image 20240928234239.png"></a>
+
+<ul>
+<li>等待直到解锁</li>
+<li>等待直到页完成被写回磁盘</li>
+</ul>
+<h5 id="compound-page"><a href="#compound-page" class="headerlink" title="compound page"></a>compound page</h5><p>用户可能期望使用一些巨大页，这会<strong>显著减少缺页中断</strong>，提升性能。此外还使用了<strong>更少的PTE</strong>，这带来了一些额外的好处：</p>
+<ul>
+<li>提高了TLB的缓存命中率</li>
+<li>fork 时对页表拷贝更快</li>
+</ul>
+<p>巨型页由多个 page 组合而成，其中根据其相对位置把不同的page分为 <strong>首页</strong> 和 <strong>尾页</strong></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/54a92bb6502d54b58c3bfea2879e0653.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/54a92bb6502d54b58c3bfea2879e0653.webp" class title="54a92bb6502d54b58c3bfea2879e0653.webp"></a>
+<p>这一点也体现在 page 的 flag 上，即首页会被设置 <strong>PG_head</strong> flag</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240929001311.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240929001311.png" class title="Pasted image 20240929001311.png"></a>
+
+<p>另外，首页还会保存一些复合页的元数据，例如：</p>
+<ul>
+<li>复合页的<strong>释放&#x2F;析构</strong>函数：compound_dtor</li>
+<li><strong>复合阶</strong>：compound_order（8个复合页为3阶）</li>
+<li>引用计数 &amp; 映射计数</li>
+</ul>
+<p>所有 <strong>尾页</strong> 都有一个指向头页的指针</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/76d48cc5a2033be3bcd767728b5cc6bf.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/76d48cc5a2033be3bcd767728b5cc6bf.webp" class title="76d48cc5a2033be3bcd767728b5cc6bf.webp"></a>
+
+
+
+
+<h5 id="slab-对象池"><a href="#slab-对象池" class="headerlink" title="slab 对象池"></a>slab 对象池</h5><p>用于内核中<strong>小内存对象的分配</strong>，所有内核对象都来自于这个对象池，类似于堆。</p>
+<p>基本原理是先申请一整个页，然后把这个页划分为多个大小相等的小块内存进行管理。</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240929010754.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240929010754.png" class title="Pasted image 20240929010754.png"></a>
+
+<p>我不知道他下面这些话在说什么。。。算了我也罗列照搬</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240929011744.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20Linux%20%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/Pasted%20image%2020240929011744.png" class title="Pasted image 20240929011744.png"></a>
+
+
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-10-29</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/OS/'>
+                            OS
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+            
+    </body>
+</html>

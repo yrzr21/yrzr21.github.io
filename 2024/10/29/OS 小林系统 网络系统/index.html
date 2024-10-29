@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="小林系统 网络系统" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    小林系统 网络系统
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F"><span class="post-toc-text">网络系统</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="post-toc-text">零拷贝</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93"><span class="post-toc-text">传统文件传输</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D%E5%AE%9E%E7%8E%B0%E7%AD%96%E7%95%A5"><span class="post-toc-text">零拷贝实现策略</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Page-Cache"><span class="post-toc-text">Page Cache</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A4%A7%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93%EF%BC%9A%E5%BC%82%E6%AD%A5-%E7%9B%B4%E6%8E%A5I-O"><span class="post-toc-text">大文件传输：异步+直接I&#x2F;O</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#I-O-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%EF%BC%9Aselect-poll-epoll"><span class="post-toc-text">I&#x2F;O 多路复用：select&#x2F;poll&#x2F;epoll</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#socket-%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">socket 模型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A6%82%E4%BD%95%E6%9C%8D%E5%8A%A1%E6%9B%B4%E5%A4%9A%E7%9A%84%E7%94%A8%E6%88%B7"><span class="post-toc-text">如何服务更多的用户</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">多进程模型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">多线程模型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#I-O-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="post-toc-text">I&#x2F;O 多路复用</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%AB%98%E6%80%A7%E8%83%BD%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%EF%BC%9AReactor-%E5%92%8C-Proactor"><span class="post-toc-text">高性能网络模式：Reactor 和 Proactor</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8D%95-Reactor-%E5%8D%95%E8%BF%9B%E7%A8%8B-%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">单 Reactor 单进程 &#x2F; 线程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8D%95-Reactor-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E8%BF%9B%E7%A8%8B"><span class="post-toc-text">单 Reactor 多线程 &#x2F; 多进程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%A4%9A-Reactor-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E8%BF%9B%E7%A8%8B"><span class="post-toc-text">多 Reactor 多线程 &#x2F; 多进程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Proactor"><span class="post-toc-text">Proactor</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link"><span class="post-toc-text"></span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#-1"><span class="post-toc-text"></span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#-2"><span class="post-toc-text"></span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="网络系统"><a href="#网络系统" class="headerlink" title="网络系统"></a>网络系统</h2><p>DMA 使得I&#x2F;O设备与内存之间的数据传输大大加快，且无需占用CPU。每个I&#x2F;O设备都有自己的DMA控制器</p>
+<h3 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h3><h4 id="传统文件传输"><a href="#传统文件传输" class="headerlink" title="传统文件传输"></a>传统文件传输</h4><ul>
+<li>从磁盘读取文件到内核空间–&gt;数据复制到用户空间–&gt;发送数据，拷贝到内核空间的 socket 缓冲区–&gt;从 socket 缓冲区拷贝到网卡</li>
+<li>从用户调用read开始，到write结束，总共经历了<strong>4次上下文切换，4次数据拷贝</strong>，这里有很多不必要的开销</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E4%BC%A0%E7%BB%9F%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E4%BC%A0%E7%BB%9F%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93.webp" class title="传统文件传输.webp"></a>
+
+<h4 id="零拷贝实现策略"><a href="#零拷贝实现策略" class="headerlink" title="零拷贝实现策略"></a>零拷贝实现策略</h4><p>用户和内核可以<strong>共享缓冲区</strong>，从而避免了用户和内核缓冲区间的一次拷贝，现在只需要<strong>三次数据拷贝</strong>，两次 DMA 一次 CPU。这通过 <code>mmap</code> 实现</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/mmap%20+%20write%20%E9%9B%B6%E6%8B%B7%E8%B4%9D.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/mmap%20+%20write%20%E9%9B%B6%E6%8B%B7%E8%B4%9D.webp" class title="mmap + write 零拷贝.webp"></a>
+
+<p>另外，我们可以用一个系统调用发送文件：<code>sendfile</code>，现在只需要<strong>两次</strong>上下文切换</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241012145356.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/Pasted%20image%2020241012145356.png" class title="Pasted image 20241012145356.png"></a>
+
+<p>若网卡支持 <strong>SG-DMA</strong>（scatter-gather）技术，则<strong>无需CPU搬运数据</strong>，整个过程只需要DMA进行数据的搬运</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/senfile-%E9%9B%B6%E6%8B%B7%E8%B4%9D.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/senfile-%E9%9B%B6%E6%8B%B7%E8%B4%9D.webp" class title="senfile-零拷贝.webp"></a>
+
+<p>至此，整个过程需要2次数据搬运，以及2次上下文切换。一些利用此技术的项目包括：Kafka、Nginx。要求内核版本大于2.1</p>
+<h4 id="Page-Cache"><a href="#Page-Cache" class="headerlink" title="Page Cache"></a>Page Cache</h4><p>前文所述的内核缓冲区指页缓存，如果需要传输的文件就在页缓存中，则可以省去从磁盘拷贝数据的过程，即一次拷贝两次上下文切换。</p>
+<p>但对于<strong>大文件</strong>，使用 page cache 是纯纯在浪费缓存</p>
+<ol>
+<li>使得其他小文件的访问无法获得加速，变得缓慢</li>
+<li>且这个大文件也只是被拷贝过来，并不会二次使用，而是直接发送出去，也就是说，享受不到缓存加速的好处</li>
+</ol>
+<h4 id="大文件传输：异步-直接I-O"><a href="#大文件传输：异步-直接I-O" class="headerlink" title="大文件传输：异步+直接I&#x2F;O"></a>大文件传输：异步+直接I&#x2F;O</h4><p>朴素方式：<strong>阻塞</strong></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E9%98%BB%E5%A1%9E%20IO%20%E7%9A%84%E8%BF%87%E7%A8%8B.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E9%98%BB%E5%A1%9E%20IO%20%E7%9A%84%E8%BF%87%E7%A8%8B.webp" class title="阻塞 IO 的过程.webp"></a>
+
+<p>可以使用<strong>异步 I&#x2F;O</strong>以及 DMA 避免此期间的CPU事件浪费：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E5%BC%82%E6%AD%A5%20IO%20%E7%9A%84%E8%BF%87%E7%A8%8B.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E5%BC%82%E6%AD%A5%20IO%20%E7%9A%84%E8%BF%87%E7%A8%8B.webp" class title="异步 IO 的过程.webp"></a>
+
+<p>我们不把数据拷贝到页缓存，而是拷贝到用户的缓冲区。也就是不适用缓冲I&#x2F;O，而是使用<strong>直接 I&#x2F;O</strong></p>
+<p>直接I&#x2F;O的<strong>应用场景</strong>通常为：大文件传输、应用程序自己实现了磁盘缓存。它无法享受<strong>内核的优化</strong>：预读 &amp; I&#x2F;O合并</p>
+<h3 id="I-O-多路复用：select-poll-epoll"><a href="#I-O-多路复用：select-poll-epoll" class="headerlink" title="I&#x2F;O 多路复用：select&#x2F;poll&#x2F;epoll"></a>I&#x2F;O 多路复用：select&#x2F;poll&#x2F;epoll</h3><h4 id="socket-模型"><a href="#socket-模型" class="headerlink" title="socket 模型"></a>socket 模型</h4><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/tcp_socket.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/tcp_socket.webp" class title="tcp_socket.webp"></a>
+
+<p>需要为自己的 socket 绑定端口和ip，即绑定到特定的<strong>网卡</strong>上</p>
+<ul>
+<li>对于已监听到请求，但尚未完成TCP三次握手的连接，内核维护了一个 <strong>TCP半连接队列</strong>，处于 <strong>syn_rccvd</strong> 状态</li>
+<li>完成三次握手的连接队列：<strong>TCP全连接队列</strong>，处于 <strong>established</strong> 状态</li>
+</ul>
+<p>在全连接队列不为空时，服务端的 <strong>listen</strong> 会返回，接着调用 <strong>accept</strong> 从全连接队列中取出一个 socket 返回应用程序</p>
+<ul>
+<li>注意监听 socket 和连接的 socket 是不同的</li>
+</ul>
+<h4 id="如何服务更多的用户"><a href="#如何服务更多的用户" class="headerlink" title="如何服务更多的用户"></a>如何服务更多的用户</h4><p>最大TCP连接数 &#x3D; 客户端 IP 数 × 每个客户端端口数，但这实际上受服务器<strong>资源限制</strong>：文件描述符数量、系统内存大小、内存网卡性能、I&#x2F;O模型</p>
+<h4 id="多进程模型"><a href="#多进程模型" class="headerlink" title="多进程模型"></a>多进程模型</h4><p>父进程负责监听，有握手好的 socket 时 <strong>fork</strong> 一个子进程去处理和客户端的连接 socket</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E8%BF%9B%E7%A8%8B.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E8%BF%9B%E7%A8%8B.webp" class title="多进程.webp"></a>
+<p>此模式下，<strong>一个进程对应一个客户端</strong>；进程资源需要被在 wait 中<strong>回收</strong>。</p>
+<p>如果有过多的客户端，那么会<strong>消耗大量的系统资源</strong>；且需要大量的<strong>上下文切换</strong></p>
+<h4 id="多线程模型"><a href="#多线程模型" class="headerlink" title="多线程模型"></a>多线程模型</h4><p>思路与多进程模型类似，而同进程的线程的上下文切换<strong>开销更小</strong>、且与其他线程<strong>共享资源</strong></p>
+<p>线程在结束运行后可以被销毁，但也可以被放入一个<strong>线程池</strong>，省去销毁线程的开销</p>
+<blockquote>
+<p>为啥没有进程池？进程之间是隔离的，监听的进程本身无法触碰其他进程</p>
+</blockquote>
+<p>然而此模型仍需<strong>过多的线程对应客户端连接</strong>，上下文开销仍然有，且系统仍不一定能负担得起这些线程占用的系统资源</p>
+<h4 id="I-O-多路复用"><a href="#I-O-多路复用" class="headerlink" title="I&#x2F;O 多路复用"></a>I&#x2F;O 多路复用</h4><p>如此，我们需要<strong>一个线程负责处理多个客户端的连接</strong>。</p>
+<p>为此，线程需要<strong>注册自己处理的 socket</strong>，在产生事件时，内核返回有事件的 <strong>socket 与事件</strong>，然后在用户态进行处理</p>
+<blockquote>
+<p>有点像多个进程分时复用一个CPU</p>
+</blockquote>
+<p><strong>select</strong> 的实现方式是，用户将注册的 socket <strong>位图</strong>拷贝到内核<strong>，内核通过 <strong>遍历</strong> 检查fd集合是否有事件发生，若有则标记位可读&#x2F;可写，然后再</strong>拷贝到用户空间<strong>，用户通过</strong>遍历检查发生事件的socket**</p>
+<ul>
+<li><strong>2次拷贝2次遍历</strong>，对于大量的连接来说，这种方式及其抵消</li>
+<li>位图大小固定，所以这种方式<strong>只能监听一定范围内的fd</strong></li>
+</ul>
+<p><strong>poll</strong> 使用动态数组&#x2F;链表形式组织所关注的 fd，突破了位图大小的限制，但仍是<strong>线性结构</strong>组织，<strong>需要大量的遍历以及拷贝</strong></p>
+<p><strong>epoll</strong> 使用 <strong>红黑树</strong> 跟踪所有的 fd，其增删改的复杂度为 logn；且使用 <strong>事件驱动</strong> 的机制，它维护了一个就绪事件链表，返回时只复制发生&#x2F;就绪的事件到用户空间</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/epoll.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/epoll.webp" class title="epoll.webp"></a>
+
+<p>epoll 有两种事件触发模式，分别是 <strong>边缘触发</strong> 和 <strong>水平触发</strong>。有事件触发时边沿触发会唤醒一次，即便之后未被读取也不会再次唤醒；而水平触发只要缓冲区中有事件就会不断唤醒</p>
+<ul>
+<li>所以一般模式下，边沿触发需要读完缓冲区，需要循环读取</li>
+<li>而多路复用返回的<strong>事件不一定是可读写的</strong>，如果使用阻塞 I&#x2F;O，其数据被错误的标记为就绪，但由于错误数据被丢弃，程序会阻塞在这个 read&#x2F;write 调用中，因此<strong>最好搭配非阻塞 I&#x2F;O</strong></li>
+<li>非阻塞 I&#x2F;O 的情形下，若无数据可读取，调用会返回一个<strong>错误码</strong>，使得我们可以忽略他，接着处理其他事件</li>
+</ul>
+<p>select、poll 只支持水平触发，epoll 默认使用水平触发，但可切换为边缘触发</p>
+<h3 id="高性能网络模式：Reactor-和-Proactor"><a href="#高性能网络模式：Reactor-和-Proactor" class="headerlink" title="高性能网络模式：Reactor 和 Proactor"></a>高性能网络模式：Reactor 和 Proactor</h3><p>Reactor 模式也叫 Dispatcher 模式，即分配发生的事件给某个线程。在这种模式下，</p>
+<ul>
+<li><strong>Reactor</strong> 负责监听和分配发生的事件：连接事件、读写事件</li>
+<li><strong>处理资源的线程池</strong> 负责处理事件，例如 read -&gt; 业务逻辑 -&gt; send</li>
+</ul>
+<p>reactor 和 处理资源池均可以有一个或多个，一般不采用 多 Reactor 单进程 &#x2F; 线程 方案。<strong>可选的方案有三个</strong>：</p>
+<ul>
+<li>单 Reactor 单进程 &#x2F; 线程； </li>
+<li>单 Reactor 多线程 &#x2F; 进程； </li>
+<li>多 Reactor 多进程 &#x2F; 线程；</li>
+</ul>
+<p>使用线程还是进程看编程语言以及平台</p>
+<h4 id="单-Reactor-单进程-线程"><a href="#单-Reactor-单进程-线程" class="headerlink" title="单 Reactor 单进程 &#x2F; 线程"></a>单 Reactor 单进程 &#x2F; 线程</h4><blockquote>
+<p>C语言一般是单<del>单进程，Java一般是单</del>单线程</p>
+</blockquote>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E5%8D%95Reactor%E5%8D%95%E8%BF%9B%E7%A8%8B.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E5%8D%95Reactor%E5%8D%95%E8%BF%9B%E7%A8%8B.webp" class title="单Reactor单进程.webp"></a>
+
+<p>进程中一般有 Reactor、Acceptor、Handler 三个对象，分别负责监听和分发事件、获取连接、处理事件</p>
+<ul>
+<li>Acceptor 获取连接后，会创建一个 Handler 响应后续事件</li>
+</ul>
+<p>这种模式无需考虑进程间通信、多线&#x2F;进程竞争。而若业务处理极度耗时，则会造成其他请求的延迟响应。且此模式无法充分利用<strong>多核CPU</strong>的性能</p>
+<p>因此，此模式<strong>不适用于计算密集型</strong>场景，只适用于业务处理非常快速的场景</p>
+<h4 id="单-Reactor-多线程-多进程"><a href="#单-Reactor-多线程-多进程" class="headerlink" title="单 Reactor 多线程 &#x2F; 多进程"></a>单 Reactor 多线程 &#x2F; 多进程</h4><p>为了<strong>充分利用多核CPU的性能</strong>，我们可以使用单 Reactor 多线程 &#x2F; 多进程模式</p>
+<p>对于多线程模式：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E5%8D%95Reactor%E5%A4%9A%E7%BA%BF%E7%A8%8B.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E5%8D%95Reactor%E5%A4%9A%E7%BA%BF%E7%A8%8B.webp" class title="单Reactor多线程.webp"></a>
+
+
+<p>此模式中，Handler 只负责读取和发送数据，而将<strong>业务处理交给处理线程池中的线程</strong>进行，在处理完成后将结果发送回原 Handler 对象，由原 Handler 进行数据发送</p>
+<p>此方案可以充分利用多核CPU。但：</p>
+<ul>
+<li>会引入多线程竞争问题，需要<strong>锁</strong>保护共享资源</li>
+<li>只使用<strong>一个Reacto</strong>r监听、分发所有事件，负载过大</li>
+<li>Reactor 运行在<strong>主线程</strong>，而其中的几个对象完全可以并发运行</li>
+</ul>
+<p>对于多进程模式，它的<strong>通信</strong>问题比多线程模式复杂得多，所以一般不考虑。</p>
+<h4 id="多-Reactor-多线程-多进程"><a href="#多-Reactor-多线程-多进程" class="headerlink" title="多 Reactor 多线程 &#x2F; 多进程"></a>多 Reactor 多线程 &#x2F; 多进程</h4><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E4%B8%BB%E4%BB%8EReactor%E5%A4%9A%E7%BA%BF%E7%A8%8B.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/%E4%B8%BB%E4%BB%8EReactor%E5%A4%9A%E7%BA%BF%E7%A8%8B.webp" class title="主从Reactor多线程.webp"></a>
+
+<p>主线程中，主 reactor 仅负责监听、建立新连接，由子线程的从 reactor 负责后续的读写事件监听、以及业务处理</p>
+<h4 id="Proactor"><a href="#Proactor" class="headerlink" title="Proactor"></a>Proactor</h4><p>前面提到的 <strong>Reactor 是非阻塞同步网络模式，而 Proactor 是异步网络模式</strong>。异步模式不需要等待数据准备、以及数据拷贝过程，Reactor 的读写数据需要等待。换句话说：</p>
+<ul>
+<li>Reactor：感知<strong>可</strong>读写事件</li>
+<li>Proactor：感知<strong>已完成</strong>读写事件，由内核主动完成数据的读写</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/Proactor.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E7%BD%91%E7%BB%9C%E7%B3%BB%E7%BB%9F/Proactor.webp" class title="Proactor.webp"></a>
+
+<p>在此模式下，需要在内核中<strong>注册 Proactor、Handler</strong>。在有新事件时，内核进程自动进行 Proactor 操作，并在<strong>数据读写完毕后，回调用户进程的 Handler</strong>，进行业务处理。</p>
+<p><strong>Linux 的异步I&#x2F;O 并不是OS级别支持的</strong>，而是一个用户态库。Windows 实现了一套完整的支持 socket 的异步编程接口，这套接口就是 IOCP，是由操作系统级别实现的异步 I&#x2F;O，真正意义上异步 I&#x2F;O，因此在 Windows 里实现高性能网络程序可以使用效率更高的 Proactor 方案。</p>
+<h4 id><a href="#" class="headerlink" title></a></h4><h4 id="-1"><a href="#-1" class="headerlink" title></a></h4><h4 id="-2"><a href="#-2" class="headerlink" title></a></h4></div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-10-29</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/OS/'>
+                            OS
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+            
+    </body>
+</html>

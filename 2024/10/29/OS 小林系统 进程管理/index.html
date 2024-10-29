@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="小林系统 进程管理" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    小林系统 进程管理
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="post-toc-text">进程管理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%9F%BA%E7%A1%80"><span class="post-toc-text">基础</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="post-toc-text">进程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="post-toc-text">进程状态</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#PCB"><span class="post-toc-text">PCB</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="post-toc-text">进程控制</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2"><span class="post-toc-text">进程切换</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">线程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2"><span class="post-toc-text">线程切换</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">内核线程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B"><span class="post-toc-text">用户线程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BA%BF%E7%A8%8B-LWP"><span class="post-toc-text">轻量级线程 LWP</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%B0%83%E5%BA%A6"><span class="post-toc-text">调度</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#FCFS%EF%BC%9A%E5%85%88%E6%9D%A5%E5%85%88%E6%9C%8D%E5%8A%A1"><span class="post-toc-text">FCFS：先来先服务</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SJF%EF%BC%9A%E6%9C%80%E7%9F%AD%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%85%88"><span class="post-toc-text">SJF：最短作业优先</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#HRRN%EF%BC%9A%E9%AB%98%E5%93%8D%E5%BA%94%E6%AF%94%E4%BC%98%E5%85%88"><span class="post-toc-text">HRRN：高响应比优先</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#RR%EF%BC%9A%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC"><span class="post-toc-text">RR：时间片轮转</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#HPF%EF%BC%9A%E6%9C%80%E9%AB%98%E4%BC%98%E5%85%88%E7%BA%A7%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="post-toc-text">HPF：最高优先级调度算法</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#MFQ%EF%BC%9A%E5%A4%9A%E7%BA%A7%E5%8F%8D%E9%A6%88%E9%98%9F%E5%88%97%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="post-toc-text">MFQ：多级反馈队列调度算法</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="post-toc-text">进程间通信</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%AE%A1%E9%81%93"><span class="post-toc-text">管道</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#shell-%E4%B8%AD%E7%9A%84-pipe"><span class="post-toc-text">shell 中的 pipe</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="post-toc-text">消息队列</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="post-toc-text">共享内存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="post-toc-text">信号量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BF%A1%E5%8F%B7"><span class="post-toc-text">信号</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SOCKET"><span class="post-toc-text">SOCKET</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#TCP-%E7%9A%84-socket-%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">TCP 的 socket 模型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#UDP-%E7%9A%84-socket-%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">UDP 的 socket 模型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%9C%AC%E5%9C%B0%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E7%9A%84-socket-%E6%A8%A1%E5%9E%8B"><span class="post-toc-text">本地进程通信的 socket 模型</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%86%B2%E7%AA%81"><span class="post-toc-text">多线程冲突</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%94%81"><span class="post-toc-text">锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-1"><span class="post-toc-text">信号量</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#PV%E6%93%8D%E4%BD%9C"><span class="post-toc-text">PV操作</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E9%97%AE%E9%A2%98"><span class="post-toc-text">生产者-消费者问题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%93%B2%E5%AD%A6%E5%AE%B6%E5%B0%B1%E9%A4%90%E9%97%AE%E9%A2%98"><span class="post-toc-text">哲学家就餐问题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%AF%BB%E8%80%85%E5%86%99%E8%80%85%E9%97%AE%E9%A2%98"><span class="post-toc-text">读者写者问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%AD%BB%E9%94%81"><span class="post-toc-text">死锁</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B7%A5%E5%85%B7%EF%BC%9A%E6%8E%92%E6%9F%A5%E6%AD%BB%E9%94%81"><span class="post-toc-text">工具：排查死锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%81%BF%E5%85%8D%E6%AD%BB%E9%94%81"><span class="post-toc-text">避免死锁</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BA%94%E7%A7%8D%E9%94%81"><span class="post-toc-text">五种锁</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%9D%A1%E7%9C%A0%E9%94%81%E5%92%8C%E8%87%AA%E6%97%8B%E9%94%81"><span class="post-toc-text">睡眠锁和自旋锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%AF%BB%E5%86%99%E9%94%81"><span class="post-toc-text">读写锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B9%90%E8%A7%82%E9%94%81%E5%92%8C%E6%82%B2%E8%A7%82%E9%94%81"><span class="post-toc-text">乐观锁和悲观锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CAS%E4%B8%8E%E8%87%AA%E6%97%8B%E9%94%81"><span class="post-toc-text">CAS与自旋锁</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%E5%8F%AF%E4%BB%A5%E5%88%9B%E5%BB%BA%E5%A4%9A%E5%B0%91%E7%BA%BF%E7%A8%8B%EF%BC%9F"><span class="post-toc-text">一个进程可以创建多少线程？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%B4%A9%E6%BA%83%EF%BC%8C%E8%BF%9B%E7%A8%8B%E4%B9%9F%E4%BC%9A%E5%B4%A9%E6%BA%83%E5%90%97%EF%BC%9F"><span class="post-toc-text">线程崩溃，进程也会崩溃吗？</span></a></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E8%BF%9B%E7%A8%8B%E5%9F%BA%E7%A1%80.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E8%BF%9B%E7%A8%8B%E5%9F%BA%E7%A1%80.png" class title="进程基础.png"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1.png" class title="进程间通信.png"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%86%B2%E7%AA%81%201.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%86%B2%E7%AA%81%201.png" class title="多线程冲突 1.png"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E6%AD%BB%E9%94%81.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E6%AD%BB%E9%94%81.png" class title="死锁.png"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E4%BA%94%E7%A7%8D%E9%94%81.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E4%BA%94%E7%A7%8D%E9%94%81.png" class title="五种锁.png"></a>
+
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E5%85%B6%E4%BB%96.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/%E5%85%B6%E4%BB%96.png" class title="其他.png"></a>
+<h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/3-%E6%8F%90%E7%BA%B2.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/3-%E6%8F%90%E7%BA%B2.webp" class title="3-提纲.webp"></a>
+
+<h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><p>程序被编译为ELF格式存储在磁盘中，OS将它加载到内存中从第一条指令开始执行。每个运行中的<strong>程序实例</strong>被称为一个<strong>进程</strong>。</p>
+<p>加载过程中CPU会运行别的进程，加载完毕后通过<strong>中断</strong>通知CPU。CPU允许多个进程<strong>交替执行</strong>，或者说<strong>并发</strong>执行。每个进程运行一段时间然后切换到另一个进程。</p>
+<h5 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h5><p><strong>进程的状态</strong>可以分为：运行、就绪、阻塞，以及创建和结束</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/10-%E8%BF%9B%E7%A8%8B%E4%B8%83%E4%B8%AD%E7%8A%B6%E6%80%81.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/10-%E8%BF%9B%E7%A8%8B%E4%B8%83%E4%B8%AD%E7%8A%B6%E6%80%81.webp" class title="10-进程七中状态.webp"></a>
+
+<p>当物理内存紧缺，会有部分进程的物理内存被换出到外存，这种状态被称为<strong>挂起</strong>。根据其进入挂起前的状态又可分为<strong>就绪挂起</strong>和<strong>阻塞挂起</strong></p>
+<h5 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h5><p>process control block 进程控制块，<strong>标识并控制</strong>一个进程。它包含：</p>
+<ul>
+<li>进程标识：进程ID，所属用户ID</li>
+<li>进程状态：进程当前状态、进程优先级</li>
+<li>资源：虚拟地址空间、打开的文件以及IO设备</li>
+<li>运行上下文：寄存器值，方便恢复状态</li>
+</ul>
+<p>OS通常通过<strong>链表</strong>组织相同状态的进程，例如阻塞队列、就绪队列：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/12-PCB%E7%8A%B6%E6%80%81%E9%93%BE%E8%A1%A8%E7%BB%84%E7%BB%87.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/12-PCB%E7%8A%B6%E6%80%81%E9%93%BE%E8%A1%A8%E7%BB%84%E7%BB%87.webp" class title="12-PCB状态链表组织.webp"></a>
+
+
+<h5 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h5><p>允许一个进程<strong>创建另一个进程</strong>，子进程可拷贝父进程所拥有的资源，其基本流程为：</p>
+<ul>
+<li>创建并初始化一个空白PCB，例如填写控制信息、pid等</li>
+<li>分配资源，例如内存</li>
+<li>将pcb插入到就绪队列</li>
+</ul>
+<p>进程有三种<strong>终止</strong>方式：正常&#x2F;异常结束、kill 信号。进程终止时，父进程负责<strong>回收</strong>子进程的资源；若父进程终止子进程还在运行则子进程变为<strong>孤儿进程</strong>，被托管给1号进程回收。回收过程为：</p>
+<ul>
+<li>寻找pcb，找到后：<ul>
+<li>若处于执行状态则停止执行，让出CPU</li>
+<li>若有子进程则托管给1号进程</li>
+</ul>
+</li>
+<li>回收该进程资源，将pcb从队列中删除</li>
+</ul>
+<p>进程可能需要<strong>等待事件发生</strong>，此时会<strong>阻塞</strong>自己，且<strong>只能被另一进程唤醒</strong>。阻塞的过程为：</p>
+<ul>
+<li>找到pcb，若在运行则保存上下文，将其状态转换为阻塞状态停止运行</li>
+<li>插入到阻塞队列</li>
+</ul>
+<p><strong>唤醒</strong>的过程为：找到pcb，转换状态为就绪状态，插入到就绪队列</p>
+<h5 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h5><p>一个进程运行在CPU时需要自己的运行信息，即<strong>进程上下文</strong>。这包含此刻CPU中<strong>通用寄存器和PC</strong>的值、以及在内存资源等等，前者被称为<strong>CPU上下文</strong>。</p>
+<p>每次<strong>切换进程</strong>时只需要重新加载CPU上下文即可，这被存储在pcb中。另外还需要刷新TLB，<strong>切换页表</strong></p>
+<p><strong>进程调度只能发生在内核态</strong>。</p>
+<h4 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h4><p>更小的<strong>独立运行</strong>基本单位，<strong>线程共享进程的资源</strong>。</p>
+<ul>
+<li>这使得线程的<strong>创建&amp;终止</strong>更快</li>
+<li>同进程的<strong>线程切换</strong>无需切换页表，也更快——它们的页表一样</li>
+<li>同进程的线程间通信也更快——它们的页表一样</li>
+</ul>
+<p>进程和线程被 linux 统一抽象为<strong>任务</strong>，作为调度的基本单位，这意味着线程也有<strong>运行状态</strong>。</p>
+<h5 id="线程切换"><a href="#线程切换" class="headerlink" title="线程切换"></a>线程切换</h5><p>同进程的线程切换只需要切换CPU上下文，不需要切换页表；而不同进程的线程切换还需要另外切换页表</p>
+<h5 id="内核线程"><a href="#内核线程" class="headerlink" title="内核线程"></a>内核线程</h5><p>内核管理的线程，可被OS看到，可被调度。使用 <strong>tcb</strong> Thread Control Block 控制</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/21-%E7%BA%BF%E7%A8%8BPCB-%E4%B8%80%E5%AF%B9%E4%B8%80%E5%85%B3%E7%B3%BB.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/21-%E7%BA%BF%E7%A8%8BPCB-%E4%B8%80%E5%AF%B9%E4%B8%80%E5%85%B3%E7%B3%BB.webp" class title="21-线程PCB-一对一关系.webp"></a>
+
+<p><strong>优点</strong>在于一个内核线程被阻塞并不会影响其他内核线程，且相较于用户线程有更多的CPU时间</p>
+<p><strong>缺点</strong>在于，创建一个内核线程需要系统调用，开销较大</p>
+<h5 id="用户线程"><a href="#用户线程" class="headerlink" title="用户线程"></a>用户线程</h5><p>非内核管理，由用户态线程库管理。OS看不到tcb，只能看到整个进程的 pcb</p>
+<ul>
+<li>管理即创建、终止、调度、同步</li>
+</ul>
+<p>多个用户线程<strong>分时共用</strong>同一个内核线程</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/20-%E7%BA%BF%E7%A8%8BPCB-%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/20-%E7%BA%BF%E7%A8%8BPCB-%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%85%B3%E7%B3%BB.webp" class title="20-线程PCB-一对多关系.webp"></a>
+
+<p><strong>优点</strong>在于：</p>
+<ul>
+<li>可用于不支持线程的OS</li>
+<li><strong>切换线程快</strong>，无需转换模式</li>
+</ul>
+<p><strong>缺点</strong>在于：</p>
+<ul>
+<li>一个线程的系统调用被阻塞，则所有用户线程都会被阻塞</li>
+<li>线程不能彼此强行中止</li>
+<li>时间片少，执行慢</li>
+</ul>
+<h5 id="轻量级线程-LWP"><a href="#轻量级线程-LWP" class="headerlink" title="轻量级线程 LWP"></a>轻量级线程 LWP</h5><blockquote>
+<p>light weight process</p>
+</blockquote>
+<p>内核支持的用户线程，一个进程可以有多个LWP。每个LWP都被一个内核线程支持，被内核像普通进程一样<strong>调度</strong>。</p>
+<ul>
+<li>CPU时间片足，syscall 不会阻塞其他线程</li>
+<li>同进程LWP间切换速度相较于进程切换更快，但仍需要经过内核–切换模式！慢</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020240930102340.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020240930102340.png" class title="Pasted image 20240930102340.png"></a>
+
+<h4 id="调度"><a href="#调度" class="headerlink" title="调度"></a>调度</h4><p>进程的状态变化时都会<strong>切换到调度程序</strong>，OS 通过 <strong>调度程序 scheduler</strong> 选择下一个执行的进程&#x2F;线程。</p>
+<p>一个运行中的进程可能因为：</p>
+<ul>
+<li>使用系统调用&#x2F;其他原因阻塞&#x2F;退出，<strong>主动让出CPU</strong></li>
+<li>各种<strong>中断</strong>（例如CPU时间用完，被时钟中断）暂时停止运行，<strong>被迫让出CPU</strong></li>
+</ul>
+<p><strong>切换到调度程序</strong>，更新原进程状态，选择下一个进程，<strong>切换到那个进程</strong>，继续运行</p>
+<blockquote>
+<p><strong>抢占式调度算法</strong>：<strong>时间片机制</strong>，时间片用完被中断切换到调度程序<br><strong>非抢占式调度算法</strong>：还是会被中断，但是执行完 handler 后会返回原进程</p>
+</blockquote>
+<p><strong>调度原则</strong>：综合考虑CPU利用率、长任务短任务运行、等待时间、响应时间、周转时间</p>
+<h5 id="FCFS：先来先服务"><a href="#FCFS：先来先服务" class="headerlink" title="FCFS：先来先服务"></a>FCFS：先来先服务</h5><p>First Come First Serve</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/24-%E5%85%88%E6%9D%A5%E5%85%88%E6%9C%8D%E5%8A%A1.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/24-%E5%85%88%E6%9D%A5%E5%85%88%E6%9C%8D%E5%8A%A1.webp" class title="24-先来先服务.webp"></a>
+
+<p><strong>不利于短作业</strong>的运行，等待时间长</p>
+<h5 id="SJF：最短作业优先"><a href="#SJF：最短作业优先" class="headerlink" title="SJF：最短作业优先"></a>SJF：最短作业优先</h5><p>Shortest Job First</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/25-%E6%9C%80%E7%9F%AD%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%85%88%E7%AE%97%E6%B3%95.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/25-%E6%9C%80%E7%9F%AD%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%85%88%E7%AE%97%E6%B3%95.webp" class title="25-最短作业优先算法.webp"></a>
+
+<p><strong>不利于长作业</strong></p>
+<h5 id="HRRN：高响应比优先"><a href="#HRRN：高响应比优先" class="headerlink" title="HRRN：高响应比优先"></a>HRRN：高响应比优先</h5><p>Highest Response Ratio Next，等待时间相同，优先短任务；时间相同，优先等待长的；长任务等待太长了由于高响应比也有更大的出场机会</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/26-%E5%93%8D%E5%BA%94%E6%AF%94%E5%85%AC%E5%BC%8F.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/26-%E5%93%8D%E5%BA%94%E6%AF%94%E5%85%AC%E5%BC%8F.webp" class title="26-响应比公式.webp"></a>
+
+<p>但<strong>服务时间不可预知</strong></p>
+<h5 id="RR：时间片轮转"><a href="#RR：时间片轮转" class="headerlink" title="RR：时间片轮转"></a>RR：时间片轮转</h5><p>Round Robin，每个进程一个时间片，用完就换下一个，<strong>所有进程优先级相同</strong></p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/27-%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%AF%A2.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/27-%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%AF%A2.webp" class title="27-时间片轮询.webp"></a>
+<p>需要<strong>权衡时间片长短</strong>：</p>
+<ul>
+<li>太短会产生大量上下文切换</li>
+<li>太长不利于短作业</li>
+</ul>
+<h5 id="HPF：最高优先级调度算法"><a href="#HPF：最高优先级调度算法" class="headerlink" title="HPF：最高优先级调度算法"></a>HPF：最高优先级调度算法</h5><p>Highest Priority First，从就绪队列中选择<strong>优先级</strong>最高的执行。优先级可以分为：</p>
+<ul>
+<li><strong>静态优先级</strong>：创建进程时确定</li>
+<li><strong>动态优先级</strong>：动态变化调整优先级。例如运行时间长了则降低优先级，等待时间长了则升高优先级</li>
+</ul>
+<p>根据<strong>是否抢占</strong>又可分为两种方法。</p>
+<ul>
+<li>抢占：有更高优先级的进程出现时打断当前进程，执行优先级更高的那个进程</li>
+</ul>
+<p><strong>可能导致低优先级的进程永远不会执行</strong></p>
+<h5 id="MFQ：多级反馈队列调度算法"><a href="#MFQ：多级反馈队列调度算法" class="headerlink" title="MFQ：多级反馈队列调度算法"></a>MFQ：多级反馈队列调度算法</h5><p>Mutilevel Feedback Queue &#x3D; 时间片 + 最高优先级</p>
+<p>存在多个队列：</p>
+<ul>
+<li><strong>同优先级队列的进程FCFS</strong></li>
+<li><strong>高优先级的队列时间片短</strong></li>
+<li><strong>高优先级队列的进程会抢占低优先级队列的运行</strong></li>
+</ul>
+<p>短作业会被优先调度，长作业拥有更长的运行时间，<strong>兼顾二者</strong></p>
+<h3 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h3><h4 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h4><p><strong>单向通道</strong>，数据为连续的字节流，先入先出，一方读一方写。分为两种：</p>
+<ul>
+<li><p>匿名管道：**|**，一般只有类似父子关系的进程可以通信</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241001043031.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241001043031.png" class title="Pasted image 20241001043031.png"></a>
+</li>
+<li><p>命名管道&#x2F;<strong>FIFO</strong>：通过 <code>mkfifo</code> 将管道创建为文件，允许不相关的进程通信</p>
+</li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241001050431.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241001050431.png" class title="Pasted image 20241001050431.png"></a>
+
+<p>其背后是系统调用：0读1写。一般搭配 <strong>fork</strong> 使用</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241001050744.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241001050744.png" class title="Pasted image 20241001050744.png"></a>
+
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/6-%E7%AE%A1%E9%81%93-pipe-fork.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/6-%E7%AE%A1%E9%81%93-pipe-fork.webp" class title="6-管道-pipe-fork.webp"></a>
+
+<p>写端的数据被<strong>缓存在内核中</strong>，再从读端读取。通信中一段数据需要<strong>拷贝两次</strong>，在管道满时写方进程会被阻塞在内核中，等待读方读取后，进行写入再返回继续进程运行</p>
+<p>一般只用于读的一方会关闭fd[1]，写方会关闭fd[0]。</p>
+<p>匿名进程被杀掉后，其中的管道数据也会消失</p>
+<h5 id="shell-中的-pipe"><a href="#shell-中的-pipe" class="headerlink" title="shell 中的 pipe"></a>shell 中的 pipe</h5><p>在 shell 里面执行 <strong>A | B</strong>命令的时候，A 进程和 B 进程都是 shell 创建出来的子进程，A 和 B 之间不存在父子关系，它俩的父进程都是 shell。</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/8-%E7%AE%A1%E9%81%93-pipe-shell.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/8-%E7%AE%A1%E9%81%93-pipe-shell.webp" class title="8-管道-pipe-shell.webp"></a>
+
+
+
+
+
+
+
+
+
+<h4 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h4><ul>
+<li><strong>生命周期随内核</strong>，数据保存在内核中，进程被杀掉数据依然存在，不像匿名管道</li>
+<li>以<strong>消息体</strong>（即数据块）为单位传输数据，而非字节流，通信双方可预定好数据类型进行通信</li>
+</ul>
+<p>它的不足在于：</p>
+<ul>
+<li><strong>通信数据大小有限制</strong>： 单个消息长度不能超过 MSGMNB，消息队列长度不能超过  MSGMAX</li>
+<li>数据传输过程中经过了<strong>两次拷贝</strong>，且经过了<strong>两次用户态和内核态的转换</strong>。管道同理</li>
+</ul>
+<h4 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h4><p>把一片物理内存<strong>映射</strong>到两个进程中，<strong>避免了用户态内核态的切换以及数据拷贝</strong></p>
+<p>一般需要<strong>锁</strong>保护</p>
+<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><p>一个整型计数器，<strong>用于同步进程对共享资源的访问</strong>，保护共享数据。有两种原子操作：</p>
+<ul>
+<li><strong>P操作</strong>：cnt–后若cnt&gt;&#x3D;0，则有资源可用，开始运行，否则阻塞</li>
+<li><strong>V操作</strong>：cnt++后若cnt&lt;&#x3D;0，则有进程想要使用资源，唤醒它们；否则没有</li>
+</ul>
+<p>信号量被初始化为不同值表示不同的含义：</p>
+<ul>
+<li><strong>1</strong>：<strong>锁</strong>&#x2F;互斥信号量</li>
+<li><strong>0</strong>：<strong>同步信号量</strong>，用于多进程同步，生产&#x2F;消费者模型</li>
+</ul>
+<h4 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h4><ul>
+<li>可以通过信号通知进程发生了某事件，是一种<strong>异步通信</strong>机制</li>
+<li>进程会打断主控制流的运行，转而去运行<strong>独立的异常控制流</strong>，也即相应的 <strong>handler</strong>。</li>
+<li>进程对每个信号都有<strong>默认响应</strong>操作，也可以自定义一个 handler，进行处理或<strong>忽略</strong><ul>
+<li>SIGKILL 和 SIGSTOP 无法忽略，它们用于强制中断&#x2F;杀死进程</li>
+</ul>
+</li>
+</ul>
+<p>可以通过 <code>kill -信号id pid</code> 发送信号给进程：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241002043521.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241002043521.png" class title="Pasted image 20241002043521.png"></a>
+
+<ul>
+<li>Ctrl+C 产生 SIGINT 信号，表示终止该进程； </li>
+<li>Ctrl+Z 产生 SIGTSTP 信号，表示停止该进程，但还未结束；</li>
+</ul>
+<h4 id="SOCKET"><a href="#SOCKET" class="headerlink" title="SOCKET"></a>SOCKET</h4><p><strong>跨网络的进程间通信</strong>——也可以与同主机进程通信。需要通过 <strong>socket</strong> syscall：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241002044205.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241002044205.png" class title="Pasted image 20241002044205.png"></a>
+
+<ul>
+<li>domain：协议族<ul>
+<li>AF_INET：IPV4；AF_INET6：IPV6；AF_LOCAL&#x2F;AF_UNIX：本机</li>
+</ul>
+</li>
+<li>type：通信特性<ul>
+<li>SOCK_STREAM：字节流；SOCK_DGRAM：数据报；SOCK_RAW：原始套接字</li>
+</ul>
+</li>
+<li>protocal：指定通信协议，现已废除一般填0——协议已经由前面二者指定</li>
+</ul>
+<p>不同的通信方式有不同的参数：</p>
+<ul>
+<li>TCP：AF_INET &amp; SOCK_STREAM</li>
+<li>UDP：AF_INET &amp; SOCK_DGRAM</li>
+<li>本地进程间字节流通信：AF_LOCAL&#x2F;AF_UNIX &amp; SOCK_STREAM</li>
+<li>本地进程间数据报通信：AF_LOCAL&#x2F;AF_UNIX &amp; SOCK_DGRAM</li>
+</ul>
+<h5 id="TCP-的-socket-模型"><a href="#TCP-的-socket-模型" class="headerlink" title="TCP 的 socket 模型"></a>TCP 的 socket 模型</h5><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/12-TCP%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/12-TCP%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B.webp" class title="12-TCP编程模型.webp"></a>
+
+<p>服务端：</p>
+<ul>
+<li>初始化<strong>监听 socket</strong>，得到<strong>fd</strong>，然后把 <strong>IP和端口与fd绑定</strong></li>
+<li>调用 <strong>listen</strong> 开始监听，有请求连接的客户端时返回</li>
+<li>调用 <strong>accept</strong> 建立连接，进行 <strong>TCP三次握手</strong>，成功后返回一个建立好<strong>连接的 fd</strong></li>
+<li>通过 <strong>read &amp; write</strong> 在建立好连接的fd上通信</li>
+<li>在读取到 <strong>EOF</strong> 时调用 <strong>close</strong> 断开通信</li>
+</ul>
+<p>客户端：</p>
+<ul>
+<li>创建 <strong>socket</strong>，调用 <strong>connect</strong> 请求建立连接</li>
+<li>通过 <strong>read &amp; write</strong> 通信</li>
+</ul>
+<h5 id="UDP-的-socket-模型"><a href="#UDP-的-socket-模型" class="headerlink" title="UDP 的 socket 模型"></a>UDP 的 socket 模型</h5><a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/13-UDP%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/13-UDP%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B.webp" class title="13-UDP编程模型.webp"></a>
+<p>UDP 面向无连接，不需要三次握手，服务端不需要监听再连接</p>
+<ul>
+<li>一般流程是双方创建好 socket 后，bind IP和端口，就开始通信了</li>
+<li>通信时使用 sendto 和 recvfrom，传入目标主机的 IP和端口</li>
+</ul>
+<h5 id="本地进程通信的-socket-模型"><a href="#本地进程通信的-socket-模型" class="headerlink" title="本地进程通信的 socket 模型"></a>本地进程通信的 socket 模型</h5><p>接口与上述的字节流&#x2F;数据报模型接口一致，但 bind 时需要<strong>绑定本地的一个文件</strong></p>
+<h3 id="多线程冲突"><a href="#多线程冲突" class="headerlink" title="多线程冲突"></a>多线程冲突</h3><p>防止多线程访问<strong>共享资源</strong>产生冲突，即 <strong>race condition</strong>——即便是单核也可能产生冲突，它们很可能导致结果与预期不符，且每次的结果都可能不同，<strong>难以复现</strong>，这被称为 <strong>不确定性</strong></p>
+<blockquote>
+<p>例如两个线程对一个变量各增加1000，每次加1；一个进程加到51时被中断，此时可能有一个值在寄存器中，然后进程2对变量进行累加，恢复到进程1时，他会把51存到变量中——这就使得进程2的工作完全作废</p>
+</blockquote>
+<p>我们希望在操作共享资源的这段 <strong>代码临界区</strong> 中，我们对资源的操作是<strong>原子</strong>的，对其他进程的访问是<strong>互斥</strong>的</p>
+<p>此外，进程在可能需要合作完成某件事情，为此可能需要等待，进行<strong>同步</strong>，保证一定的事件发生顺序</p>
+<p>基本的互斥与同步策略有：<strong>锁、信号量</strong></p>
+<h4 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h4><p>锁的实现需要硬件提供的 <strong>test and set 原子指令</strong>，它可以原子地设置一个值并返回旧值</p>
+<p>一般 <strong>自旋锁</strong> 的实现大概是这样：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241002064655.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241002064655.png" class title="Pasted image 20241002064655.png"></a>
+
+<ul>
+<li>另外还需要关闭中断，防止中断中的进程也试图获取锁，产生死锁</li>
+</ul>
+<p><strong>flag</strong> 表示锁是否被持有，释放锁时会把 flag 设为 0，获取锁时会设为 1。</p>
+<ul>
+<li>自旋锁会<strong>耗费大量的CPU时间</strong>在这个循环中</li>
+</ul>
+<p><strong>睡眠锁</strong> 不需要自旋，而是在某个 <strong>channel</strong> 上睡眠，直到被唤醒</p>
+<h4 id="信号量-1"><a href="#信号量-1" class="headerlink" title="信号量"></a>信号量</h4><p>可以用于<strong>同步&#x2F;互斥</strong>，取决于它们初始化的值</p>
+<ul>
+<li>对于同步信号量，信号量常用于表示<strong>资源的数量</strong>，一般初始化为<strong>非0</strong>值</li>
+<li>对于互斥信号量，信号量表示<strong>资源是否可以访问</strong>，初始化为<strong>1</strong>，表示资源空闲</li>
+</ul>
+<blockquote>
+<p>其他细节。如果有三个进程共享资源，互斥信号量的值可为1、0、-1、-2</p>
+</blockquote>
+<h5 id="PV操作"><a href="#PV操作" class="headerlink" title="PV操作"></a>PV操作</h5><p>一个进程在<strong>进入临界区前会进行P操作</strong>，<strong>并在离开临界区后进行V操作</strong>，且PV操作都是<strong>原子</strong>的</p>
+<ul>
+<li>P：Proberen（荷兰语），尝试&#x2F;获取</li>
+<li>V：Verhogen，增加&#x2F;信号</li>
+</ul>
+<h5 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h5><p>具体代码实现中，信号量的结构体需要维护 <strong>信号量</strong> &amp; <strong>等待队列</strong> &amp; <strong>信号量的锁</strong>，锁确保访问信号量的操作是原子的</p>
+<ul>
+<li>P&#x2F;wait操作：获取信号量的锁，在自己的条件变量&amp;锁上睡眠，直到被唤醒后有资源，消耗资源，并释放锁</li>
+<li>V&#x2F;signal操作：获取信号量的锁，资源+1，唤醒条件变量上睡眠的进程，释放锁</li>
+</ul>
+<h4 id="生产者-消费者问题"><a href="#生产者-消费者问题" class="headerlink" title="生产者-消费者问题"></a>生产者-消费者问题</h4><blockquote>
+<p>数据是资源，空位也可以是资源，再加上一把读写共享资源的锁</p>
+</blockquote>
+<p>描述：<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/20-%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85.webp" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/20-%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85.webp" class title="20-生产者消费者.webp"></a></p>
+<ul>
+<li>生产者生产数据后，放入缓冲区；消费者从缓冲区取出数据</li>
+<li>任何时刻只能有一个线程访问缓冲区</li>
+</ul>
+<p>实现时，我们需要<strong>变量</strong>：</p>
+<ul>
+<li>缓冲区，锁&#x2F;互斥信号量</li>
+<li>full 信号量：资源的个数，防止访问空缓冲区，资源为0时阻塞</li>
+<li>empty 信号量：空位个数，防止生产太快导致缓冲区溢出，空位为0时阻塞</li>
+</ul>
+<p><strong>生产者</strong>的操作为：</p>
+<ul>
+<li>尝试获取空位资源：P(&amp;empty)</li>
+<li>获取锁进入临界区，生产数据放入缓冲区，释放锁离开临界区</li>
+<li>生产数据资源：V(&amp;full)</li>
+</ul>
+<p><strong>消费者</strong>的操作为：</p>
+<ul>
+<li>尝试获取数据资源：P(&amp;full)</li>
+<li>获取锁进入临界区，读取缓冲区的数据，释放锁离开临界区</li>
+<li>生产空位资源：V(&amp;empty)</li>
+</ul>
+<h4 id="哲学家就餐问题"><a href="#哲学家就餐问题" class="headerlink" title="哲学家就餐问题"></a>哲学家就餐问题</h4><p>如果使用锁&#x2F;互斥信号量，即每个叉子一把锁，获取叉子的锁即是用叉子。这有一种极端情形，即所有人都拿到了左边&#x2F;所有人都拿到右边的叉子，试图获取另一边的叉子，但是陷入了死锁</p>
+<p>方案1：<strong>同一时间只有一个哲学家吃饭</strong>，即吃饭前获取锁，不吃了释放锁，但这样<strong>效率</strong>会很低</p>
+<p>方案2：<strong>避免极端情形</strong>，改变获取锁的顺序，例如奇数号哲学家先获取左边的叉子，偶数获取右边的叉子，从而避免出现上述的极端情形</p>
+<p>方案3：<strong>确保两根叉子都可用才开始用餐</strong></p>
+<ul>
+<li>哲学家有三种状态：饥饿、进食、思考，每个哲学家一个互斥信号量，使用一个全局锁保护所有哲学家的状态</li>
+<li>进食前哲学家先获取全局锁，<strong>查看周围两个哲学家是否在进食</strong><ul>
+<li>如果有至少一个人在进食，则进入沉睡，被唤醒后重复检查</li>
+<li>否则进入进食状态，释放全局锁</li>
+</ul>
+</li>
+<li>进食完毕后，获取全局锁，改变自身状态为思考，释放全局锁，<strong>唤醒两边的哲学家</strong></li>
+</ul>
+<h4 id="读者写者问题"><a href="#读者写者问题" class="headerlink" title="读者写者问题"></a>读者写者问题</h4><blockquote>
+<p>以下的锁可用互斥信号量</p>
+</blockquote>
+<p>描述：</p>
+<ul>
+<li>读者只会读取资源，写者可读可写</li>
+<li>读读允许，读写互斥，写写互斥</li>
+</ul>
+<p>方案1：<strong>读者优先</strong>，读时阻塞写</p>
+<ul>
+<li>读者计数+计数锁+写信号量&#x2F;数据锁&#x2F;写锁</li>
+<li>读者：<ul>
+<li>获取计数锁，<strong>若未获取数据锁则获取数据锁（P）</strong>，计数+1，释放计数锁<ul>
+<li>读者为0时唤醒写着，所以读者为0时写者为被阻塞</li>
+</ul>
+</li>
+<li>读取数据，获取计数锁，计数-1，<strong>若读者为0则释放数据锁（V）</strong>，释放计数锁</li>
+</ul>
+</li>
+<li>写者：<ul>
+<li>获取写锁（P），写数据，释放写锁（V）</li>
+</ul>
+</li>
+<li><strong>可能饿死写者</strong></li>
+</ul>
+<p>方案2：<strong>写者优先</strong>，写时阻塞读</p>
+<ul>
+<li>读锁+读&amp;写计数锁+数据锁+读&amp;写计数<ul>
+<li>隔离临界区以获得更好的性能</li>
+</ul>
+</li>
+<li>写者：<ul>
+<li>获取写计数锁，阻塞读者读取数据，计数+1，释放计数锁</li>
+<li>获取数据锁，写入数据，释放数据锁</li>
+<li>获取计数锁，计数–，若无写者唤醒读者，释放写锁</li>
+</ul>
+</li>
+<li>读者：<ul>
+<li>获取读锁，获取读计数锁，阻塞写者写入数据，计数+1，释放读计数锁，释放读锁</li>
+<li>读取数据</li>
+<li>获取读计数锁，计数–，若无读者唤醒尝试写入数据的写者，释放读计数锁</li>
+</ul>
+</li>
+<li><strong>读者可能饿死</strong></li>
+</ul>
+<p>方案3：<strong>公平策略</strong></p>
+<ul>
+<li>读计数锁+数据锁+flag锁+计数</li>
+<li>写者：<ul>
+<li>获取flag，获取数据锁，写入数据，释放数据锁，释放flag锁</li>
+</ul>
+</li>
+<li>读者：<ul>
+<li>获取flag，获取读计数锁，阻塞写者写入，计数++，释放计数锁，释放flag</li>
+<li>读数据</li>
+<li>获取计数锁，计数–，若无读者唤醒写者写入，释放计数锁</li>
+</ul>
+</li>
+<li>flag <strong>保证了读者和写者在临界区可以相互阻塞</strong>，是一种公平的阻塞策略</li>
+</ul>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>两种情况：</p>
+<ol>
+<li>进程1持有A锁，想要获取B锁；进程2持有B锁，想要获取A锁</li>
+<li>进程持有A锁，若未关闭中断，且在中断handler中获取A锁</li>
+</ol>
+<ul>
+<li>总之，都是形成<strong>环形等待链</strong></li>
+</ul>
+<h4 id="工具：排查死锁"><a href="#工具：排查死锁" class="headerlink" title="工具：排查死锁"></a>工具：排查死锁</h4><ul>
+<li><code>pstack</code> + <code>gdb</code></li>
+</ul>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005153416.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005153416.png" class title="Pasted image 20241005153416.png"></a>
+
+<p>两个线程同时调用了 <strong>lock</strong>，可能发生死锁。使用gdb进一步查看情况：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005153438.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005153438.png" class title="Pasted image 20241005153438.png"></a>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005153644.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005153644.png" class title="Pasted image 20241005153644.png"></a>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005153937.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005153937.png" class title="Pasted image 20241005153937.png"></a>
+
+
+<h4 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h4><p>产生死锁有四大条件：</p>
+<ul>
+<li>资源的访问是<strong>互斥</strong>的</li>
+<li>线程<strong>持有锁并获取另一个锁</strong></li>
+<li><strong>锁不可被剥夺</strong></li>
+<li>锁获取构成<strong>环形链</strong></li>
+</ul>
+<p>经典的解决方法是<strong>有序</strong>获取锁，例如在获取锁B前必然持有锁A</p>
+<h3 id="五种锁"><a href="#五种锁" class="headerlink" title="五种锁"></a>五种锁</h3><blockquote>
+<p>获取锁都是系统调用，都需要切换到内核态</p>
+</blockquote>
+<h4 id="睡眠锁和自旋锁"><a href="#睡眠锁和自旋锁" class="headerlink" title="睡眠锁和自旋锁"></a>睡眠锁和自旋锁</h4><p>基本上是所有锁的基础，睡眠锁获取锁失败会使进程进入睡眠，自旋锁则会不断尝试获取</p>
+<ul>
+<li>睡眠锁会导致开启进程调度，进行上下文切换</li>
+<li>自旋锁会让CPU不断进行无意义的操作，即<strong>CAS</strong>原子指令</li>
+</ul>
+<p>如果<strong>临界区的代码较短</strong>，则完全可以用自旋锁；如果时间很长，则使用睡眠锁</p>
+<blockquote>
+<p>CAS指令：比较&amp;交换，若指定地址处的值等于预期值，则设置该地址处的值为新值，然后返回当前指定地址处的值</p>
+</blockquote>
+<h4 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h4><blockquote>
+<p>读写锁基于睡眠锁和自旋锁实现，根据具体的常见选择具体的实现方式</p>
+</blockquote>
+<p>读锁+写锁，共享锁+独占锁。适用于<strong>读多写少</strong>的场景</p>
+<ul>
+<li>可有多个线程持有读锁</li>
+<li>若写锁被持有，则读线程获取读锁的操作会被阻塞，且只有一个线程能持有写锁</li>
+</ul>
+<p>根据<strong>实现</strong>，读写锁可被分为：<strong>读优先锁</strong>、<strong>写优先锁</strong>、<strong>公平锁</strong></p>
+<ul>
+<li>读优先锁在有读者时会阻塞写者<ul>
+<li>可能会饿死写者</li>
+</ul>
+</li>
+<li>写优先锁会在有写需求时，阻塞后面的读者；有读者时会阻塞写者的数据写入操作<ul>
+<li>可能饿死读者</li>
+</ul>
+</li>
+<li>公平锁不会出现饥饿的现象，他会保护临界区</li>
+</ul>
+<h4 id="乐观锁和悲观锁"><a href="#乐观锁和悲观锁" class="headerlink" title="乐观锁和悲观锁"></a>乐观锁和悲观锁</h4><p>前面提到的睡眠锁、自旋锁、读写锁都是<strong>悲观锁</strong>，他们假定会出现很多<strong>竞态</strong>情况，访问资源前需要<strong>上锁</strong></p>
+<p><strong>乐观锁</strong>假定竞态出现的概率不高，它<strong>先修改资源，然后检查这段时间有没有冲突</strong></p>
+<ul>
+<li>若有冲突则放弃此次操作，否则操作完成</li>
+<li>放弃后如何重试取决于业务场景，<strong>重试的成本很高</strong>，但是若概率足够低，可以接受</li>
+</ul>
+<p>乐观锁是一种<strong>无锁编程</strong>，即是使用了乐观锁</p>
+<ul>
+<li>例如在线文档的编辑，服务器要求用户提交时带上原始版本号，若和当前版本一致则接受提交，否则不接受</li>
+<li>又例如 <strong>git 和 SVN</strong></li>
+</ul>
+<h4 id="CAS与自旋锁"><a href="#CAS与自旋锁" class="headerlink" title="CAS与自旋锁"></a>CAS与自旋锁</h4><p>CAS 不是乐观锁吗，为什么基于 CAS 实现的自旋锁是悲观锁？</p>
+<p>加了while，形成了自旋的效果</p>
+<h3 id="一个进程可以创建多少线程？"><a href="#一个进程可以创建多少线程？" class="headerlink" title="一个进程可以创建多少线程？"></a>一个进程可以创建多少线程？</h3><p>取决于两点：<strong>地址空间大小 &amp; 系统参数</strong></p>
+<p>每次创建一个线程，内核都会为其分配一个<strong>栈空间</strong>，例如8M，可以用 <strong>ulimit -a</strong> 查看，使用 <strong>ulimit -s</strong> 调整栈空间大小</p>
+<p>不考虑系统参数，我们可以对一个进程的线程数进行估算</p>
+<ul>
+<li>32位系统有3G的用户虚拟空间，若一个线程栈为10M，则差不多可以创建300个线程</li>
+<li>对于64位系统，这一数量可以达到一千万，理论上不会被限制，但是我们的系统可能就不支持了</li>
+</ul>
+<p>系统有三个参数可能限制线程的上限：</p>
+<ul>
+<li>系统支持的最大线程数</li>
+<li>全局pid数值限制，任何大于这个值的pid都会创建失败</li>
+<li>进程vma的最大数量<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005183729.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005183729.png" class title="Pasted image 20241005183729.png"></a></li>
+</ul>
+<h3 id="线程崩溃，进程也会崩溃吗？"><a href="#线程崩溃，进程也会崩溃吗？" class="headerlink" title="线程崩溃，进程也会崩溃吗？"></a>线程崩溃，进程也会崩溃吗？</h3><p><strong>进程崩溃</strong>的原因一般是收到了某个<strong>信号</strong>，在默认情况下 <strong>handler</strong> 都会杀死整个进程。</p>
+<p>进程的所有线程共用一套异常处理机制，如果某个线程触发了异常，而内核发送的信号可能会导致整个进程被杀死</p>
+<p>我们一般通过<strong>自定义信号 handler</strong>来处理每个异常，而非杀死整个进程，例如JVM的针对栈溢出和空指针异常的处理方式：</p>
+<a href="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005191102.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/10/29/OS%20%E5%B0%8F%E6%9E%97%E7%B3%BB%E7%BB%9F%20%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/Pasted%20image%2020241005191102.png" class title="Pasted image 20241005191102.png"></a>
+
+
+
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-10-29</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/OS/'>
+                            OS
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+            
+    </body>
+</html>
