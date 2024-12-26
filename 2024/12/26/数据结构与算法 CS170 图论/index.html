@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <meta name="description" content="CS170 图论" />
+    <meta name="hexo-theme-A4" content="v1.9.2" />
+    <link rel="alternate icon" type="image/webp" href="/img/logo.jpg">
+    <title>Toki</title>
+
+    
+        
+<link rel="stylesheet" href="/css/highlight/style1.css">
+
+        
+<link rel="stylesheet" href="/css/reset.css">
+
+        
+<link rel="stylesheet" href="/css/markdown.css">
+
+        
+<link rel="stylesheet" href="/css/fonts.css">
+ 
+         <!--注意：首页既不是post也不是page-->
+        
+        
+        
+<link rel="stylesheet" href="/css/ui.css">
+ 
+        
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+        
+            <!--目录-->
+            
+<link rel="stylesheet" href="/css/toc.css">
+
+        
+    
+
+    
+    
+   
+<link rel="stylesheet" href="/css/lightgallery.min.css">
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+    
+    
+        <style>
+            .index-main{
+                max-width:  880px;
+            }
+        </style>
+
+    
+    
+
+
+
+    
+
+    
+    
+
+    
+    
+    
+    <body>
+        <script src="/js/darkmode-js.min.js"></script>
+        
+        <script>
+            const options = {
+                bottom: '40px', // default: '32px'
+                right: 'unset', // default: '32px'
+                left: '42px', // default: 'unset'
+                time: '0.3s', // default: '0.3s'
+                mixColor: '#fff', // default: '#fff'
+                backgroundColor: ' #e4e4e4 ',  // default: '#fff'
+                buttonColorDark: '#100f2c',  // default: '#100f2c'
+                buttonColorLight: '#fff', // default: '#fff'
+                saveInCookies: true, // default: true,
+                label: '🌓', // default: ''
+                autoMatchOsTheme: true // default: true
+            }
+            const darkmode = new Darkmode(options);
+            darkmode.showWidget();
+        </script>
+        
+        
+            <div class="left-toc-container">
+                <nav id="toc" class="bs-docs-sidebar"></nav>
+            </div>
+        
+        <div class="paper">
+            
+            
+            
+            
+                <div class="shadow-drop-2-bottom paper-main">
+                    
+
+
+<div class="header">
+    <div class="header-container">
+        <img style="
+        width: 56px;
+        height: auto;" alt="^-^" cache-control="max-age=86400" class="header-img" src="/img/logo.jpg" width="10%"></img>
+        <div class="header-content">
+            <a class="logo" href="/">Toki</a> 
+            <span class="description">Why so serious?</span> 
+        </div>
+        
+    </div>
+    
+   
+    <ul class="nav">
+        
+            
+                <li><a href="/">首页</a></li>
+            
+        
+            
+                <li><a href="/list/">文章</a></li>
+            
+        
+            
+                <li><a href="/categories/">分类</a></li>
+            
+        
+            
+                <li><a href="/contact/">联系</a></li>
+            
+        
+    </ul>
+</div> 
+        
+                    
+                    
+
+                    
+                    
+                    
+                    <!--说明是文章post页面-->
+                    
+                        <div class="post-main">
+
+    
+        
+            
+                <div class="post-main-title">
+                    CS170 图论
+                </div>
+            
+        
+      
+    
+
+    <div class="post-md">
+        
+            
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%9B%BE%E8%AE%BA"><span class="post-toc-text">图论</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%A1%A8%E7%A4%BA"><span class="post-toc-text">表示</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%BF%9E%E9%80%9A%E6%80%A7"><span class="post-toc-text">连通性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#DFS"><span class="post-toc-text">DFS</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%97%A0%E5%90%91%E5%9B%BE%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F"><span class="post-toc-text">无向图连通分量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%89%8D%E5%BA%8F%E6%95%B0%E3%80%81%E5%90%8E%E5%BA%8F%E6%95%B0"><span class="post-toc-text">前序数、后序数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AE%9A%E4%B9%89%EF%BC%9A%E8%BE%B9%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="post-toc-text">定义：边的类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%88%A4%E5%AE%9A-DAG"><span class="post-toc-text">判定 DAG</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F"><span class="post-toc-text">拓扑排序</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9C%89%E5%90%91%E5%9B%BE%E5%88%86%E8%A7%A3%EF%BC%9ASCC"><span class="post-toc-text">有向图分解：SCC</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%8D%95%E6%BA%90%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84"><span class="post-toc-text">单源最短路径</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#BFS"><span class="post-toc-text">BFS</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%AD%A3%E6%9D%83%E9%87%8D%EF%BC%9ADijkstra-%E7%AE%97%E6%B3%95"><span class="post-toc-text">正权重：Dijkstra 算法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%B4%9F%E6%9D%83%E9%87%8D%EF%BC%9ABellman-Ford-%E7%AE%97%E6%B3%95"><span class="post-toc-text">负权重：Bellman-Ford 算法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%B4%9F%E7%8E%AF%E6%A3%80%E6%B5%8B%EF%BC%9A%E5%9F%BA%E4%BA%8E-Bellman-Ford-%E7%AE%97%E6%B3%95"><span class="post-toc-text">负环检测：基于 Bellman-Ford 算法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E9%92%88%E5%AF%B9DAG%E7%9A%84%E4%BC%98%E5%8C%96%E4%B8%8E%E6%80%BB%E7%BB%93"><span class="post-toc-text">针对DAG的优化与总结</span></a></li></ol></li></ol></li></ol>
+            
+        
+        <link rel="stylesheet" type="text/css" href="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/css/lightgallery.min.css"><div class=".article-gallery"><h2 id="图论"><a href="#图论" class="headerlink" title="图论"></a>图论</h2><h3 id="表示"><a href="#表示" class="headerlink" title="表示"></a>表示</h3><p>两种表示方法：<strong>邻接矩阵、邻接表</strong></p>
+<ul>
+<li>一般后者用于稀疏图，前者用于稠密图</li>
+<li>如何表示输入直接影响了算法的效率，需要权衡取舍</li>
+</ul>
+<h3 id="连通性"><a href="#连通性" class="headerlink" title="连通性"></a>连通性</h3><h4 id="DFS"><a href="#DFS" class="headerlink" title="DFS"></a>DFS</h4><ul>
+<li>标记所有可达顶点，使用DFS</li>
+<li>状态由<strong>栈</strong>表示<a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224044124.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224044124.png" class title="Pasted image 20241224044124.png"></a></li>
+</ul>
+<p><strong>证明</strong>：DFS 已遍历了所有可遍历顶点</p>
+<ul>
+<li>一般使用<strong>反证和路径考虑</strong></li>
+</ul>
+<ol>
+<li>假设有一个可达、且未被访问的点a</li>
+<li>必然存在一个已经访问的点v，且有一条到达a的路径</li>
+<li>假设 b 为路径上第一个未被访问的顶点，w为b的邻接点</li>
+<li>w 上运行过算法，矛盾，b是邻接点但未被访问<a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224051338.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224051338.png" class title="Pasted image 20241224051338.png"></a></li>
+</ol>
+<p><strong>运行时间</strong>：$O(n+m)$</p>
+<ul>
+<li>每个点被访问一次</li>
+<li>每条边被考虑一次，无向图一条边会从两边都分别考虑一次</li>
+</ul>
+<h4 id="无向图连通分量"><a href="#无向图连通分量" class="headerlink" title="无向图连通分量"></a>无向图连通分量</h4><ul>
+<li>必定为强连通分量</li>
+</ul>
+<p>求个数：</p>
+<a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224052516.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224052516.png" class title="Pasted image 20241224052516.png"></a>
+
+<p>dfs 中标记每个顶点所属的连通分量：</p>
+<a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224052807.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224052807.png" class title="Pasted image 20241224052807.png"></a>
+
+<h4 id="前序数、后序数"><a href="#前序数、后序数" class="headerlink" title="前序数、后序数"></a>前序数、后序数</h4><p>DFS中，进一步<strong>标记访问开始与结束时间</strong>：</p>
+<ul>
+<li>全局时钟，每次进行完操作++</li>
+<li>pre、post 数组分别表示节点的访问开始、结束时间<ul>
+<li>开始访问时赋值 pre，结束访问时赋值 post<a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224053319.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224053319.png" class title="Pasted image 20241224053319.png"></a></li>
+</ul>
+</li>
+</ul>
+<p><strong>若存在边</strong> $(u,v)$ ，横轴表示时间，则它们看起来应该像左下角：</p>
+<ul>
+<li>右上角表示要么不可达，要么路径上的点先前被访问过了</li>
+<li>实际访问的路径边  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224054142.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224054142.png" class title="Pasted image 20241224054142.png"></a></li>
+</ul>
+<p>那么对于如下的无向图，<strong>有3个连通分量</strong>：<br>    <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224054427.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224054427.png" class title="Pasted image 20241224054427.png"></a></p>
+<h4 id="定义：边的类型"><a href="#定义：边的类型" class="headerlink" title="定义：边的类型"></a>定义：边的类型</h4><p>在有向图上运行我们的算法：<br>    <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224055141.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224055141.png" class title="Pasted image 20241224055141.png"></a></p>
+<ul>
+<li>分为<strong>虚边</strong>（不属于实际访问路径）、<strong>实边</strong></li>
+<li>虚边可以被分为：<strong>forward</strong>（指向后继）、<strong>back</strong>（指向祖先）、<strong>cross</strong>（两者有共同祖先）</li>
+</ul>
+<p><strong>在时间上表现为</strong>：</p>
+<a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224055437.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224055437.png" class title="Pasted image 20241224055437.png"></a>
+
+
+<h4 id="判定-DAG"><a href="#判定-DAG" class="headerlink" title="判定 DAG"></a>判定 DAG</h4><p>一个有向图是否无环？</p>
+<ul>
+<li>基本思路：<strong>没有反向边</strong>即无环</li>
+<li><strong>判定反向边</strong>：开始访问一个节点时入栈，结束访问一个节点时出栈，若节点在栈中且有边指向则为反向边</li>
+<li><strong>证明</strong>：<a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224103641.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224103641.png" class title="Pasted image 20241224103641.png"></a></li>
+</ul>
+<h4 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h4><ul>
+<li>给定DAG，使得路径上的每条边都指向前方，即不出现交叉边（DAG无后向边）<a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224114205.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224114205.png" class title="Pasted image 20241224114205.png"></a></li>
+</ul>
+<p><strong>算法</strong>：DFS，<strong>按 post# 降序输出节点</strong>，即为我们的路径</p>
+<ul>
+<li>因为先<strong>访问的顶点后弹出访问栈</strong>，那我们只需要按照弹出顺序降序访问即可  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224204205.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224204205.png" class title="Pasted image 20241224204205.png"></a></li>
+</ul>
+<h4 id="有向图分解：SCC"><a href="#有向图分解：SCC" class="headerlink" title="有向图分解：SCC"></a>有向图分解：SCC</h4><ul>
+<li><strong>有向图可被强连通分量划分</strong>，<strong>强连通分量间组成一个DAG</strong>：  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224213222.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224213222.png" class title="Pasted image 20241224213222.png"></a>
+如何寻找有向图的SCC？</li>
+<li><strong>基本思路</strong>：寻找强连通分量然后从图中移除（即mark）</li>
+<li><strong>避免溢出</strong>：强连通分量可能会溢出到其他强连通分量<ul>
+<li><strong>逆向拓扑排序顺序访问</strong>：如果按照逆向 DAG 拓扑排序的顺序访问，则必定不会溢出</li>
+<li>逆向拓扑排序顺序中，<strong>post# 最大的节点</strong>一定处在一个SCC中，且按原图访问不会溢出</li>
+</ul>
+</li>
+<li><strong>反转图</strong>：反转图的拓扑排序顺序，即是原图的逆序拓扑排序顺序</li>
+</ul>
+<p>则<strong>算法</strong>：（Kosaraju 算法）</p>
+<ul>
+<li><strong>反转图</strong>，DFS，得到 post#</li>
+<li>按照 post# 降序访问图即可  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224214509.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241224214509.png" class title="Pasted image 20241224214509.png"></a></li>
+</ul>
+<h3 id="单源最短路径"><a href="#单源最短路径" class="headerlink" title="单源最短路径"></a>单源最短路径</h3><h4 id="BFS"><a href="#BFS" class="headerlink" title="BFS"></a>BFS</h4><ul>
+<li>不断扩大<strong>源点的邻域</strong>，寻找邻居<ul>
+<li>即距离为0、1、2….</li>
+</ul>
+</li>
+<li>状态由<strong>队列</strong>表示  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241225071823.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241225071823.png" class title="Pasted image 20241225071823.png"></a>
+<strong>算法</strong>：</li>
+<li>距离根据上一个节点  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241225072334.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241225072334.png" class title="Pasted image 20241225072334.png"></a></li>
+</ul>
+<h4 id="正权重：Dijkstra-算法"><a href="#正权重：Dijkstra-算法" class="headerlink" title="正权重：Dijkstra 算法"></a>正权重：Dijkstra 算法</h4><p>一种简单算法：权重为n的边分解为n条权重为1的边，引入大量中间节点，BFS</p>
+<ul>
+<li>速度太慢，边的权重对速度有较大影响  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241225073024.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241225073024.png" class title="Pasted image 20241225073024.png"></a></li>
+</ul>
+<p> 基于以上思想，我们可以<strong>加速边的访问</strong>，即 <strong>Dijkstra 算法</strong></p>
+<ul>
+<li>其基本思想是<strong>找出局部源点最短路径，并不断扩展</strong>，与BFS如出一辙</li>
+<li>使用<strong>归纳法</strong></li>
+<li>注意到：K的邻点中，必定有一个节点与抵达它的边，在最终的最短路径中  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241225075134.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241225075134.png" class title="Pasted image 20241225075134.png"></a>
+维护状态：</li>
+<li>**dist[i]**：节点i距离源点的当前距离，会逐步收敛到最短距离<ul>
+<li>初始为无穷</li>
+</ul>
+</li>
+<li><strong>subset K</strong>：包含局部最短路径中的所有节点<ul>
+<li>初始为源点</li>
+</ul>
+</li>
+</ul>
+<p><strong>算法</strong>：扩展路径+更新 dist<br>    <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226000340.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226000340.png" class title="Pasted image 20241226000340.png"></a><br><strong>高效</strong>的实现：</p>
+<ul>
+<li>从全集 U 中一步一步剔除节点，而非向空集中加入节点 </li>
+<li>U 使用优先级队列表示，key 为 dist，value 为 node name  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226002935.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226002935.png" class title="Pasted image 20241226002935.png"></a></li>
+</ul>
+<p><strong>运行时间</strong>：<br>    <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226003140.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226003140.png" class title="Pasted image 20241226003140.png"></a></p>
+<h4 id="负权重：Bellman-Ford-算法"><a href="#负权重：Bellman-Ford-算法" class="headerlink" title="负权重：Bellman-Ford 算法"></a>负权重：Bellman-Ford 算法</h4><ul>
+<li><p>一种方法：转换为正权重的情形。此节中我们暂不讨论。</p>
+</li>
+<li><p>另外，<strong>存在负环的图无单源最短路径</strong>，例如：</p>
+  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226121223.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226121223.png" class title="Pasted image 20241226121223.png"></a>
+<p>我们关注没有负环的图；有负边不等于有负环。</p>
+</li>
+<li><p>负权重图不能仿照正权重的思路，<strong>单边扩展不再有效</strong>，例如：</p>
+  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226003714.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226003714.png" class title="Pasted image 20241226003714.png"></a></li>
+<li><p><strong>引理</strong>：仅当已知这条路径为最短路径时，可以进行单边扩展</p>
+<ul>
+<li>注：update 即 $dist[v] &#x3D; min(dist[v], dist[u] + weight(u, v))$  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226112831.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226112831.png" class title="Pasted image 20241226112831.png"></a></li>
+</ul>
+</li>
+<li><p>注意到，执行某个算法不断进行 update，对于一个节点来说，<strong>在某个时刻一定会其得到最短路径的 update 子序列</strong>，于是我们可以得到该节点的最短路径</p>
+<ul>
+<li>但对于路径上的其他节点来说，该路径不一定为其最短路径</li>
+</ul>
+</li>
+<li><p>根据我们的引理，<strong>正确的节点从源点开始，我们查看所有的边 $V-1$ 次，便必定可以得到除源点外所有节点的最短路径距离</strong>——Bellman Ford 算法</p>
+<ul>
+<li>复杂度 $O(|V|\times |E|)$  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226114349.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226114349.png" class title="Pasted image 20241226114349.png"></a></li>
+</ul>
+</li>
+</ul>
+<h4 id="负环检测：基于-Bellman-Ford-算法"><a href="#负环检测：基于-Bellman-Ford-算法" class="headerlink" title="负环检测：基于 Bellman-Ford 算法"></a>负环检测：基于 Bellman-Ford 算法</h4><ul>
+<li>我们已经证明了，对于没有负环的图，Bellman-Ford 算法在运行 V-1 次后，必定得到最短距离</li>
+<li><strong>若我们的算法循环第 V 次时，仍有对 dist 的更新，则存在负环</strong></li>
+<li><strong>复杂度</strong>：$O(|V|\times |E|)$</li>
+</ul>
+<p><strong>证明</strong>：将不等式相加即可得到结果，多个节点的证明类似两个节点的证明<br>    <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226122024.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226122024.png" class title="Pasted image 20241226122024.png"></a></p>
+<h4 id="针对DAG的优化与总结"><a href="#针对DAG的优化与总结" class="headerlink" title="针对DAG的优化与总结"></a>针对DAG的优化与总结</h4><ul>
+<li>对于DAG，其单源最短路径一定按照<strong>拓扑排序</strong>的顺序访问，这就是我们的算法<ul>
+<li>我们已经锚定了访问顺序，所以无需考虑单边扩展之类的问题</li>
+</ul>
+</li>
+<li><strong>复杂度</strong>：$O(|V|+|E|)$  <a href="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226122644.png" class="gallery-item" style="box-shadow: none;"> <img src="/2024/12/26/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%20CS170%20%E5%9B%BE%E8%AE%BA/Pasted%20image%2020241226122644.png" class title="Pasted image 20241226122644.png"></a></li>
+</ul>
+</div><script src="https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/js/lightgallery.min.js"></script><script>if("undefined"!=typeof lightGallery) {
+        var options1 = {
+            selector: '.gallery-item'
+        };
+        lightGallery(document.getElementsByClassName('.article-gallery')[0], options1);
+        }</script>
+    </div>
+
+    <div class="post-meta">
+        <i>
+        
+            <span>2024-12-26</span>
+            
+                <span>该篇文章被 Toki</span>
+            
+            
+             
+                <span>归为分类:
+                    
+                    
+                        <a href='/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/'>
+                            数据结构与算法
+                        </a>
+                    
+                </span>
+            
+        
+        </i>
+    </div>
+    <br>
+    
+    
+
+    
+        
+
+     
+</div>
+
+
+
+                                      
+                    
+                    
+                    <div class="footer">
+    
+        <span> 
+            © 2024 
+
+            
+                
+
+            
+                
+                    / <a href="/contact/"> 联系 </a>
+                
+
+            
+        </span>
+    
+</div>
+<!--这是指一条线往下的内容-->
+<div class="footer-last">
+    
+            <span></span>
+            
+    
+</div>
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!--目录-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js" type="text/javascript" ></script>
+        
+<script src="/js/toc.js"></script>
+
+    
+
+    
+<script src="/js/randomHeaderContent.js"></script>
+
+    <!--回到顶部按钮-->
+    
+
+    
+
+
+
+
+
+<script src="/js/lightgallery.min.js"></script>
+
+
+
+                </div>
+            
+            
+            
+    </body>
+</html>
